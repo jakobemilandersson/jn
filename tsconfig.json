@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "types": ["vite/client"],
+    "allowJs": false,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+
+    /* Optional but recommended for Mini-FSD */
+    "baseUrl": "./src",
+    "paths": {
+      "app/*": ["app/*"],
+      "pages/*": ["pages/*"],
+      "features/*": ["features/*"],
+      "entities/*": ["entities/*"],
+      "widgets/*": ["widgets/*"],
+      "shared/*": ["shared/*"]
+    },
+
+    /* Ensure Vite, Jest/Vitest, and bundlers behave consistently */
+    "noEmit": true
+  },
+
+  "include": ["src"],
+  "references": []
+}
