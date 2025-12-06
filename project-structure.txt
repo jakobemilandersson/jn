@@ -1,0 +1,47 @@
+.
+├── CNAME
+├── index.html
+├── package-lock.json
+├── package.json
+├── postcss.config.cjs
+├── project-context.md
+├── README.md
+├── src
+│   ├── app
+│   │   ├── main.tsx
+│   │   └── styles.css
+│   ├── entities
+│   │   └── resume
+│   │       ├── data.ts
+│   │       ├── index.ts
+│   │       └── types.ts
+│   ├── features
+│   │   └── filters
+│   │       ├── index.ts
+│   │       ├── lib
+│   │       │   ├── applyFilters.ts
+│   │       │   └── getSkillOptions.ts
+│   │       ├── model
+│   │       │   └── useFilterStore.ts
+│   │       └── ui
+│   │           ├── ClearButton.tsx
+│   │           ├── SkillsMultiSelect.tsx
+│   │           └── StackTypeDropdown.tsx
+│   ├── pages
+│   │   └── ResumePage
+│   │       └── index.tsx
+│   ├── shared
+│   │   └── ui
+│   │       ├── Dropdown.tsx
+│   │       ├── index.ts
+│   │       └── MultiSelect.tsx
+│   └── widgets
+├── tailwind.config.cjs
+├── tests
+│   └── features
+│       └── filters
+│           ├── applyFilter.spec.ts
+│           ├── SKILL_OPTIONS.spec.ts
+│           └── useFilterStore.spec.ts
+├── tsconfig.json
+└── vite.config.ts
