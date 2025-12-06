@@ -1,4 +1,4 @@
-import create from 'zustand'
+import { create } from 'zustand'
 import type { StackType } from '../../../entities/resume/types'
 
 type FilterState = {
