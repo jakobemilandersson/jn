@@ -6,7 +6,7 @@
 - Architecture: Mini-FSD (app, pages, features, entities, widgets, shared).
 - Data: Predefined resume data in `src/entities/resume/data.ts`.
 - Filters:
-  - `stack_type` ∈ {"fullstack","backend","frontend"}
+  - `stackType` ∈ {"fullstack","backend","frontend"}
   - `skills` ∈ Array<string> (dynamic)
 - UX:
   - Two dropdowns (single + multi-select), Search button triggers filtering.

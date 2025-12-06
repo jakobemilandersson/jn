@@ -1,17 +1,17 @@
-import create from 'zustand'
+import { create } from 'zustand'
 import type { StackType } from '../../../entities/resume/types'
 
 type FilterState = {
-  stackType: StackType | '' 
+  stackType: StackType | null,
   skills: string[]
-  setStackType: (s: StackType | '') => void
+  setStackType: (s: StackType | null) => void
   toggleSkill: (skill: string) => void
   setSkills: (skills: string[]) => void
   clear: () => void
 }
 
 export const useFilterStore = create<FilterState>((set) => ({
-  stackType: '',
+  stackType: null,
   skills: [],
   setStackType: (stackType) => set({ stackType }),
   toggleSkill: (skill) =>
@@ -21,5 +21,5 @@ export const useFilterStore = create<FilterState>((set) => ({
         : [...state.skills, skill]
     })),
   setSkills: (skills) => set({ skills }),
-  clear: () => set({ stackType: '', skills: [] })
+  clear: () => set({ stackType: null, skills: [] })
 }))
