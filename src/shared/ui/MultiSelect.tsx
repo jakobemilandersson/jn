@@ -7,11 +7,11 @@ type Props = {
   onToggle: (skill: string) => void
 }
 
-export default function MultiSelect({ label, options, selected, onToggle }: Props) {
+export const MultiSelect = ({ label, options, selected, onToggle }: Props) => {
   return (
     <fieldset>
       <legend className="text-sm font-medium">{label}</legend>
-      <div className="mt-1 flex flex-wrap gap-2">
+      <div role="group" aria-multiselectable="true" className="mt-1 flex flex-wrap gap-2">
         {options.map((opt) => {
           const isSelected = selected.includes(opt)
           return (

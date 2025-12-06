@@ -1,10 +1,10 @@
 # jakob-now
 
 Single-page interactive resume presenter (Mini-FSD).  
-Filters: `stack_type` (fullstack | backend | frontend) + multi-select `skills`. Built with React + TypeScript + Vite + Tailwind + Zustand. Deployed to GitHub Pages (custom domain: jakob.now).
+Filters: `stackType` (fullstack | backend | frontend) + multi-select `skills`. Built with React + TypeScript + Vite + Tailwind + Zustand. Deployed to GitHub Pages (custom domain: jakob.now).
 
 ## Features (MVP)
-- Two dropdowns: `stack_type` (single) and `skills` (multi-select).
+- Two dropdowns: `stackType` (single) and `skills` (multi-select).
 - Client-side filtering of a predefined resume dataset.
 - Search button triggers filtering and reveals tailored Work Experience + Skills sections.
 - Static hosting on GitHub Pages (free).

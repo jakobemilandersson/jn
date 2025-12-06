@@ -1,2 +1,2 @@
-export * from './Dropdown'
-export * from './MultiSelect'
+export { Dropdown } from './Dropdown'
+export { MultiSelect } from './MultiSelect'
