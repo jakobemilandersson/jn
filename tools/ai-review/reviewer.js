@@ -16,7 +16,7 @@ Enforce rules:
 Provide actionable comments. Do not invent issues.
 `;
 
-async function askLLM(diff) {s
+async function askLLM(diff) {
   try {
     const res = await fetch(`${OLLAMA_URL}/api/generate`, {
       method: "POST",
