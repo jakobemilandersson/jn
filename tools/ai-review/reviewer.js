@@ -4,11 +4,6 @@ const REPO = process.env.GITHUB_REPOSITORY;
 const PR_NUMBER = process.env.PR_NUMBER;
 const DIFF = process.env.PR_DIFF;
 
-console.log("🔍 Starting AI Reviewer...");
-console.log("PR_NUMBER:", PR_NUMBER);
-console.log("OLLAMA_URL:", OLLAMA_URL);
-console.log("Diff length:", DIFF?.length || 0);
-
 const SYSTEM_PROMPT = `
 You are a senior frontend engineer reviewing PRs for a Mini-FSD React+TS project.
 Enforce rules:
@@ -21,9 +16,7 @@ Enforce rules:
 Provide actionable comments. Do not invent issues.
 `;
 
-async function askLLM(diff) {
-  console.log("🔗 Sending request to LLM...");
-
+async function askLLM(diff) {s
   try {
     const res = await fetch(`${OLLAMA_URL}/api/generate`, {
       method: "POST",
@@ -38,28 +31,22 @@ async function askLLM(diff) {
     const data = await res.json();
 
     if (!data || !data.response) {
-      console.error("❌ LLM returned no response:", data);
       return "";
     }
 
-    console.log("📩 LLM response received");
     return data.response;
 
   } catch (err) {
-    console.error("❌ Error contacting LLM:", err);
     return "";
   }
 }
 
 async function postComment(body) {
   if (!body || !body.trim()) {
-    console.log("⚠️ Empty review — skipping PR comment");
     return;
   }
 
-  console.log("💬 Posting comment to PR...");
-
-  const res = await fetch(
+  await fetch(
     `https://api.github.com/repos/${REPO}/issues/${PR_NUMBER}/comments`,
     {
       method: "POST",
@@ -70,19 +57,11 @@ async function postComment(body) {
       body: JSON.stringify({ body })
     }
   );
-
-  if (!res.ok) {
-    console.error("❌ GitHub API error:", await res.text());
-  } else {
-    console.log("✅ Comment posted to PR");
-  }
 }
 
 async function main() {
   const review = await askLLM(DIFF);
-  console.log("📝 Review length:", review.length || 0);
   await postComment(review);
 }
 
 main();
-  
