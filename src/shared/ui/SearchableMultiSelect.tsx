@@ -44,8 +44,9 @@ export function SearchableMultiSelect({
 
   return (
     <div className="relative w-full" ref={containerRef}>
-      <label className="block" htmlFor={id}>
-        <span className="text-sm font-medium">{label}</span>
+      <label className="block text-sm font-medium" htmlFor={id}>
+        {label}
+      </label>
         {/* Control */}
         <button
           id={id}
@@ -71,7 +72,6 @@ export function SearchableMultiSelect({
             <span className="text-gray-500">Select skills…</span>
           )}
         </button>
-      </label>
 
       {/* Dropdown */}
       {open && (
