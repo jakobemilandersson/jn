@@ -38,8 +38,8 @@ export function SearchableMultiSelect({
         setOpen(false);
       }
     };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
+    window.addEventListener("mousedown", handler);
+    return () => window.removeEventListener("mousedown", handler);
   }, []);
 
   return (
@@ -47,31 +47,31 @@ export function SearchableMultiSelect({
       <label className="block text-sm font-medium" htmlFor={id}>
         {label}
       </label>
-        {/* Control */}
-        <button
-          id={id}
-          type="button"
-          aria-haspopup="listbox"
-          aria-expanded={open}
-          aria-label={label}
-          className="mt-1 w-full block border rounded px-3 py-2 text-left bg-inherit focus:ring focus:outline-none"
-          onClick={() => setOpen(o => !o)}
-        >
-          {selected.length > 0 ? (
-            <div className="inline-flex flex-wrap gap-1">
-              {selected.map(s => (
-                <span
-                  key={s}
-                  className="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-xs"
-                >
-                  {s}
-                </span>
-              ))}
-            </div>
-          ) : (
-            <span className="text-gray-500">Select skills…</span>
-          )}
-        </button>
+      {/* Control */}
+      <button
+        id={id}
+        type="button"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-label={label}
+        className="mt-1 w-full block border rounded px-3 py-2 text-left bg-inherit focus:ring focus:outline-none"
+        onClick={() => setOpen(o => !o)}
+      >
+        {selected.length > 0 ? (
+          <div className="inline-flex flex-wrap gap-1">
+            {selected.map(s => (
+              <span
+                key={s}
+                className="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-xs"
+              >
+                {s}
+              </span>
+            ))}
+          </div>
+        ) : (
+          <span className="text-gray-500">Select skills…</span>
+        )}
+      </button>
 
       {/* Dropdown */}
       {open && (
