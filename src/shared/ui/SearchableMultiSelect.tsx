@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 
 export type SearchableMultiSelectProps = {
   id: string,
@@ -19,9 +19,9 @@ export function SearchableMultiSelect({
   const [query, setQuery] = useState("");
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const filtered = options.filter(o =>
+  const filtered = useMemo(() => options.filter(o =>
     o.toLowerCase().includes(query.toLowerCase())
-  );
+  ), [options, query]);
 
   const toggle = (value: string) => {
     if (selected.includes(value)) {
