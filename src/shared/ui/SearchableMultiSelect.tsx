@@ -44,7 +44,7 @@ export function SearchableMultiSelect({
 
   return (
     <div className="relative w-full" ref={containerRef}>
-      <label className="block text-sm font-medium" htmlFor={id}>
+      <label className="text-sm font-medium" htmlFor={id}>
         {label}
       </label>
       {/* Control */}
