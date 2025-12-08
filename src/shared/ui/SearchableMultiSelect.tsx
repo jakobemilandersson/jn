@@ -54,7 +54,7 @@ export function SearchableMultiSelect({
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-label={label}
-        className="mt-1 w-full block border rounded px-3 py-2 text-left bg-inherit focus:ring focus:outline-none"
+        className="mt-1 w-full block border rounded px-3 py-2 text-left bg-white text-black dark:bg-white dark:text-black focus:ring focus:outline-none"
         onClick={() => setOpen(o => !o)}
       >
         {selected.length > 0 ? (
