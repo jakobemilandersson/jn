@@ -1,3 +1,2 @@
-export { StackTypeDropdown } from './ui/StackTypeDropdown'
-export { SkillsMultiSelect } from './ui/SkillsMultiSelect'
+export { StackTypeDropdown } from './ui/StackTypeField'
 export { ClearButton } from './ui/ClearButton'

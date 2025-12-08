@@ -3,7 +3,7 @@ import { StackTypeDropdown, ClearButton } from '../../features/filters'
 import { useFilterStore } from '../../features/filters/model/useFilterStore'
 import type { WorkExperience } from '../../entities/resume/types'
 import { applyFilter } from '../../features/filters/lib/applyFilters'
-import { SkillsSearchableMultiSelect } from '../../features/filters/ui/SkillsSearchableMultiSelect'
+import { SkillsSearchableMultiSelect } from '../../features/filters/ui/SkillsField'
 
 export default function ResumePage() {
   const stackType = useFilterStore((s) => s.stackType)
