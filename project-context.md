@@ -2,19 +2,33 @@
 
 - Purpose: Single-page interactive resume filter and presenter.
 - Hosting: Static site on GitHub Pages at custom domain `jakob.now` (porkbun DNS).
-- Stack: React + TypeScript + Vite + Tailwind + Zustand.
+- Stack: React + TypeScript + Vite + Tailwind + Zustand + Vitest 1.x + React Testing Library + Jest-DOM.
 - Architecture: Mini-FSD (app, pages, features, entities, widgets, shared).
-- Data: Predefined resume data in `src/entities/resume/data.ts`.
+- Data:
+  - Predefined resume data in `src/entities/resume/data.ts`.
+  - Types in `src/entities/resume/types.ts`.
+- UI components:
+  - `StackTypeField.tsx` (feature-level)
+  - `SkillsField.tsx` (feature-level)
+  - `Dropdown.tsx` and `SearchableMultiSelect.tsx` (shared/ui)
 - Filters:
-  - `stackType` ∈ {"fullstack","backend","frontend"}
-  - `skills` ∈ Array<string> (dynamic)
+  - `stackType: "fullstack" | "backend" | "frontend" | ""`
+  - `skills: string[]`
 - UX:
-  - Two dropdowns (single + multi-select), Search button triggers filtering.
-  - Show/hide Work Experience and Skills & Tools sections based on filters.
+  - Filters UI: `StackTypeField` (shared Dropdown) and `SkillsField` (shared SearchableMultiSelect).
+  - Filters apply instantly on change (no submit/search button).
 - Deployment: GitHub Actions push to `gh-pages` branch; `CNAME` file with `jakob.now`.
+- Testing:
+  - Vitest 1.x configured inside `vite.config.ts`
+  - Test environment: jsdom
+  - RTL + Jest-DOM matchers loaded via `setupTests.ts`
+  - Tests located under `tests/`
+- State management: Zustand store at `src/features/filters/model/useFilterStore.ts`.
 - Coding conventions:
   - Use TypeScript types for all entities.
   - One file per React component.
   - Export only minimal public APIs per folder (index.ts).
   - Keep UI components in `shared/ui`.
-- State management: Zustand store at `src/features/filters/model/useFilterStore.ts`.
+  - Use Tailwind utility classes for styling.
+  - Prefer minimal dependencies; rely on built-in browser APIs.
+  - Shared UI must remain feature-agnostic (no imports from features or global state).

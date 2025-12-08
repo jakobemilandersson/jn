@@ -1,47 +1,55 @@
 .
 ├── CNAME
+├── README.md
 ├── index.html
 ├── package-lock.json
 ├── package.json
 ├── postcss.config.cjs
 ├── project-context.md
-├── README.md
+├── project-structure.txt
+├── setupTests.ts
 ├── src
-│   ├── app
-│   │   ├── main.tsx
-│   │   └── styles.css
-│   ├── entities
-│   │   └── resume
-│   │       ├── data.ts
-│   │       ├── index.ts
-│   │       └── types.ts
-│   ├── features
-│   │   └── filters
-│   │       ├── index.ts
-│   │       ├── lib
-│   │       │   ├── applyFilters.ts
-│   │       │   └── getSkillOptions.ts
-│   │       ├── model
-│   │       │   └── useFilterStore.ts
-│   │       └── ui
-│   │           ├── ClearButton.tsx
-│   │           ├── SkillsMultiSelect.tsx
-│   │           └── StackTypeDropdown.tsx
-│   ├── pages
-│   │   └── ResumePage
-│   │       └── index.tsx
-│   ├── shared
-│   │   └── ui
-│   │       ├── Dropdown.tsx
-│   │       ├── index.ts
-│   │       └── MultiSelect.tsx
-│   └── widgets
+│   ├── app
+│   │   ├── main.tsx
+│   │   └── styles.css
+│   ├── entities
+│   │   └── resume
+│   │       ├── data.ts
+│   │       ├── index.ts
+│   │       └── types.ts
+│   ├── features
+│   │   └── filters
+│   │       ├── index.ts
+│   │       ├── lib
+│   │       │   ├── applyFilters.ts
+│   │       │   └── getSkillOptions.ts
+│   │       ├── model
+│   │       │   └── useFilterStore.ts
+│   │       └── ui
+│   │           ├── ClearButton.tsx
+│   │           ├── SkillsField.tsx
+│   │           └── StackTypeField.tsx
+│   ├── pages
+│   │   └── ResumePage
+│   │       └── index.tsx
+│   └── shared
+│       └── ui
+│           ├── Dropdown.tsx
+│           ├── MultiSelect.tsx
+│           ├── SearchableMultiSelect.tsx
+│           ├── hooks
+│           └── index.ts
 ├── tailwind.config.cjs
 ├── tests
-│   └── features
-│       └── filters
-│           ├── applyFilter.spec.ts
-│           ├── SKILL_OPTIONS.spec.ts
-│           └── useFilterStore.spec.ts
+│   ├── features
+│   │   └── filters
+│   │       ├── SKILL_OPTIONS.spec.ts
+│   │       ├── applyFilter.spec.ts
+│   │       └── useFilterStore.spec.ts
+│   └── shared
+│       └── ui
+│           └── SearchableMultiSelect.spec.tsx
 ├── tsconfig.json
 └── vite.config.ts
+
+20 directories, 33 files
