@@ -8,6 +8,7 @@ export function SkillsSearchableMultiSelect() {
 
   return (
     <SearchableMultiSelect
+      id="skills"
       label="Skills"
       options={SKILL_OPTIONS}
       selected={skills}
