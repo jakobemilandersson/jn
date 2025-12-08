@@ -6,6 +6,7 @@ describe("SearchableMultiSelect", () => {
     const onChange = vi.fn();
     render(
       <SearchableMultiSelect
+        id="skills"
         label="Skills"
         options={["Ruby", "React", "Python"]}
         selected={[]}
