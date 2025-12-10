@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useMemo } from "react";
+import { SkillChip } from "./chips/SkillChip";
 
 export type SearchableMultiSelectProps = {
   id: string,
@@ -59,14 +60,7 @@ export function SearchableMultiSelect({
       >
         {selected.length > 0 ? (
           <div className="inline-flex flex-wrap gap-1">
-            {selected.map(s => (
-              <span
-                key={s}
-                className="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-xs"
-              >
-                {s}
-              </span>
-            ))}
+            {selected.map(s => <SkillChip key={s} label={s} />)}
           </div>
         ) : (
           <span className="text-gray-500">Select skills…</span>
