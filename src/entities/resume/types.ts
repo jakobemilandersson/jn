@@ -1,6 +1,9 @@
 export type StackType = 'fullstack' | 'backend' | 'frontend'
 
-export type Skill = string
+export type Skill = {
+  presentation: string;
+  stackType: "frontend" | "backend" | "fullstack";
+};
 
 export type WorkExperience = {
   id: string

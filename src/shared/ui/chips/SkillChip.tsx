@@ -1,9 +1,10 @@
+import { Skill } from "entities/resume";
 import React from "react";
 
 export type SkillChipVariant = "frontend" | "backend" | "fullstack";
 
 export type SkillChipProps = {
-  label: string;
+  skill: Skill;
   className?: string;
 };
 
@@ -13,30 +14,12 @@ const VARIANT_STYLES: Record<SkillChipVariant, string> = {
   fullstack: "bg-blue-100 text-blue-700",
 };
 
-function inferVariant(skill: string): SkillChipVariant {
-  const s = skill.toLowerCase();
-
-  // frontend indicators
-  if (
-    s.includes("react")
-  ) {
-    return "frontend";
-  }
-
-  // backend indicators
-  if (
-    s.includes("node") ||
-    s.includes("mysql")
-  ) {
-    return "backend";
-  }
-
-  // fallback
-  return "fullstack";
+function inferVariant(skill: Skill): SkillChipVariant {
+  return skill.stackType;
 }
 
-export function SkillChip({ label, className = "" }: SkillChipProps) {
-  const variant = inferVariant(label);
+export function SkillChip({ skill, className = "" }: SkillChipProps) {
+  const variant = inferVariant(skill);
   const variantClasses = VARIANT_STYLES[variant];
 
   return (
@@ -46,7 +29,7 @@ export function SkillChip({ label, className = "" }: SkillChipProps) {
         `px-2 py-0.5 rounded text-xs font-medium inline-block ${variantClasses} ${className}`
       }
     >
-      {label}
+      {skill.presentation}
     </div>
   );
 }

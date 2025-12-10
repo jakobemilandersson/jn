@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import { SkillChip } from "./chips/SkillChip";
+import { resolveSkill } from "../../entities/resume/lib/skillIndex";
 
 export type SearchableMultiSelectProps = {
   id: string,
@@ -60,7 +61,7 @@ export function SearchableMultiSelect({
       >
         {selected.length > 0 ? (
           <div className="inline-flex flex-wrap gap-1">
-            {selected.map(s => <SkillChip key={s} label={s} />)}
+            {selected.map(s => <SkillChip key={s} skill={resolveSkill(s)!} />)}
           </div>
         ) : (
           <span className="text-gray-500">Select skills…</span>

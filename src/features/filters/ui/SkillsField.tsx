@@ -10,7 +10,7 @@ export function SkillsField() {
     <SearchableMultiSelect
       id="skills"
       label="Skills"
-      options={SKILL_OPTIONS}
+      options={SKILL_OPTIONS.map(s => s.presentation)}
       selected={skills}
       onChange={setSkills}
     />

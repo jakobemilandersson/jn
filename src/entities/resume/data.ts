@@ -1,4 +1,4 @@
-import type { WorkExperience } from './types'
+import type { WorkExperience } from './types';
 
 export const RESUME: WorkExperience[] = [
   {
@@ -6,7 +6,12 @@ export const RESUME: WorkExperience[] = [
     role: 'Fullstack Developer',
     company: 'Acme Corp',
     stackType: 'fullstack',
-    skills: ['react', 'node', 'mysql', 'aws'],
+    skills: [
+      { presentation: 'react', stackType: 'frontend' },
+      { presentation: 'node', stackType: 'backend' },
+      { presentation: 'mysql', stackType: 'backend' },
+      { presentation: 'aws', stackType: 'fullstack' }
+    ],
     start: '2022-01',
     end: '2023-12',
     description: 'Built full product features'
@@ -16,7 +21,11 @@ export const RESUME: WorkExperience[] = [
     role: 'Frontend Engineer',
     company: 'Widget Ltd',
     stackType: 'frontend',
-    skills: ['react', 'storybook', 'testing'],
+    skills: [
+      { presentation: 'react', stackType: 'frontend' },
+      { presentation: 'storybook', stackType: 'frontend' },
+      { presentation: 'testing', stackType: 'frontend' }
+    ],
     start: '2020-06',
     end: '2021-12',
     description: 'Component development and design system'
@@ -26,9 +35,13 @@ export const RESUME: WorkExperience[] = [
     role: 'Backend Engineer',
     company: 'DataCo',
     stackType: 'backend',
-    skills: ['mysql', 'node', 'integration testing'],
+    skills: [
+      { presentation: 'mysql', stackType: 'backend' },
+      { presentation: 'node', stackType: 'backend' },
+      { presentation: 'integration testing', stackType: 'backend' }
+    ],
     start: '2019-01',
     end: '2020-05',
     description: 'API and data modeling'
   }
-]
+];

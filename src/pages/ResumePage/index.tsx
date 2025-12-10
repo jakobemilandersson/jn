@@ -38,7 +38,7 @@ export default function ResumePage() {
               <p className="mt-2">{r.description}</p>
               <br />
               <div className="inline-flex flex-wrap gap-1">
-                {r.skills.map((s) => <SkillChip key={s} label={s} />)}
+                {r.skills.map((s) => <SkillChip key={s.presentation} skill={s} />)}
               </div>
             </article>
           ))}
