@@ -2,15 +2,16 @@ import React, { useMemo } from 'react'
 import { StackTypeDropdown, ClearButton } from '../../features/filters'
 import { useFilterStore } from '../../features/filters/model/useFilterStore'
 import type { WorkExperience } from '../../entities/resume/types'
-import { applyFilter } from '../../features/filters/lib/applyFilters'
+import { applyFilters } from '../../features/filters/lib/applyFilters'
 import { SkillsField } from '../../features/filters/ui/SkillsField'
+import { SkillChip } from "../../shared/ui/chips";
 
 export default function ResumePage() {
   const stackType = useFilterStore((s) => s.stackType)
   const skills = useFilterStore((s) => s.skills)
 
   const results = useMemo(() => {
-    return applyFilter(stackType, skills);
+    return applyFilters(stackType, skills);
   }, [stackType, skills])
 
   return (
@@ -35,7 +36,10 @@ export default function ResumePage() {
               <h3 className="font-medium">{r.role} — {r.company}</h3>
               <p className="text-sm text-slate-600">{r.start} — {r.end ?? 'Present'}</p>
               <p className="mt-2">{r.description}</p>
-              <p className="mt-2 text-sm">Skills: {r.skills.join(', ')}</p>
+              <br />
+              <div className="inline-flex flex-wrap gap-1">
+                {r.skills.map((s) => <SkillChip key={s.presentation} skill={s} />)}
+              </div>
             </article>
           ))}
         </div>

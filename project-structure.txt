@@ -1,12 +1,14 @@
+# Project Structure Overview (for ChatGPT context)
+```
 .
 ├── CNAME
-├── README.md
 ├── index.html
-├── package-lock.json
 ├── package.json
+├── pnpm-lock.yaml
 ├── postcss.config.cjs
 ├── project-context.md
 ├── project-structure.txt
+├── README.md
 ├── setupTests.ts
 ├── src
 │   ├── app
@@ -16,6 +18,8 @@
 │   │   └── resume
 │   │       ├── data.ts
 │   │       ├── index.ts
+│   │       ├── lib
+│   │       │   └── skillIndex.ts
 │   │       └── types.ts
 │   ├── features
 │   │   └── filters
@@ -32,24 +36,41 @@
 │   ├── pages
 │   │   └── ResumePage
 │   │       └── index.tsx
-│   └── shared
-│       └── ui
-│           ├── Dropdown.tsx
-│           ├── MultiSelect.tsx
-│           ├── SearchableMultiSelect.tsx
-│           ├── hooks
-│           └── index.ts
+│   ├── shared
+│   │   └── ui
+│   │       ├── chips
+│   │       │   ├── index.ts
+│   │       │   └── SkillChip.tsx
+│   │       ├── Dropdown.tsx
+│   │       ├── index.ts
+│   │       ├── MultiSelect.tsx
+│   │       └── SearchableMultiSelect.tsx
+│   └── widgets
 ├── tailwind.config.cjs
 ├── tests
+│   ├── entities
+│   │   └── resume
+│   │       └── skillIndex.spec.ts
 │   ├── features
 │   │   └── filters
-│   │       ├── SKILL_OPTIONS.spec.ts
 │   │       ├── applyFilter.spec.ts
+│   │       ├── applyFilters.spec.ts
+│   │       ├── SKILL_OPTIONS.spec.ts
 │   │       └── useFilterStore.spec.ts
 │   └── shared
 │       └── ui
+│           ├── chips
+│           │   └── SkillChip.spec.tsx
 │           └── SearchableMultiSelect.spec.tsx
+├── tree.txt
 ├── tsconfig.json
 └── vite.config.ts
 
-20 directories, 33 files
+25 directories, 40 files
+```
+
+Notes:
+- Skills are structured objects.
+- skillIndex is canonical metadata source.
+- Filters operate on skill.presentation strings.
+- Shared UI is presentational.

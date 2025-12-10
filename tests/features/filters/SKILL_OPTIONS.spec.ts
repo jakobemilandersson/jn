@@ -4,9 +4,15 @@ import { RESUME } from '../../../src/entities/resume'
 
 describe('SKILL_OPTIONS', () => {
   it('contains all unique skills sorted alphabetically', () => {
-    const expected = Array.from(new Set(RESUME.flatMap((r) => r.skills))).sort()
-    expect(SKILL_OPTIONS).toEqual(expected)
-  })
+    const expected = Array
+      .from(new Map(
+        RESUME
+          .flatMap(r => r.skills)
+          .map(s => [s.presentation, s]) // dedupe by presentation
+      ).values())
+
+    expect(SKILL_OPTIONS).toEqual(expected);
+  });
 
   it('is sorted', () => {
     const manuallySorted = [...SKILL_OPTIONS].sort()
