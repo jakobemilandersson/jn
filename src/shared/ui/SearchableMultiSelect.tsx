@@ -25,6 +25,24 @@ export function SearchableMultiSelect({
     o.toLowerCase().includes(query.toLowerCase())
   ), [options, query]);
 
+  const selectedChips = useMemo(() => {
+    return selected.map((presentation) => {
+      const skillObj = resolveSkill(presentation);
+      if (skillObj) {
+        return <SkillChip key={presentation} skill={skillObj} />;
+      }
+      // fallback plain pill when skill metadata is missing
+      return (
+        <span
+          key={presentation}
+          className="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-xs"
+        >
+          {presentation}
+        </span>
+      );
+    });
+  }, [selected, resolveSkill]);
+
   const toggle = (value: string) => {
     if (selected.includes(value)) {
       onChange(selected.filter(v => v !== value));
@@ -59,9 +77,9 @@ export function SearchableMultiSelect({
         className="mt-1 w-full block border rounded px-3 py-2 text-left bg-white text-black dark:bg-white dark:text-black focus:ring focus:outline-none"
         onClick={() => setOpen(o => !o)}
       >
-        {selected.length > 0 ? (
+        {selectedChips.length > 0 ? (
           <div className="inline-flex flex-wrap gap-1">
-            {selected.map(s => <SkillChip key={s} skill={resolveSkill(s)!} />)}
+            {selectedChips}
           </div>
         ) : (
           <span className="text-gray-500">Select skills…</span>

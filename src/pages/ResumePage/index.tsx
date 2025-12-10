@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import { StackTypeDropdown, ClearButton } from '../../features/filters'
 import { useFilterStore } from '../../features/filters/model/useFilterStore'
 import type { WorkExperience } from '../../entities/resume/types'
-import { applyFilter } from '../../features/filters/lib/applyFilters'
+import { applyFilters } from '../../features/filters/lib/applyFilters'
 import { SkillsField } from '../../features/filters/ui/SkillsField'
 import { SkillChip } from "../../shared/ui/chips";
 
@@ -11,7 +11,7 @@ export default function ResumePage() {
   const skills = useFilterStore((s) => s.skills)
 
   const results = useMemo(() => {
-    return applyFilter(stackType, skills);
+    return applyFilters(stackType, skills);
   }, [stackType, skills])
 
   return (

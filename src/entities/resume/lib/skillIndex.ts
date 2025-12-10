@@ -1,21 +1,22 @@
-// src/entities/resume/lib/skillIndex.ts
 import { RESUME } from "../data";
 import type { Skill } from "../types";
 
 const index = new Map<string, Skill>();
 
-// Build a flat index for fast lookup
+// Build index
 RESUME.forEach(exp => {
   exp.skills.forEach(skill => {
-    // presentation name is the unique key
     index.set(skill.presentation, skill);
   });
 });
+
+// ❗ compute AFTER index is filled
+const ALL_SKILLS = Object.freeze(Array.from(index.values()));
 
 export function resolveSkill(presentation: string): Skill | null {
   return index.get(presentation) ?? null;
 }
 
-export function getAllSkills(): Skill[] {
-  return Array.from(index.values());
+export function getAllSkills(): readonly Skill[] {
+  return ALL_SKILLS;
 }
