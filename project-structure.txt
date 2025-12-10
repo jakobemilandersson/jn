@@ -2,13 +2,12 @@
 ```
 .
 ├── CNAME
-├── diff.txt
 ├── index.html
 ├── package.json
 ├── pnpm-lock.yaml
 ├── postcss.config.cjs
 ├── project-context.md
-├── project-structure.md
+├── project-structure.txt
 ├── README.md
 ├── setupTests.ts
 ├── src
@@ -67,7 +66,7 @@
 ├── tsconfig.json
 └── vite.config.ts
 
-25 directories, 41 files
+25 directories, 40 files
 ```
 
 Notes:
