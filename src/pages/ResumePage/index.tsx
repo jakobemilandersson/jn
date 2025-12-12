@@ -6,6 +6,7 @@ import { applyFilters } from '../../features/filters/lib/applyFilters'
 import { SkillsField } from '../../features/filters/ui/SkillsField'
 import { SkillChip } from "../../shared/ui/chips";
 import { StrictToggle } from '../../features/filters/ui/StrictSkillsToggle'
+import { RESUME } from '../../entities/resume'
 
 export default function ResumePage() {
   const stackType = useFilterStore((s) => s.stackType)
@@ -13,7 +14,7 @@ export default function ResumePage() {
   const strictSkills = useFilterStore((s) => s.strictSkillsMatch)
 
   const results = useMemo(() => {
-    return applyFilters(stackType, skills, strictSkills);
+    return applyFilters(RESUME, stackType, skills, strictSkills);
   }, [stackType, skills, strictSkills])
 
   return (

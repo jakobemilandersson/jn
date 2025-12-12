@@ -1,8 +1,7 @@
-import { RESUME } from '../../../entities/resume'
 import type { StackType, WorkExperience } from '../../../entities/resume'
 
-export const applyFilters = (stackType: StackType | null, skills: string[], strict: boolean): WorkExperience[] => {
-    return RESUME.filter((r) => {
+export const applyFilters = (data: WorkExperience[], stackType: StackType | null, skills: string[], strict: boolean): WorkExperience[] => {
+    return data.filter((r) => {
         let isMatch = true;
         if (stackType) isMatch &&= r.stackType == stackType
         if (skills.length > 0) {
