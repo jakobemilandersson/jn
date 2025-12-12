@@ -5,14 +5,16 @@ import type { WorkExperience } from '../../entities/resume/types'
 import { applyFilters } from '../../features/filters/lib/applyFilters'
 import { SkillsField } from '../../features/filters/ui/SkillsField'
 import { SkillChip } from "../../shared/ui/chips";
+import { StrictToggle } from '../../features/filters/ui/StrictSkillsToggle'
 
 export default function ResumePage() {
   const stackType = useFilterStore((s) => s.stackType)
   const skills = useFilterStore((s) => s.skills)
+  const strictSkills = useFilterStore((s) => s.strictSkillsMatch)
 
   const results = useMemo(() => {
-    return applyFilters(stackType, skills);
-  }, [stackType, skills])
+    return applyFilters(stackType, skills, strictSkills);
+  }, [stackType, skills, strictSkills])
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
@@ -21,7 +23,8 @@ export default function ResumePage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <StackTypeDropdown />
         <SkillsField />
-        <div className="flex items-end">
+        <div className="flex flex-col justify-end gap-2">
+          <StrictToggle />
           <div className="space-x-2">
             <ClearButton />
           </div>

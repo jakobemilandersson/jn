@@ -3,16 +3,19 @@ import type { StackType } from '../../../entities/resume/types'
 
 type FilterState = {
   stackType: StackType | null,
-  skills: string[]
+  skills: string[],
+  strictSkillsMatch: boolean,
   setStackType: (s: StackType | null) => void
   toggleSkill: (skill: string) => void
   setSkills: (skills: string[]) => void
+  setStrictSkillsMatch: (strict: boolean) => void,
   clear: () => void
 }
 
 export const useFilterStore = create<FilterState>((set) => ({
   stackType: null,
   skills: [],
+  strictSkillsMatch: false,
   setStackType: (stackType) => set({ stackType }),
   toggleSkill: (skill) =>
     set((state) => ({
@@ -21,5 +24,6 @@ export const useFilterStore = create<FilterState>((set) => ({
         : [...state.skills, skill]
     })),
   setSkills: (skills) => set({ skills }),
-  clear: () => set({ stackType: null, skills: [] })
+  setStrictSkillsMatch: (strictSkillsMatch) => set({ strictSkillsMatch }),
+  clear: () => set({ stackType: null, skills: [], strictSkillsMatch: false })
 }))
