@@ -1,33 +1,82 @@
 import { describe, it, expect } from "vitest";
-import { resolveSkill, getAllSkills } from "../../../src/entities/resume/lib/skillIndex";
-import { RESUME } from "../../../src/entities/resume";
+import { extractSkills, resolveSkill } from "../../../src/entities/resume/lib/skillIndex";
+import type { Skill, StackType, WorkExperience } from "../../../src/entities/resume/types";
 
-describe("skillIndex", () => {
-  it("returns all unique skills", () => {
-    const skills = getAllSkills();
-    const presentations = skills.map(s => s.presentation);
+// -----------------------------------------------------
+// Mock factories
+// -----------------------------------------------------
 
-    // Flattened set from actual data
-    const expected = Array.from(
-      new Set(RESUME.flatMap(r => r.skills.map(s => s.presentation)))
-    );
+const skill = (presentation: string, stackType: StackType = "backend"): Skill => ({
+  presentation,
+  stackType,
+});
 
-    expect(new Set(presentations)).toEqual(new Set(expected));
+const exp = (overrides: Partial<WorkExperience>): WorkExperience => ({
+  id: "id",
+  role: "Dev",
+  company: "Corp",
+  description: "",
+  start: "2020",
+  end: "2021",
+  stackType: "backend",
+  skills: [],
+  ...overrides,
+});
+
+// -----------------------------------------------------
+// Deterministic mock dataset
+// -----------------------------------------------------
+
+const DATA: WorkExperience[] = [
+  exp({ id: "a", skills: [skill("react", "frontend"), skill("docker", "fullstack")] }),
+  exp({ id: "b", skills: [skill("react", "frontend"), skill("node", "backend")] }),
+  exp({ id: "c", skills: [skill("go", "backend")] }),
+];
+
+// Expected unique skill set:
+// react, docker, node, go
+
+// -----------------------------------------------------
+// Tests
+// -----------------------------------------------------
+
+describe("skillIndex — extractSkills", () => {
+  it("returns a deduplicated list of skills", () => {
+    const result = extractSkills(DATA).map((s) => s.presentation);
+
+    expect(result.sort()).toEqual(["react", "docker", "node", "go"].sort());
   });
 
-  it("resolves a skill by its presentation", () => {
-    const skill = resolveSkill("react");
-    expect(skill).not.toBeNull();
-    expect(skill!.presentation).toBe("react");
+  it("preserves skill objects exactly (no clones)", () => {
+    const result = extractSkills(DATA);
+
+    const originalReact = DATA[0].skills[0];
+    const extractedReact = result.find(s => s.presentation === "react");
+
+    // Same object reference
+    expect(extractedReact).toStrictEqual(originalReact);
+  });
+});
+
+describe("skillIndex — resolveSkill()", () => {
+  it("resolves an existing skill by its presentation", () => {
+    const s = resolveSkill("docker", DATA);
+    expect(s).not.toBeNull();
+    expect(s!.presentation).toBe("docker");
+    expect(s!.stackType).toBe("fullstack");
   });
 
-  it("returns null for skills that do not exist", () => {
-    const missing = resolveSkill("not-a-skill");
-    expect(missing).toBeNull();
+  it("returns null when skill does not exist", () => {
+    const s = resolveSkill("not-a-skill", DATA);
+    expect(s).toBeNull();
   });
 
-  it("mapping preserves correct stack type", () => {
-    const nodeSkill = resolveSkill("node");
-    expect(nodeSkill!.stackType).toBe("backend");
+  it("correctly resolves duplicate skills across experiences", () => {
+    const s = resolveSkill("react", DATA);
+
+    // Should resolve to the first occurrence in deterministic extraction order
+    const expected = DATA[0].skills.find((sk) => sk.presentation === "react");
+
+    expect(s).toStrictEqual(expected);
   });
 });

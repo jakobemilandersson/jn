@@ -1,22 +1,33 @@
+import type { WorkExperience, Skill } from "../types";
 import { RESUME } from "../data";
-import type { Skill } from "../types";
 
-const index = new Map<string, Skill>();
-
-// Build index
-RESUME.forEach(exp => {
-  exp.skills.forEach(skill => {
-    index.set(skill.presentation, skill);
+export const extractSkills = (data: WorkExperience[]): Skill[] => {
+  const duplicateSkills = data.flatMap((r) => r.skills);//.map((s) => [s.presentation, s])
+  let uniqueSkills: Skill[] = []
+  duplicateSkills.forEach((s) => {
+    const skillPresentation = s.presentation
+    const uniqueSkillPresentations = uniqueSkills.map((s) => s.presentation)
+    if(!(uniqueSkillPresentations.includes(skillPresentation))) {
+      uniqueSkills.push(s);
+    }
   });
-});
 
-// ❗ compute AFTER index is filled
-const ALL_SKILLS = Object.freeze(Array.from(index.values()));
-
-export function resolveSkill(presentation: string): Skill | null {
-  return index.get(presentation) ?? null;
+  return uniqueSkills;
+  return Array.from(
+    new Map(
+      data.flatMap((r) => r.skills).map((s) => [s.presentation, s])
+    ).values()
+  );
 }
 
-export function getAllSkills(): readonly Skill[] {
-  return ALL_SKILLS;
-}
+export const getAllSkills = (): Skill[] => extractSkills(RESUME);
+
+export const resolveSkill = (
+  presentation: string,
+  data: WorkExperience[] = RESUME   
+): Skill | null => {
+  const map = new Map(
+    data.flatMap((r) => r.skills).map((s) => [s.presentation, s])
+  );
+  return map.get(presentation) ?? null;
+};
