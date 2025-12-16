@@ -4,7 +4,7 @@ Interactive resume explorer built with **React + TypeScript + Vite** using **Min
 
 Users can filter Jakob’s work experience by:
 - Stack Type
-- Skills (multi-select, AND-semantics)
+- Skills (multi-select, **AND or OR semantics via strict toggle**)
 
 ---
 
@@ -23,8 +23,11 @@ type Skill = {
 
 ### 🔎 skillIndex
 Provides:
-- `resolveSkill(name)`
+- `resolveSkill(name, data?)`
 - `getAllSkills()`
+- `extractSkills(data)` (deduplicates by presentation)
+
+Acts as the **canonical source of skill metadata**.
 
 ### 🔍 SearchableMultiSelect
 Searchable dropdown with:
@@ -33,9 +36,14 @@ Searchable dropdown with:
 - String-based filtering integration
 
 ### ⚙️ Filtering System
-`applyFilters(stackType, skills)`:
+```ts
+applyFilters(data, stackType, skills, strict)
+```
 - Exact stackType matching
-- AND logic for skills (based on `skill.presentation`)
+- Skill filtering supports:
+  - **Strict mode (AND)** — all selected skills must match
+  - **Loose mode (OR)** — any selected skill may match
+- Filtering is pure and data-injected
 
 ---
 
@@ -54,6 +62,7 @@ src/
       lib/getSkillOptions.ts
       model/useFilterStore.ts
       ui/SkillsField.tsx
+      ui/StrictSkillsToggle.tsx
   shared/
     ui/
       SearchableMultiSelect.tsx
@@ -68,7 +77,8 @@ src/
 
 ## 🧪 Testing
 - Vitest + React Testing Library.
-- Tests for domain logic, filters, UI components.
+- Tests for domain logic, filters, and UI components.
+- Domain tests use explicit mock data (no RESUME coupling).
 
 Run tests:
 ```

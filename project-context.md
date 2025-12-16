@@ -12,7 +12,7 @@ jakob-now is a **React + TypeScript + Vite SPA** for presenting Jakob’s resume
 filter-driven explorer. Users can filter work experiences by:
 
 - Stack Type (`frontend`, `backend`, `fullstack`)
-- Skills (multi-select, AND filter semantics)
+- Skills (multi-select, **AND or OR semantics via strict toggle**)
 
 The app is deployed on GitHub Pages and follows a **Mini-FSD (Feature-Sliced Design)** architecture.
 
@@ -29,7 +29,7 @@ src/entities/resume/
     data.ts         → Hardcoded resume data (WorkExperience[])
     types.ts        → Domain types (Skill, StackType, WorkExperience)
     lib/
-      skillIndex.ts → Derived skill index (Map for O(1) lookup)
+      skillIndex.ts → Canonical skill index (deduplication + resolution)
 ```
 
 ### Domain Models
@@ -58,10 +58,13 @@ type WorkExperience = {
 
 ### skillIndex.ts — Domain Normalization
 Exports:
-- `resolveSkill(name): Skill | null`
-- `getAllSkills(): readonly Skill[]`
+- `extractSkills(data: WorkExperience[])`
+  - Deduplicates by `presentation`
+  - Preserves first occurrence
+- `getAllSkills()` (RESUME-backed convenience)
+- `resolveSkill(name, data?)`
 
-Used throughout features + UI.
+No other layer should implement its own skill deduplication or indexing.
 
 ---
 
@@ -74,11 +77,25 @@ src/features/filters/
     lib/getSkillOptions.ts
     model/useFilterStore.ts
     ui/SkillsField.tsx
+    ui/StrictSkillsToggle.tsx
 ```
 
-Filtering behavior:
-- `applyFilters` performs AND logic across selected skills.
-- Filters operate on `string[]` (skill.presentation).
+### Filtering Behavior
+```ts
+applyFilters(data, stackType, skills, strict)
+```
+
+- `stackType` matches by equality
+- Skill filtering modes:
+  - `strict = true` → ALL skills must match (AND)
+  - `strict = false` → ANY skill may match (OR)
+- Function is pure and data-injected (no RESUME imports)
+
+### SKILL_OPTIONS
+- Derived from `getAllSkills()`
+- Deduplicated and sorted A–Z
+- Cached and frozen at module load
+- Used as the canonical skill option list for UI
 
 ---
 
@@ -93,42 +110,44 @@ src/shared/ui/
 ```
 
 ### SkillChip
-A presentational component that colors itself based on `skill.stackType`.
+Presentational component; color derives from `skill.stackType`.
 
 ### SearchableMultiSelect
-- Renders SkillChips inside selected area.
-- Uses `resolveSkill` to map strings → Skill objects.
-- Memoized.
+- Renders SkillChips for selected values
+- Maps `string` → `Skill` via `skillIndex`
+- Memoized for performance
 
 ---
 
 ## PAGES LAYER
-`ResumePage` composes filters + UI + skill chips.
+`ResumePage` composes filters, UI, and results.  
+Pages contain no domain logic.
 
 ---
 
-# STATE MANAGEMENT
+## STATE MANAGEMENT
 
 Zustand store:
 - `stackType: StackType | null`
 - `skills: string[]`
+- `strictSkillsMatch: boolean`
+
+`clear()` resets all filter fields.
 
 ---
 
-# TESTING
+## TESTING (additions)
 
-Vitest + React Testing Library.
-
-Tests cover:
-- skillIndex
-- applyFilters
-- SKILL_OPTIONS
-- SkillChip
-- SearchableMultiSelect
+- Tests must not depend on RESUME directly
+- Domain logic is tested with explicit mock data
+- Module-level constants (e.g. SKILL_OPTIONS) are tested using:
+  - `vi.mock()`
+  - `vi.resetModules()`
+  - dynamic `import()`
 
 ---
 
-# DESIGN PRINCIPLES
+## DESIGN PRINCIPLES
 
 - Entities own domain data + normalization
 - Features own filtering + state
