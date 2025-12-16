@@ -112,3 +112,25 @@ describe("applyFilters — strict mode (ALL skills)", () => {
     expect(res.map(r => r.id)).toEqual(["b"]);
   });
 });
+
+// -----------------------------------------------------
+// Ordering by number of matching skills
+// -----------------------------------------------------
+describe("applyFilters — ordering by matching skill count", () => {
+  it("orders results by number of matching skills (descending)", () => {
+    const res = applyFilters(DATA, null, ["react", "ts"], false)
+    expect(res.map(r => r.id)).toEqual(["a", "c"])
+    // a matches 2 skills, c matches 1
+  })
+
+  it("keeps stable order when match counts are equal", () => {
+    const res = applyFilters(DATA, null, ["react"], false)
+    expect(res.map(r => r.id)).toEqual(["a", "c"])
+    // both match 1 skill → preserve original order
+  })
+
+  it("orders backend results correctly when multiple matches exist", () => {
+    const res = applyFilters(DATA, "backend", ["go", "docker"], false)
+    expect(res.map(r => r.id)).toEqual(["d"])
+  })
+})
