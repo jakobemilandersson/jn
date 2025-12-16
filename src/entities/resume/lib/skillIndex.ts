@@ -1,22 +1,20 @@
+import type { WorkExperience, Skill } from "../types";
 import { RESUME } from "../data";
-import type { Skill } from "../types";
 
-const index = new Map<string, Skill>();
-
-// Build index
-RESUME.forEach(exp => {
-  exp.skills.forEach(skill => {
-    index.set(skill.presentation, skill);
-  });
-});
-
-// ❗ compute AFTER index is filled
-const ALL_SKILLS = Object.freeze(Array.from(index.values()));
-
-export function resolveSkill(presentation: string): Skill | null {
-  return index.get(presentation) ?? null;
+export const extractSkills = (data: WorkExperience[]): Skill[] => {
+  return data.flatMap((r) => r.skills).filter((s, i, arr) =>
+    arr.findIndex(s2 => (s2.presentation === s.presentation)) === i
+  )
 }
 
-export function getAllSkills(): readonly Skill[] {
-  return ALL_SKILLS;
-}
+export const getAllSkills = (): Skill[] => extractSkills(RESUME);
+
+export const resolveSkill = (
+  presentation: string,
+  data: WorkExperience[] = RESUME   
+): Skill | null => {
+  const map = new Map(
+    data.flatMap((r) => r.skills).map((s) => [s.presentation, s])
+  );
+  return map.get(presentation) ?? null;
+};

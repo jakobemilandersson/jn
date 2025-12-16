@@ -32,7 +32,8 @@
 │   │       └── ui
 │   │           ├── ClearButton.tsx
 │   │           ├── SkillsField.tsx
-│   │           └── StackTypeField.tsx
+│   │           ├── StackTypeField.tsx
+│   │           └── StrictSkillsToggle.tsx
 │   ├── pages
 │   │   └── ResumePage
 │   │       └── index.tsx
@@ -54,7 +55,6 @@
 │   ├── features
 │   │   └── filters
 │   │       ├── applyFilter.spec.ts
-│   │       ├── applyFilters.spec.ts
 │   │       ├── SKILL_OPTIONS.spec.ts
 │   │       └── useFilterStore.spec.ts
 │   └── shared

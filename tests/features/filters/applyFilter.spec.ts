@@ -1,43 +1,114 @@
-import { describe, it, expect } from 'vitest'
-import { applyFilters } from '../../../src/features/filters/lib/applyFilters'
-import { RESUME } from '../../../src/entities/resume'
+import { describe, it, expect } from "vitest";
+import { applyFilters } from "../../../src/features/filters/lib/applyFilters";
+import type { WorkExperience, Skill } from "../../../src/entities/resume/types";
 
-describe('applyFilters', () => {
-  it('returns all entries when stackType=null and no skills selected', () => {
-    const res = applyFilters(null, [])
-    expect(res.length).toBe(RESUME.length)
-  })
+// -----------------------------------------------------
+// Minimal deterministic factories
+// -----------------------------------------------------
 
-  it('filters by stackType', () => {
-    const target = 'backend'
-    const expected = RESUME.filter((r) => r.stackType === target)
-    const res = applyFilters(target as any, [])
-    expect(res.length).toBe(expected.length)
-    expect(res.every((r) => r.stackType === target)).toBe(true)
-  })
+const makeSkill = (presentation: string, stackType: "fullstack" | "backend" | "frontend" = "fullstack" ): Skill => ({
+  presentation,
+  stackType,
+});
 
-  it('filters by a single selected skill', () => {
-    const skill = RESUME.flatMap((r) => r.skills)[0]
-    const res = applyFilters(null, [skill.presentation])
-    expect(res.every((r) => r.skills.map(s => s.presentation).includes(skill.presentation))).toBe(true)
-  })
+const makeExp = (overrides: Partial<WorkExperience>): WorkExperience => ({
+  id: "id",
+  role: "Dev",
+  company: "Corp",
+  description: "",
+  start: "2020",
+  end: "2021",
+  stackType: "fullstack",
+  skills: [],
+  ...overrides,
+});
 
-  // requires all selected skills to be present (AND filtering)
-  it('requires all selected skills to be present (AND filtering)', () => {
-    const skills = RESUME.flatMap(r => r.skills.map(s => s.presentation));
-    const pair = skills.slice(0, 2);
+// -----------------------------------------------------
+// Test dataset
+// -----------------------------------------------------
 
-    const expected = RESUME.filter(r => {
-      const rSkills = r.skills.map(s => s.presentation);
-      return pair.every(s => rSkills.includes(s));
-    });
+const DATA: WorkExperience[] = [
+  makeExp({
+    id: "a",
+    stackType: "fullstack",
+    skills: [makeSkill("react"), makeSkill("ts")],
+  }),
 
-    const res = applyFilters(null, pair);
+  makeExp({
+    id: "b",
+    stackType: "backend",
+    skills: [makeSkill("ruby")],
+  }),
 
-    expect(res.length).toBe(expected.length);
-    expect(res.every(r => {
-      const rSkills = r.skills.map(s => s.presentation);
-      return pair.every(s => rSkills.includes(s));
-    })).toBe(true);
+  makeExp({
+    id: "c",
+    stackType: "frontend",
+    skills: [makeSkill("react")],
+  }),
+
+  makeExp({
+    id: "d",
+    stackType: "backend",
+    skills: [makeSkill("go"), makeSkill("docker")],
+  }),
+];
+
+// -----------------------------------------------------
+// Loose mode (strict = false)
+// -----------------------------------------------------
+describe("applyFilters — loose mode (ANY skill)", () => {
+  it("returns all experiences when no filters are applied", () => {
+    const res = applyFilters(DATA, null, [], false);
+    expect(res.map(r => r.id)).toEqual(["a", "b", "c", "d"]);
   });
-})
+
+  it("filters by stackType only", () => {
+    const res = applyFilters(DATA, "backend", [], false);
+    expect(res.map(r => r.id)).toEqual(["b", "d"]);
+  });
+
+  it("returns experiences matching ANY selected skill", () => {
+    const res = applyFilters(DATA, null, ["react"], false);
+    expect(res.map(r => r.id)).toEqual(["a", "c"]);
+  });
+
+  it("filters by BOTH stackType and ANY skill", () => {
+    const res = applyFilters(DATA, "backend", ["docker"], false);
+    expect(res.map(r => r.id)).toEqual(["d"]);
+  });
+
+  it("returns empty list when no experience matches ANY skill", () => {
+    const res = applyFilters(DATA, null, ["unknown"], false);
+    expect(res.length).toBe(0);
+  });
+});
+
+// -----------------------------------------------------
+// Strict mode (strict = true)
+// -----------------------------------------------------
+describe("applyFilters — strict mode (ALL skills)", () => {
+  it("requires ALL selected skills to be present", () => {
+    const res = applyFilters(DATA, null, ["react", "ts"], true);
+    expect(res.map(r => r.id)).toEqual(["a"]);
+  });
+
+  it("returns empty when at least one required skill is missing", () => {
+    const res = applyFilters(DATA, null, ["react", "ts", "go"], true);
+    expect(res.length).toBe(0);
+  });
+
+  it("filters by BOTH stackType and ALL skills", () => {
+    const res = applyFilters(DATA, "fullstack", ["react", "ts"], true);
+    expect(res.map(r => r.id)).toEqual(["a"]);
+  });
+
+  it("does not match experiences missing any required skill", () => {
+    const res = applyFilters(DATA, null, ["react", "ts"], true);
+    expect(res.map(r => r.id)).toEqual(["a"]); // c has only react
+  });
+
+  it("treats one-skill strict mode the same as loose mode for one skill", () => {
+    const res = applyFilters(DATA, null, ["ruby"], true);
+    expect(res.map(r => r.id)).toEqual(["b"]);
+  });
+});
