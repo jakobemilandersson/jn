@@ -167,3 +167,15 @@ Zustand store:
 - Shared UI is pure presentation
 - Pages compose but do not contain logic
 - Skill metadata comes only from skillIndex
+
+---
+
+## GIT & CHANGE COMMUNICATION (LLM CONTEXT)
+
+- Pull request titles must reflect **behavioral or UX-level changes**
+- Titles should align with Mini-FSD ownership (features > pages > entities)
+- Avoid implementation-focused wording in PR titles
+- Ordering, filtering, and ranking changes are considered **feature logic**
+- LLMs should prefer concise, industry-standard PR titles using:
+  <type>(<scope>): <behavioral change>
+

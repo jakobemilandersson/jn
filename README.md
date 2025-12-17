@@ -101,5 +101,17 @@ Vitest
 
 ---
 
+## 🔀 Git & Pull Request Guidelines
+
+This project follows a lightweight, feature-oriented git workflow.
+
+- Pull request titles should describe **observable behavior**, not implementation
+- Titles follow the format:
+
+  `feature(filters): rank results by skill relevance`
+
+- Scope should align with the Mini-FSD slice being changed
+- Commits may be granular; PR titles should summarize user-visible impact
+
 ## 📝 License
 MIT

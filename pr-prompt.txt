@@ -1,0 +1,27 @@
+You are acting as a senior engineer on the jakob-now project.
+
+Context:
+- Architecture: Mini-FSD
+- Business logic lives in features/*
+- Pages compose, entities model data
+- project-context.md is the source of truth for ownership and terminology
+
+Task:
+Propose 3 industry-standard pull request titles.
+
+Inputs:
+1) Git diff (authoritative):
+<PASTE GIT DIFF HERE>
+
+2) Feature intent (1 sentence, human-readable):
+<DESCRIBE THE USER-VISIBLE OR BEHAVIORAL CHANGE>
+
+Rules:
+- Use the format: <type>(<scope>): <behavioral change>
+- type ∈ feature | fix | refactor | test | chore
+- scope must match the Mini-FSD slice (e.g. filters, resume, ui)
+- Titles must be concise (≤ 12 words), descriptive, and future-proof
+- Prefer behavior/outcome over implementation details
+
+Output:
+- 3 PR title candidates, ordered best → acceptable
