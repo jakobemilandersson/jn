@@ -6,6 +6,8 @@ Users can filter Jakob’s work experience by:
 - Stack Type
 - Skills (multi-select, **AND or OR semantics via strict toggle**)
 
+Results are **ranked by relevance** when skills are selected: experiences with more matching skills appear first.
+
 ---
 
 ## 🚀 Features
@@ -43,7 +45,8 @@ applyFilters(data, stackType, skills, strict)
 - Skill filtering supports:
   - **Strict mode (AND)** — all selected skills must match
   - **Loose mode (OR)** — any selected skill may match
-- Filtering is pure and data-injected
+- When skills are selected, results are **sorted by number of matching skills (descending)**.
+- Filtering and ordering are pure and data-injected.
 
 ---
 
@@ -78,6 +81,7 @@ src/
 ## 🧪 Testing
 - Vitest + React Testing Library.
 - Tests for domain logic, filters, and UI components.
+- Filter tests assert both **filter semantics** and **result ordering**.
 - Domain tests use explicit mock data (no RESUME coupling).
 
 Run tests:

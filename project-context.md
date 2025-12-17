@@ -9,10 +9,14 @@ coding standards, design principles, and data modeling choices.
 # 📦 Project Summary
 
 jakob-now is a **React + TypeScript + Vite SPA** for presenting Jakob’s resume in an interactive,
-filter-driven explorer. Users can filter work experiences by:
+filter-driven explorer.
 
+Users can filter work experiences by:
 - Stack Type (`frontend`, `backend`, `fullstack`)
 - Skills (multi-select, **AND or OR semantics via strict toggle**)
+
+When skills are selected, filtered results are **ranked by relevance**, where experiences with more
+matching skills are ordered before those with fewer matches.
 
 The app is deployed on GitHub Pages and follows a **Mini-FSD (Feature-Sliced Design)** architecture.
 
@@ -21,7 +25,8 @@ The app is deployed on GitHub Pages and follows a **Mini-FSD (Feature-Sliced Des
 # 🧱 Architecture (Mini-FSD)
 
 ## ENTITIES LAYER
-This layer defines **canonical domain models** and pure domain logic.
+Defines **canonical domain models** and pure domain logic.
+No ordering, filtering, or presentation logic lives in entities.
 
 ### Resume Domain
 ```
@@ -69,7 +74,7 @@ No other layer should implement its own skill deduplication or indexing.
 ---
 
 ## FEATURES LAYER
-Feature modules encapsulate business logic.
+Encapsulates business logic.
 
 ```
 src/features/filters/
@@ -85,11 +90,17 @@ src/features/filters/
 applyFilters(data, stackType, skills, strict)
 ```
 
-- `stackType` matches by equality
-- Skill filtering modes:
-  - `strict = true` → ALL skills must match (AND)
-  - `strict = false` → ANY skill may match (OR)
+Responsibilities:
+- Filter by stackType
+- Filter by skills:
+  - `strict = true` → ALL selected skills must match
+  - `strict = false` → ANY selected skill may match
+- When skills are provided:
+  - Results are **sorted by number of matching skills (descending)**
+  - Sorting is stable for equal match counts
 - Function is pure and data-injected (no RESUME imports)
+
+Ordering logic belongs to the **features layer**, never pages or entities.
 
 ### SKILL_OPTIONS
 - Derived from `getAllSkills()`
@@ -136,21 +147,23 @@ Zustand store:
 
 ---
 
-## TESTING (additions)
-
+## TESTING RULES
 - Tests must not depend on RESUME directly
 - Domain logic is tested with explicit mock data
 - Module-level constants (e.g. SKILL_OPTIONS) are tested using:
   - `vi.mock()`
   - `vi.resetModules()`
   - dynamic `import()`
+- Filtering tests must assert both:
+  - Inclusion/exclusion
+  - Result ordering when relevant
 
 ---
 
 ## DESIGN PRINCIPLES
 
 - Entities own domain data + normalization
-- Features own filtering + state
+- Features own filtering + state (including ordering)
 - Shared UI is pure presentation
 - Pages compose but do not contain logic
 - Skill metadata comes only from skillIndex
