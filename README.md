@@ -12,6 +12,14 @@ Results are **ranked by relevance** when skills are selected: experiences with m
 
 ## 🚀 Features
 
+### 🎯 Result Relevance
+Filtered results visually highlight:
+- Skills that directly match selected filters
+- Additional related skills for context
+
+When multiple skills are selected, a subtle match-strength indicator explains
+why a result appears.
+
 ### 🎨 SkillChip
 A presentational chip reflecting `skill.stackType` via colors.
 

@@ -4,9 +4,9 @@ import { useFilterStore } from '../../features/filters/model/useFilterStore'
 import type { WorkExperience } from '../../entities/resume/types'
 import { applyFilters } from '../../features/filters/lib/applyFilters'
 import { SkillsField } from '../../features/filters/ui/SkillsField'
-import { SkillChip } from "../../shared/ui/chips";
 import { StrictToggle } from '../../features/filters/ui/StrictSkillsToggle'
 import { RESUME } from '../../entities/resume'
+import { WorkExperienceCard } from '../../widgets/work-experience/ui/WorkExperienceCard'
 
 export default function ResumePage() {
   const stackType = useFilterStore((s) => s.stackType)
@@ -36,15 +36,12 @@ export default function ResumePage() {
         <h2 className="text-xl font-semibold">Results ({results.length})</h2>
         <div className="mt-4 space-y-4">
           {results.map((r: WorkExperience) => (
-            <article key={r.id} className="p-4 border rounded">
-              <h3 className="font-medium">{r.role} — {r.company}</h3>
-              <p className="text-sm text-slate-600">{r.start} — {r.end ?? 'Present'}</p>
-              <p className="mt-2">{r.description}</p>
-              <br />
-              <div className="inline-flex flex-wrap gap-1">
-                {r.skills.map((s) => <SkillChip key={s.presentation} skill={s} />)}
-              </div>
-            </article>
+            <WorkExperienceCard
+              key={r.id}
+              experience={r}
+              selectedSkills={skills}
+              selectedStackType={stackType}
+            />
           ))}
         </div>
       </section>
