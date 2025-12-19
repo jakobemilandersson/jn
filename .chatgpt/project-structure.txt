@@ -6,8 +6,6 @@
 ├── package.json
 ├── pnpm-lock.yaml
 ├── postcss.config.cjs
-├── project-context.md
-├── project-structure.txt
 ├── README.md
 ├── setupTests.ts
 ├── src
@@ -47,6 +45,11 @@
 │   │       ├── MultiSelect.tsx
 │   │       └── SearchableMultiSelect.tsx
 │   └── widgets
+│       └── work-experience
+│           ├── lib
+│           │   └── classifySkills.ts
+│           └── ui
+│               └── WorkExperienceCard.tsx
 ├── tailwind.config.cjs
 ├── tests
 │   ├── entities
@@ -57,16 +60,19 @@
 │   │       ├── applyFilter.spec.ts
 │   │       ├── SKILL_OPTIONS.spec.ts
 │   │       └── useFilterStore.spec.ts
-│   └── shared
-│       └── ui
-│           ├── chips
-│           │   └── SkillChip.spec.tsx
-│           └── SearchableMultiSelect.spec.tsx
+│   ├── shared
+│   │   └── ui
+│   │       ├── chips
+│   │       │   └── SkillChip.spec.tsx
+│   │       └── SearchableMultiSelect.spec.tsx
+│   └── widgets
+│       └── work-experience
+│           └── classifySkills.spec.ts
 ├── tree.txt
 ├── tsconfig.json
 └── vite.config.ts
 
-25 directories, 40 files
+30 directories, 41 files
 ```
 
 Notes:

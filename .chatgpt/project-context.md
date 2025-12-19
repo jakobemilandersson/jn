@@ -85,6 +85,33 @@ src/features/filters/
     ui/StrictSkillsToggle.tsx
 ```
 
+## WIDGETS LAYER (IMPORTANT)
+
+Widgets adapt **domain data + feature context** into UI-ready representations.
+
+They are allowed to:
+- Derive presentation-specific groupings
+- Combine multiple domain concepts for rendering
+- Compute contextual metadata (e.g. match strength)
+
+They must:
+- Remain pure and testable
+- Avoid direct Zustand access
+- Avoid mutating domain entities
+
+### Work Experience Widget
+```
+src/widgets/work-experience/
+  lib/
+    classifySkills.ts   // Groups skills into matched / related / other
+  ui/
+    WorkExperienceCard.tsx
+```
+
+**Note:**  
+Skill classification for presentation lives in widgets, not in features or entities.
+Filtering eligibility remains owned by `features/filters`.
+
 ### Filtering Behavior
 ```ts
 applyFilters(data, stackType, skills, strict)
@@ -161,9 +188,9 @@ Zustand store:
 ---
 
 ## DESIGN PRINCIPLES
-
 - Entities own domain data + normalization
 - Features own filtering + state (including ordering)
+- Widgets define *how matched data is interpreted for UI*
 - Shared UI is pure presentation
 - Pages compose but do not contain logic
 - Skill metadata comes only from skillIndex
