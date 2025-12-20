@@ -1,4 +1,4 @@
-import { useFilterStore } from "../model/useFilterStore"
+import { useFilterStore } from "@features/filters"
 
 export const ClearButton = () => {
   const clear = useFilterStore((s) => s.clear)

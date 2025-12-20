@@ -1,12 +1,13 @@
-import type { WorkExperience, StackType } from '@entities/resume/types'
-import { SkillChip } from '@shared/ui/chips'
-import { classifySkills } from '../lib/classifySkills'
+import type { WorkExperience, StackType } from "@entities/resume";
+import { SkillChip } from "@shared/ui";
+import { classifySkills } from "@widgets/work-experience";
+import { mapSkillToChipProps } from "@features/filters/lib/mapSkillToChipProps";
 
 type Props = {
-  experience: WorkExperience
-  selectedSkills: string[]
-  selectedStackType: StackType | null
-}
+  experience: WorkExperience;
+  selectedSkills: string[];
+  selectedStackType: StackType | null;
+};
 
 export function WorkExperienceCard({
   experience,
@@ -17,9 +18,9 @@ export function WorkExperienceCard({
     experience,
     selectedSkills,
     selectedStackType,
-  })
+  });
 
-  const nonMatched = [...related, ...other]
+  const nonMatched = [...related, ...other];
 
   return (
     <article className="p-4 border rounded space-y-3">
@@ -30,21 +31,18 @@ export function WorkExperienceCard({
           </h3>
 
           <p className="text-sm text-slate-600">
-            {experience.start} — {experience.end ?? 'Present'}
+            {experience.start} — {experience.end ?? "Present"}
           </p>
         </div>
-        <div>
-          {matchStrength && (
-            <p className="text-xs text-slate-500 py-1">
-              Matches {matchStrength.matched} of {matchStrength.total} selected skills
-            </p>
-          )}
-        </div>
+
+        {matchStrength && (
+          <p className="text-xs text-slate-500 py-1">
+            Matches {matchStrength.matched} of {matchStrength.total} selected skills
+          </p>
+        )}
       </div>
 
-      {experience.description && (
-        <p>{experience.description}</p>
-      )}
+      {experience.description && <p>{experience.description}</p>}
 
       <div className="py-1" />
 
@@ -52,12 +50,20 @@ export function WorkExperienceCard({
         <>
           <h5 className="text-sm font-medium">Matched skills</h5>
           <div className="flex flex-wrap gap-1">
-            {matched.map((skill) => (
-              <SkillChip
-                key={skill.presentation}
-                skill={skill}
-              />
-            ))}
+            {matched.map((skill) => {
+              const { label, variant } = mapSkillToChipProps(
+                skill,
+                skill.presentation
+              );
+
+              return (
+                <SkillChip
+                  key={skill.presentation}
+                  label={label}
+                  variant={variant}
+                />
+              );
+            })}
           </div>
         </>
       )}
@@ -66,15 +72,23 @@ export function WorkExperienceCard({
         <>
           <h5 className="text-sm font-medium opacity-60">Other skills</h5>
           <div className="flex flex-wrap gap-1 opacity-60">
-            {nonMatched.map((skill) => (
-              <SkillChip
-                key={skill.presentation}
-                skill={skill}
-              />
-            ))}
+            {nonMatched.map((skill) => {
+              const { label, variant } = mapSkillToChipProps(
+                skill,
+                skill.presentation
+              );
+
+              return (
+                <SkillChip
+                  key={skill.presentation}
+                  label={label}
+                  variant={variant}
+                />
+              );
+            })}
           </div>
         </>
       )}
     </article>
-  )
+  );
 }

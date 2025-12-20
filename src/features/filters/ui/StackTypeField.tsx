@@ -1,7 +1,7 @@
 import React from 'react'
-import { useFilterStore } from '../model/useFilterStore'
+import { useFilterStore } from '@features/filters'
 import { Dropdown } from '@shared/ui'
-import { StackType } from '@entities/resume'
+import type { StackType } from '@entities/resume'
 
 export const StackTypeDropdown = () => {
   const stackType = useFilterStore((s) => s.stackType)

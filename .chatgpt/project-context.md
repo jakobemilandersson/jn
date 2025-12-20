@@ -137,12 +137,33 @@ Encapsulates business logic.
 src/features/filters/
     lib/applyFilters.ts
     lib/getSkillOptions.ts
+    lib/mapSkillToChipProps.ts
     lib/useFilteredResume.ts
     model/useFilterStore.ts
     ui/FiltersPanel.tsx
     ui/SkillsField.tsx
     ui/StrictSkillsToggle.tsx
 ```
+
+### Presentation Mapping Helpers (IMPORTANT)
+
+Features may define **pure presentation-mapping helpers** that:
+- Convert domain entities into UI-ready view models
+- Contain no React or rendering logic
+- Are reusable across features and widgets
+- Prevent shared UI components from depending on entities
+
+Example:
+```ts
+mapSkillToChipProps(skill, fallbackLabel)
+```
+
+These helpers:
+- Belong in `features/*/lib`
+- Must remain pure and testable
+- Are the only place where domain → presentation mapping occurs
+
+Shared UI components must consume view models only, never domain entities.
 
 ## WIDGETS LAYER (IMPORTANT)
 

@@ -123,6 +123,21 @@ Filtering behavior remains unchanged:
 - Skill filtering with strict (AND) / loose (OR) semantics
 - Results ranked by number of matching skills (descending)
 
+### Skill Rendering
+
+Selected skills are rendered via **feature-provided presentation logic**:
+
+```tsx
+<SearchableMultiSelect
+  renderSelected={(value) => <SkillChip ... />}
+/>
+```
+
+This ensures:
+- Shared UI remains domain-agnostic
+- Skill metadata resolution lives in features
+- Visual semantics stay consistent across the app
+
 ---
 
 ## 🧪 Testing

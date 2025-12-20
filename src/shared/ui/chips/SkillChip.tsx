@@ -1,9 +1,8 @@
-import type { Skill } from "@entities/resume";
-
 export type SkillChipVariant = "frontend" | "backend" | "fullstack";
 
 export type SkillChipProps = {
-  skill: Skill;
+  label: string;
+  variant: SkillChipVariant;
   className?: string;
 };
 
@@ -13,12 +12,15 @@ const VARIANT_STYLES: Record<SkillChipVariant, string> = {
   fullstack: "bg-blue-100 text-blue-700",
 };
 
-export function SkillChip({ skill, className = "" }: SkillChipProps) {
-  const variantClasses = VARIANT_STYLES[skill.stackType];
-  return (
-    <div role="presentation" className={`px-2 py-0.5 rounded text-xs font-medium inline-block ${variantClasses} ${className}`}>
-      {skill.presentation}
-    </div>
-  )
-}
+export function SkillChip({ label, variant, className = "" }: SkillChipProps) {
+  const variantClasses = VARIANT_STYLES[variant];
 
+  return (
+    <div
+      role="presentation"
+      className={`px-2 py-0.5 rounded text-xs font-medium inline-block ${variantClasses} ${className}`}
+    >
+      {label}
+    </div>
+  );
+}

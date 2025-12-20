@@ -1,25 +1,31 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { SkillChip } from "@shared/ui/chips";
+import { SkillChip } from "@shared/ui";
 
 describe("SkillChip", () => {
   it("renders the label", () => {
-    render(<SkillChip skill={{ presentation: "Python", stackType: "backend" }} />);
+    render(<SkillChip label="Python" variant="backend" />);
     expect(screen.getByText("Python")).toBeInTheDocument();
   });
 
-  it("maps node to backend variant classes", () => {
-    const { container } = render(<SkillChip skill={{ presentation: "node", stackType: "backend" }} />);
+  it("maps backend variant classes", () => {
+    const { container } = render(
+      <SkillChip label="node" variant="backend" />
+    );
     expect(container.firstChild).toHaveClass("bg-green-100");
   });
 
-  it("maps react to frontend variant classes", () => {
-    const { container } = render(<SkillChip skill={{ presentation: "React", stackType: "frontend" }} />);
+  it("maps frontend variant classes", () => {
+    const { container } = render(
+      <SkillChip label="React" variant="frontend" />
+    );
     expect(container.firstChild).toHaveClass("bg-purple-100");
   });
 
-  it("falls back to fullstack for unknown skill", () => {
-    const { container } = render(<SkillChip skill={{ presentation: "SomeRandomTool", stackType: "fullstack" }} />);
+  it("maps fullstack variant classes", () => {
+    const { container } = render(
+      <SkillChip label="SomeRandomTool" variant="fullstack" />
+    );
     expect(container.firstChild).toHaveClass("bg-blue-100");
   });
 });
