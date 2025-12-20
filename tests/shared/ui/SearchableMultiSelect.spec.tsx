@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import { SearchableMultiSelect } from "../../../src/shared/ui/SearchableMultiSelect";
+import { SearchableMultiSelect } from "@shared/ui/SearchableMultiSelect";
 
 describe("SearchableMultiSelect", () => {
   it("filters options based on query", () => {

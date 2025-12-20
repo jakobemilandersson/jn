@@ -1,12 +1,12 @@
 import { describe, it, expect, vi, beforeEach, Mock } from "vitest";
-import type { Skill, StackType } from "../../../src/entities/resume/types";
+import type { Skill, StackType } from "@entities/resume/types";
 
 // Mock BEFORE import() calls
-vi.mock("../../../src/entities/resume/lib/skillIndex", () => ({
+vi.mock("@entities/resume/lib/skillIndex", () => ({
   getAllSkills: vi.fn(),
 }));
 
-import { getAllSkills } from "../../../src/entities/resume/lib/skillIndex";
+import { getAllSkills } from "@entities/resume/lib/skillIndex";
 
 const skill = (presentation: string, stackType: StackType = "backend"): Skill => ({
   presentation,
@@ -23,7 +23,7 @@ describe("SKILL_OPTIONS", () => {
     const mockSkills = [skill("react"), skill("docker")];
     (getAllSkills as any).mockReturnValue(mockSkills);
 
-    const { SKILL_OPTIONS } = await import("../../../src/features/filters/lib/getSkillOptions");
+    const { SKILL_OPTIONS } = await import("@features/filters/lib/getSkillOptions");
 
     expect(SKILL_OPTIONS.map(s => s.presentation)).toEqual(["docker", "react"]);
   });
@@ -37,7 +37,7 @@ describe("SKILL_OPTIONS", () => {
 
     (getAllSkills as Mock).mockReturnValue(mockSkills);
 
-    const { SKILL_OPTIONS } = await import("../../../src/features/filters/lib/getSkillOptions");
+    const { SKILL_OPTIONS } = await import("@features/filters/lib/getSkillOptions");
 
     expect(SKILL_OPTIONS.map(s => s.presentation)).toEqual(["go", "react"]);
     expect(SKILL_OPTIONS[1].stackType).toBe("frontend"); // first occurrence preserved
@@ -52,7 +52,7 @@ describe("SKILL_OPTIONS", () => {
 
     (getAllSkills as Mock).mockReturnValue(mockSkills);
 
-    const { SKILL_OPTIONS } = await import("../../../src/features/filters/lib/getSkillOptions");
+    const { SKILL_OPTIONS } = await import("@features/filters/lib/getSkillOptions");
 
     expect(SKILL_OPTIONS.map(s => s.presentation)).toEqual(["a11y", "docker", "React"]);
   });
@@ -61,8 +61,8 @@ describe("SKILL_OPTIONS", () => {
     const mockSkills = [skill("react")];
     (getAllSkills as any).mockReturnValue(mockSkills);
 
-    const first = (await import("../../../src/features/filters/lib/getSkillOptions")).SKILL_OPTIONS;
-    const second = (await import("../../../src/features/filters/lib/getSkillOptions")).SKILL_OPTIONS;
+    const first = (await import("@features/filters/lib/getSkillOptions")).SKILL_OPTIONS;
+    const second = (await import("@features/filters/lib/getSkillOptions")).SKILL_OPTIONS;
 
     expect(first).toBe(second);
   });

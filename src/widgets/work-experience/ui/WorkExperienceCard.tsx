@@ -1,5 +1,5 @@
-import type { WorkExperience, StackType } from '../../../entities/resume/types'
-import { SkillChip } from '../../../shared/ui/chips'
+import type { WorkExperience, StackType } from '@entities/resume/types'
+import { SkillChip } from '@shared/ui/chips'
 import { classifySkills } from '../lib/classifySkills'
 
 type Props = {
@@ -35,9 +35,9 @@ export function WorkExperienceCard({
         </div>
         <div>
           {matchStrength && (
-          <p className="text-xs text-slate-500 py-1">
-            Matches {matchStrength.matched} of {matchStrength.total} selected skills
-          </p>
+            <p className="text-xs text-slate-500 py-1">
+              Matches {matchStrength.matched} of {matchStrength.total} selected skills
+            </p>
           )}
         </div>
       </div>
