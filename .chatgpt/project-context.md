@@ -24,6 +24,23 @@ The app is deployed on GitHub Pages and follows a **Mini-FSD (Feature-Sliced Des
 
 # 🧱 Architecture (Mini-FSD)
 
+## 📐 ARCHITECTURAL ENFORCEMENT (LINTING)
+
+They are actively enforced via:
+- **ESLint (flat config, ESLint v9)**
+- `eslint-plugin-boundaries`
+- `eslint-plugin-import`
+
+### Enforcement Guarantees
+
+The linting system enforces:
+- Feature / entity / widget layer boundaries
+- Public API–only imports across layers
+- No deep imports except via `index.ts`
+- Alias-only imports (`@features/*`, `@entities/*`, etc.)
+
+Violations of architectural rules will fail CI and must be fixed before merge.
+
 ## 📦 MODULE RESOLUTION & IMPORT RULES (IMPORTANT)
 
 The project uses **TypeScript + Vite path aliases** as a core architectural constraint.
