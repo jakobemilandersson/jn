@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useMemo } from "react";
-import { SkillChip } from "./chips/SkillChip";
-import { resolveSkill } from "@entities/resume/lib/skillIndex";
+import { SkillChip } from "./chips";
+import { resolveSkill } from "@entities/resume";
 
 export type SearchableMultiSelectProps = {
   id: string,

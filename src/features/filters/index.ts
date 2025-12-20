@@ -1,2 +1,5 @@
 export { StackTypeDropdown } from './ui/StackTypeField'
 export { ClearButton } from './ui/ClearButton'
+export { useFilterStore } from './model/useFilterStore'
+export { getSkillOptions, SKILL_OPTIONS } from './lib/getSkillOptions'
+export { applyFilters } from './lib/applyFilters'

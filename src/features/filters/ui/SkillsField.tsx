@@ -1,6 +1,6 @@
-import { SKILL_OPTIONS } from "../lib/getSkillOptions";
-import { useFilterStore } from "../model/useFilterStore";
-import { SearchableMultiSelect } from "@shared/ui/SearchableMultiSelect";
+import { SKILL_OPTIONS } from "@features/filters";
+import { useFilterStore } from "@features/filters";
+import { SearchableMultiSelect } from "@shared/ui";
 
 export function SkillsField() {
   const skills = useFilterStore(s => s.skills);

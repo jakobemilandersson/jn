@@ -1,4 +1,4 @@
-import { useFilterStore } from "../model/useFilterStore";
+import { useFilterStore } from "@features/filters";
 
 export function StrictToggle() {
     const strict = useFilterStore(s => s.strictSkillsMatch);

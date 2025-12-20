@@ -1,6 +1,6 @@
-import type { WorkExperience, StackType } from '@entities/resume/types'
-import { SkillChip } from '@shared/ui/chips'
-import { classifySkills } from '../lib/classifySkills'
+import type { WorkExperience, StackType } from '@entities/resume'
+import { SkillChip } from '@shared/ui'
+import { classifySkills } from '@widgets/work-experience'
 
 type Props = {
   experience: WorkExperience

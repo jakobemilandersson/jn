@@ -1,0 +1,1 @@
+export { classifySkills } from './lib/classifySkills'

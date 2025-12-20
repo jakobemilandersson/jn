@@ -1,5 +1,5 @@
 // src/widgets/work-experience/lib/classifySkills.ts
-import type { Skill, StackType, WorkExperience } from '@entities/resume/types'
+import type { Skill, StackType, WorkExperience } from '@entities/resume'
 
 export type MatchStrength =
   | {
