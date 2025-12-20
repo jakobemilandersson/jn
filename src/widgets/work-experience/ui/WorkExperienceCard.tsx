@@ -1,12 +1,12 @@
-import type { WorkExperience, StackType } from '@entities/resume'
-import { SkillChip } from '@shared/ui'
-import { classifySkills } from '@widgets/work-experience'
+import type { WorkExperience, StackType } from "@entities/resume";
+import { SkillChip } from "@shared/ui";
+import { classifySkills } from "@widgets/work-experience";
 
 type Props = {
-  experience: WorkExperience
-  selectedSkills: string[]
-  selectedStackType: StackType | null
-}
+  experience: WorkExperience;
+  selectedSkills: string[];
+  selectedStackType: StackType | null;
+};
 
 export function WorkExperienceCard({
   experience,
@@ -17,9 +17,9 @@ export function WorkExperienceCard({
     experience,
     selectedSkills,
     selectedStackType,
-  })
+  });
 
-  const nonMatched = [...related, ...other]
+  const nonMatched = [...related, ...other];
 
   return (
     <article className="p-4 border rounded space-y-3">
@@ -30,21 +30,18 @@ export function WorkExperienceCard({
           </h3>
 
           <p className="text-sm text-slate-600">
-            {experience.start} — {experience.end ?? 'Present'}
+            {experience.start} — {experience.end ?? "Present"}
           </p>
         </div>
-        <div>
-          {matchStrength && (
-            <p className="text-xs text-slate-500 py-1">
-              Matches {matchStrength.matched} of {matchStrength.total} selected skills
-            </p>
-          )}
-        </div>
+
+        {matchStrength && (
+          <p className="text-xs text-slate-500 py-1">
+            Matches {matchStrength.matched} of {matchStrength.total} selected skills
+          </p>
+        )}
       </div>
 
-      {experience.description && (
-        <p>{experience.description}</p>
-      )}
+      {experience.description && <p>{experience.description}</p>}
 
       <div className="py-1" />
 
@@ -55,7 +52,8 @@ export function WorkExperienceCard({
             {matched.map((skill) => (
               <SkillChip
                 key={skill.presentation}
-                skill={skill}
+                label={skill.presentation}
+                variant={skill.stackType}
               />
             ))}
           </div>
@@ -69,12 +67,13 @@ export function WorkExperienceCard({
             {nonMatched.map((skill) => (
               <SkillChip
                 key={skill.presentation}
-                skill={skill}
+                label={skill.presentation}
+                variant={skill.stackType}
               />
             ))}
           </div>
         </>
       )}
     </article>
-  )
+  );
 }

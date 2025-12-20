@@ -1,13 +1,13 @@
+import type { ReactNode } from "react";
 import { useState, useRef, useEffect, useMemo } from "react";
-import { SkillChip } from "./chips";
-import { resolveSkill } from "@entities/resume";
 
 export type SearchableMultiSelectProps = {
-  id: string,
+  id: string;
   label: string;
   options: string[];
   selected: string[];
   onChange: (next: string[]) => void;
+  renderSelected?: (value: string) => ReactNode;
 };
 
 export function SearchableMultiSelect({
@@ -16,42 +16,25 @@ export function SearchableMultiSelect({
   options,
   selected,
   onChange,
+  renderSelected,
 }: SearchableMultiSelectProps) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const filtered = useMemo(() => options.filter(o =>
-    o.toLowerCase().includes(query.toLowerCase())
-  ), [options, query]);
-
-  const selectedChips = useMemo(() => {
-    return selected.map((presentation) => {
-      const skillObj = resolveSkill(presentation);
-      if (skillObj) {
-        return <SkillChip key={presentation} skill={skillObj} />;
-      }
-      // fallback plain pill when skill metadata is missing
-      return (
-        <span
-          key={presentation}
-          className="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-xs"
-        >
-          {presentation}
-        </span>
-      );
-    });
-  }, [selected, resolveSkill]);
+  const filtered = useMemo(
+    () => options.filter(o => o.toLowerCase().includes(query.toLowerCase())),
+    [options, query]
+  );
 
   const toggle = (value: string) => {
-    if (selected.includes(value)) {
-      onChange(selected.filter(v => v !== value));
-    } else {
-      onChange([...selected, value]);
-    }
+    onChange(
+      selected.includes(value)
+        ? selected.filter(v => v !== value)
+        : [...selected, value]
+    );
   };
 
-  // Close on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (!containerRef.current?.contains(e.target as Node)) {
@@ -67,30 +50,38 @@ export function SearchableMultiSelect({
       <label className="text-sm font-medium" htmlFor={id}>
         {label}
       </label>
-      {/* Control */}
+
       <button
         id={id}
         type="button"
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-label={label}
-        className="mt-1 w-full block border rounded px-3 py-2 text-left bg-white text-black dark:bg-white dark:text-black focus:ring focus:outline-none"
+        className="mt-1 w-full block border rounded px-3 py-2 text-left bg-white text-black focus:ring focus:outline-none"
         onClick={() => setOpen(o => !o)}
       >
-        {selectedChips.length > 0 ? (
+        {selected.length > 0 ? (
           <div className="inline-flex flex-wrap gap-1">
-            {selectedChips}
+            {selected.map(value =>
+              renderSelected ? (
+                <span key={value}>{renderSelected(value)}</span>
+              ) : (
+                <span
+                  key={value}
+                  className="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-xs"
+                >
+                  {value}
+                </span>
+              )
+            )}
           </div>
         ) : (
           <span className="text-gray-500">Select skills…</span>
         )}
       </button>
 
-      {/* Dropdown */}
       {open && (
-        <div
-          className="absolute z-20 mt-1 w-full border rounded bg-white shadow-lg p-2"
-        >
+        <div className="absolute z-20 mt-1 w-full border rounded bg-white shadow-lg p-2">
           <input
             aria-label={`Search ${label}`}
             className="w-full border rounded px-2 py-1 mb-2 text-sm"
