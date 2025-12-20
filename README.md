@@ -99,6 +99,42 @@ pnpm test
 
 ---
 
+## 🧪 Code Quality & Tooling
+
+This project uses a **strict, architecture-aware linting setup**.
+
+### Linting
+
+Run all lint rules:
+
+```
+pnpm lint
+```
+
+Automatically fix where possible:
+
+```
+pnpm lint:fix
+```
+
+### Formatting
+
+Format all supported files using Prettier:
+
+```
+pnpm format
+```
+
+### Notes
+
+- ESLint uses a flat config (`eslint.config.ts`)
+- Architectural rules are enforced automatically
+- Deep imports across layers are disallowed
+- Only public APIs (`index.ts`) may be imported across layers
+
+
+---
+
 ## 🧬 Technologies
 React  
 TypeScript  
