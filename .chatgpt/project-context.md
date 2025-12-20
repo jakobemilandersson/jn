@@ -137,24 +137,31 @@ Encapsulates business logic.
 src/features/filters/
     lib/applyFilters.ts
     lib/getSkillOptions.ts
+    lib/useFilteredResume.ts
     model/useFilterStore.ts
+    ui/FiltersPanel.tsx
     ui/SkillsField.tsx
     ui/StrictSkillsToggle.tsx
 ```
 
 ## WIDGETS LAYER (IMPORTANT)
 
-Widgets adapt **domain data + feature context** into UI-ready representations.
+Features may expose **feature-level abstractions** via their public `index.ts`, including:
 
-They are allowed to:
-- Derive presentation-specific groupings
-- Combine multiple domain concepts for rendering
-- Compute contextual metadata (e.g. match strength)
+- **UI orchestrators** (e.g. `FiltersPanel`)
+  - Compose internal feature UI
+  - Own Zustand wiring and internal control composition
+  - Are the *only* UI surface pages should consume
 
-They must:
-- Remain pure and testable
-- Avoid direct Zustand access
-- Avoid mutating domain entities
+- **Derived selector hooks** (e.g. `useFilteredResume`)
+  - Encapsulate store access + feature semantics
+  - Return ready-to-consume data for pages
+  - Prevent pages from coordinating feature logic
+
+Pages must not:
+- Access feature stores directly via internal paths
+- Import feature UI internals
+- Reimplement feature semantics
 
 ### Work Experience Widget
 ```
