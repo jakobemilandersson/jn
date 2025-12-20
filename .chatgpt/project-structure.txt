@@ -26,6 +26,7 @@
 │   │       ├── lib
 │   │       │   ├── applyFilters.ts
 │   │       │   ├── getSkillOptions.ts
+│   │       │   ├── mapSkillToChipProps.ts
 │   │       │   └── useFilteredResume.ts
 │   │       ├── model
 │   │       │   └── useFilterStore.ts
@@ -64,6 +65,7 @@
 │   │   └── filters
 │   │       ├── SKILL_OPTIONS.spec.ts
 │   │       ├── applyFilter.spec.ts
+│   │       ├── mapSkillToChipProps.spec.ts
 │   │       └── useFilterStore.spec.ts
 │   ├── shared
 │   │   └── ui
@@ -77,7 +79,7 @@
 ├── tsconfig.json
 └── vite.config.ts
 
-31 directories, 46 files
+31 directories, 47 files
 ```
 
 Notes:
