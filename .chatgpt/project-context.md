@@ -24,6 +24,46 @@ The app is deployed on GitHub Pages and follows a **Mini-FSD (Feature-Sliced Des
 
 # 🧱 Architecture (Mini-FSD)
 
+## 📦 MODULE RESOLUTION & IMPORT RULES (IMPORTANT)
+
+The project uses **TypeScript + Vite path aliases** as a core architectural constraint.
+
+### Canonical Aliases
+
+```ts
+@app/*       → src/app/*
+@pages/*     → src/pages/*
+@widgets/*   → src/widgets/*
+@features/*  → src/features/*
+@entities/*  → src/entities/*
+@shared/*    → src/shared/*
+```
+
+### Rules (Mandatory)
+
+- Cross-slice imports **must use aliases**
+- Relative imports (`../`) are allowed **only within the same slice**
+- Each slice exposes a public API via `index.ts`
+- Consumers must not import internal files unless explicitly intended
+
+### Correct Examples
+
+```ts
+import { applyFilters } from "@features/filters";
+import type { WorkExperience } from "@entities/resume";
+import { SkillChip } from "@shared/ui";
+```
+
+### Forbidden Examples
+
+```ts
+import { applyFilters } from "../../../features/filters/lib/applyFilters";
+import { SkillChip } from "../../shared/ui/chips/SkillChip";
+```
+
+These rules enforce Mini-FSD boundaries, improve refactor safety,
+and are relied upon by the LLM when reasoning about the codebase.
+
 ## ENTITIES LAYER
 Defines **canonical domain models** and pure domain logic.
 No ordering, filtering, or presentation logic lives in entities.
