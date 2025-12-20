@@ -50,8 +50,6 @@ export default [
                 { argsIgnorePattern: "^_" },
             ],
             "@typescript-eslint/consistent-type-imports": "error",
-
-            "import/no-relative-parent-imports": "error",
             "import/no-unresolved": "error",
 
             "boundaries/element-types": [
@@ -79,6 +77,8 @@ export default [
                         "@features/*",
                         "@entities/*",
                         "@shared/*",
+
+                        "react-dom/client"
                     ],
                 },
             ],
@@ -94,6 +94,18 @@ export default [
             parser: tsParser,
         },
     },
+
+    /* ---------------------------------- */
+    /* Allow deep imports inside index.ts */
+    /* ---------------------------------- */
+    {
+        files: ["src/**/index.ts"],
+
+        rules: {
+            "import/no-internal-modules": "off",
+        },
+    },
+
 
     /* ---------------------------------- */
     /* 3️⃣ Prettier                       */
