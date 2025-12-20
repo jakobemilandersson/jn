@@ -1,6 +1,7 @@
 import type { WorkExperience, StackType } from "@entities/resume";
 import { SkillChip } from "@shared/ui";
 import { classifySkills } from "@widgets/work-experience";
+import { mapSkillToChipProps } from "@features/filters/lib/mapSkillToChipProps";
 
 type Props = {
   experience: WorkExperience;
@@ -49,13 +50,20 @@ export function WorkExperienceCard({
         <>
           <h5 className="text-sm font-medium">Matched skills</h5>
           <div className="flex flex-wrap gap-1">
-            {matched.map((skill) => (
-              <SkillChip
-                key={skill.presentation}
-                label={skill.presentation}
-                variant={skill.stackType}
-              />
-            ))}
+            {matched.map((skill) => {
+              const { label, variant } = mapSkillToChipProps(
+                skill,
+                skill.presentation
+              );
+
+              return (
+                <SkillChip
+                  key={skill.presentation}
+                  label={label}
+                  variant={variant}
+                />
+              );
+            })}
           </div>
         </>
       )}
@@ -64,13 +72,20 @@ export function WorkExperienceCard({
         <>
           <h5 className="text-sm font-medium opacity-60">Other skills</h5>
           <div className="flex flex-wrap gap-1 opacity-60">
-            {nonMatched.map((skill) => (
-              <SkillChip
-                key={skill.presentation}
-                label={skill.presentation}
-                variant={skill.stackType}
-              />
-            ))}
+            {nonMatched.map((skill) => {
+              const { label, variant } = mapSkillToChipProps(
+                skill,
+                skill.presentation
+              );
+
+              return (
+                <SkillChip
+                  key={skill.presentation}
+                  label={label}
+                  variant={variant}
+                />
+              );
+            })}
           </div>
         </>
       )}
