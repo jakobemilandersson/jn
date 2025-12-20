@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react'
-import { StackTypeDropdown, ClearButton } from '../../features/filters'
-import { useFilterStore } from '../../features/filters/model/useFilterStore'
-import type { WorkExperience } from '../../entities/resume/types'
-import { applyFilters } from '../../features/filters/lib/applyFilters'
-import { SkillsField } from '../../features/filters/ui/SkillsField'
-import { StrictToggle } from '../../features/filters/ui/StrictSkillsToggle'
-import { RESUME } from '../../entities/resume'
-import { WorkExperienceCard } from '../../widgets/work-experience/ui/WorkExperienceCard'
+import { StackTypeDropdown, ClearButton } from '@features/filters'
+import { useFilterStore } from '@features/filters/model/useFilterStore'
+import type { WorkExperience } from '@entities/resume/types'
+import { applyFilters } from '@features/filters/lib/applyFilters'
+import { SkillsField } from '@features/filters/ui/SkillsField'
+import { StrictToggle } from '@features/filters/ui/StrictSkillsToggle'
+import { RESUME } from '@entities/resume'
+import { WorkExperienceCard } from '@widgets/work-experience/ui/WorkExperienceCard'
 
 export default function ResumePage() {
   const stackType = useFilterStore((s) => s.stackType)

@@ -1,11 +1,11 @@
 // src/widgets/work-experience/lib/classifySkills.ts
-import type { Skill, StackType, WorkExperience } from '../../../entities/resume/types'
+import type { Skill, StackType, WorkExperience } from '@entities/resume/types'
 
 export type MatchStrength =
   | {
-      matched: number
-      total: number
-    }
+    matched: number
+    total: number
+  }
   | null
 
 export type ClassifiedSkills = {
@@ -52,9 +52,9 @@ export function classifySkills({
   const matchStrength: MatchStrength =
     selectedSkills.length > 1
       ? {
-          matched: matched.length,
-          total: selectedSkills.length,
-        }
+        matched: matched.length,
+        total: selectedSkills.length,
+      }
       : null
 
   return {

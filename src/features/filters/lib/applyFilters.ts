@@ -1,4 +1,4 @@
-import type { StackType, WorkExperience } from '../../../entities/resume'
+import type { StackType, WorkExperience } from '@entities/resume'
 
 const countMatchingSkills = (experience: WorkExperience, selectedSkills: string[]): number => {
   if (selectedSkills.length === 0) return 0

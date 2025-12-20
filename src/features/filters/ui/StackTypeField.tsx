@@ -1,7 +1,7 @@
 import React from 'react'
 import { useFilterStore } from '../model/useFilterStore'
-import { Dropdown } from '../../../shared/ui'
-import { StackType } from '../../../entities/resume'
+import { Dropdown } from '@shared/ui'
+import { StackType } from '@entities/resume'
 
 export const StackTypeDropdown = () => {
   const stackType = useFilterStore((s) => s.stackType)
@@ -14,12 +14,12 @@ export const StackTypeDropdown = () => {
   ] as const
 
   return (
-  <Dropdown 
-    id="stack-type"
-    label="Stack type"
-    options={OPTIONS}
-    value={stackType ?? ''}
-    onChange={(v) => setStackType(v === '' ? null : v as StackType)}
-  />
+    <Dropdown
+      id="stack-type"
+      label="Stack type"
+      options={OPTIONS}
+      value={stackType ?? ''}
+      onChange={(v) => setStackType(v === '' ? null : v as StackType)}
+    />
   )
 }

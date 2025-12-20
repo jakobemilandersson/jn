@@ -1,5 +1,4 @@
-import type { Skill } from "../../../entities/resume";
-import React from "react";
+import type { Skill } from "@entities/resume";
 
 export type SkillChipVariant = "frontend" | "backend" | "fullstack";
 

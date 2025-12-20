@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import { classifySkills } from '../../../src/widgets/work-experience/lib/classifySkills'
-import type { WorkExperience } from '../../../src/entities/resume/types'
+import { classifySkills } from '@widgets/work-experience/lib/classifySkills'
+import type { WorkExperience } from '@entities/resume/types'
 
 const experience: WorkExperience = {
   id: '1',

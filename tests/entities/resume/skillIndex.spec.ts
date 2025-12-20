@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { extractSkills, resolveSkill } from "../../../src/entities/resume/lib/skillIndex";
-import type { Skill, StackType, WorkExperience } from "../../../src/entities/resume/types";
+import { extractSkills, resolveSkill } from "@entities/resume/lib/skillIndex";
+import type { Skill, StackType, WorkExperience } from "@entities/resume/types";
 
 // -----------------------------------------------------
 // Mock factories

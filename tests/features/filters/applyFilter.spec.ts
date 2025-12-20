@@ -1,12 +1,12 @@
 import { describe, it, expect } from "vitest";
-import { applyFilters } from "../../../src/features/filters/lib/applyFilters";
-import type { WorkExperience, Skill } from "../../../src/entities/resume/types";
+import { applyFilters } from "@features/filters/lib/applyFilters";
+import type { WorkExperience, Skill } from "@entities/resume/types";
 
 // -----------------------------------------------------
 // Minimal deterministic factories
 // -----------------------------------------------------
 
-const makeSkill = (presentation: string, stackType: "fullstack" | "backend" | "frontend" = "fullstack" ): Skill => ({
+const makeSkill = (presentation: string, stackType: "fullstack" | "backend" | "frontend" = "fullstack"): Skill => ({
   presentation,
   stackType,
 });

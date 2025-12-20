@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { StackType } from '../../../entities/resume/types'
+import type { StackType } from '@entities/resume/types'
 
 type FilterState = {
   stackType: StackType | null,

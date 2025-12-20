@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { useFilterStore } from "../../../src/features/filters/model/useFilterStore";
+import { useFilterStore } from "@features/filters/model/useFilterStore";
 
 // Helper: reset Zustand store between tests
 const resetStore = () => useFilterStore.setState({
