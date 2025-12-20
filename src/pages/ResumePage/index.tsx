@@ -1,18 +1,11 @@
-import { useMemo } from "react";
-import { FiltersPanel, applyFilters, useFilterStore } from "@features/filters";
+import { FiltersPanel, useFilteredResume, useFilterStore } from "@features/filters";
 import { RESUME } from "@entities/resume";
 import { WorkExperienceCard } from "@widgets/work-experience";
-import type { WorkExperience } from "@entities/resume";
 
 export default function ResumePage() {
-  const stackType = useFilterStore((s) => s.stackType);
+  const results = useFilteredResume(RESUME);
   const skills = useFilterStore((s) => s.skills);
-  const strictSkills = useFilterStore((s) => s.strictSkillsMatch);
-
-  const results = useMemo(
-    () => applyFilters(RESUME, stackType, skills, strictSkills),
-    [stackType, skills, strictSkills]
-  );
+  const stackType = useFilterStore((s) => s.stackType);
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
@@ -23,7 +16,7 @@ export default function ResumePage() {
       <section>
         <h2 className="text-xl font-semibold">Results ({results.length})</h2>
         <div className="mt-4 space-y-4">
-          {results.map((r: WorkExperience) => (
+          {results.map((r) => (
             <WorkExperienceCard
               key={r.id}
               experience={r}
