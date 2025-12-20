@@ -69,11 +69,17 @@ src/
       lib/skillIndex.ts
   features/
     filters/
-      lib/applyFilters.ts
-      lib/getSkillOptions.ts
-      model/useFilterStore.ts
-      ui/SkillsField.tsx
-      ui/StrictSkillsToggle.tsx
+      index.ts
+      lib/
+        applyFilters.ts
+        getSkillOptions.ts
+        useFilteredResume.ts
+      model/
+        useFilterStore.ts
+      ui/
+        FiltersPanel.tsx
+        SkillsField.tsx
+        StrictSkillsToggle.tsx
   shared/
     ui/
       SearchableMultiSelect.tsx
@@ -82,7 +88,40 @@ src/
         index.ts
   pages/
     ResumePage/index.tsx
+  widgets/
+    work-experience/
+      index.ts
+      ui/
+        WorkExperienceCard.tsx
 ```
+
+---
+
+## ⚙️ Filtering System
+
+```ts
+useFilteredResume(data)
+```
+
+- Feature-level selector hook
+- Encapsulates:
+  - filter state access
+  - filtering semantics
+  - relevance-based sorting
+- Pages consume filtered results without coordinating logic
+
+```tsx
+<FiltersPanel />
+```
+
+- Public UI surface of the filters feature
+- Internally composes all filter controls
+- Pages must not import feature UI internals
+
+Filtering behavior remains unchanged:
+- StackType filtering
+- Skill filtering with strict (AND) / loose (OR) semantics
+- Results ranked by number of matching skills (descending)
 
 ---
 

@@ -2,11 +2,12 @@
 ```
 .
 ├── CNAME
+├── README.md
+├── eslint.config.ts
 ├── index.html
 ├── package.json
 ├── pnpm-lock.yaml
 ├── postcss.config.cjs
-├── README.md
 ├── setupTests.ts
 ├── src
 │   ├── app
@@ -24,11 +25,13 @@
 │   │       ├── index.ts
 │   │       ├── lib
 │   │       │   ├── applyFilters.ts
-│   │       │   └── getSkillOptions.ts
+│   │       │   ├── getSkillOptions.ts
+│   │       │   └── useFilteredResume.ts
 │   │       ├── model
 │   │       │   └── useFilterStore.ts
 │   │       └── ui
 │   │           ├── ClearButton.tsx
+│   │           ├── FiltersPanel.tsx
 │   │           ├── SkillsField.tsx
 │   │           ├── StackTypeField.tsx
 │   │           └── StrictSkillsToggle.tsx
@@ -37,15 +40,17 @@
 │   │       └── index.tsx
 │   ├── shared
 │   │   └── ui
-│   │       ├── chips
-│   │       │   ├── index.ts
-│   │       │   └── SkillChip.tsx
 │   │       ├── Dropdown.tsx
-│   │       ├── index.ts
 │   │       ├── MultiSelect.tsx
-│   │       └── SearchableMultiSelect.tsx
+│   │       ├── SearchableMultiSelect.tsx
+│   │       ├── chips
+│   │       │   ├── SkillChip.tsx
+│   │       │   └── index.ts
+│   │       ├── hooks
+│   │       └── index.ts
 │   └── widgets
 │       └── work-experience
+│           ├── index.ts
 │           ├── lib
 │           │   └── classifySkills.ts
 │           └── ui
@@ -57,14 +62,14 @@
 │   │       └── skillIndex.spec.ts
 │   ├── features
 │   │   └── filters
-│   │       ├── applyFilter.spec.ts
 │   │       ├── SKILL_OPTIONS.spec.ts
+│   │       ├── applyFilter.spec.ts
 │   │       └── useFilterStore.spec.ts
 │   ├── shared
 │   │   └── ui
-│   │       ├── chips
-│   │       │   └── SkillChip.spec.tsx
-│   │       └── SearchableMultiSelect.spec.tsx
+│   │       ├── SearchableMultiSelect.spec.tsx
+│   │       └── chips
+│   │           └── SkillChip.spec.tsx
 │   └── widgets
 │       └── work-experience
 │           └── classifySkills.spec.ts
@@ -72,7 +77,7 @@
 ├── tsconfig.json
 └── vite.config.ts
 
-30 directories, 41 files
+31 directories, 46 files
 ```
 
 Notes:
