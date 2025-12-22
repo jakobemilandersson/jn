@@ -74,12 +74,13 @@
 │   │           └── SkillChip.spec.tsx
 │   └── widgets
 │       └── work-experience
-│           └── classifySkills.spec.ts
+│           ├── classifySkills.spec.ts
+│           └── WorkExperienceCard.spec.tsx
 ├── tree.txt
 ├── tsconfig.json
 └── vite.config.ts
 
-31 directories, 47 files
+31 directories, 48 files
 ```
 
 Notes:

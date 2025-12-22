@@ -1,7 +1,8 @@
-import type { WorkExperience, StackType } from "@entities/resume";
+import type { WorkExperience, StackType, Skill } from "@entities/resume";
 import { SkillChip } from "@shared/ui";
 import { classifySkills } from "@widgets/work-experience";
 import { mapSkillToChipProps } from "@features/filters/lib/mapSkillToChipProps";
+import { ReactNode } from "react";
 
 type Props = {
   experience: WorkExperience;
@@ -21,6 +22,20 @@ export function WorkExperienceCard({
   });
 
   const nonMatched = [...related, ...other];
+
+  const skillChips = (skills: Skill[]): ReactNode[] => skills.map((skill) => {
+    const { label, variant } = mapSkillToChipProps(
+      skill,
+      skill.presentation
+    );
+
+    return (
+      <SkillChip
+        key={skill.presentation}
+        label={label}
+        variant={variant} />
+    );
+  })
 
   return (
     <article className="p-4 border rounded space-y-3">
@@ -46,46 +61,31 @@ export function WorkExperienceCard({
 
       <div className="py-1" />
 
-      {matched.length > 0 && (
+      {selectedSkills.length > 0 ? (
         <>
-          <h5 className="text-sm font-medium">Matched skills</h5>
-          <div className="flex flex-wrap gap-1">
-            {matched.map((skill) => {
-              const { label, variant } = mapSkillToChipProps(
-                skill,
-                skill.presentation
-              );
+          {matched.length > 0 && (
+            <>
+              <h5 className="text-sm font-medium">Matched skills</h5>
+              <div className="flex flex-wrap gap-1">
+                {skillChips(matched)}
+              </div>
+            </>
+          )}
 
-              return (
-                <SkillChip
-                  key={skill.presentation}
-                  label={label}
-                  variant={variant}
-                />
-              );
-            })}
-          </div>
+          {nonMatched.length > 0 && (
+            <>
+              <h5 className="text-sm font-medium opacity-60">Other skills</h5>
+              <div className="flex flex-wrap gap-1 opacity-60">
+                {skillChips(nonMatched)}
+              </div>
+            </>
+          )}
         </>
-      )}
-
-      {nonMatched.length > 0 && (
+      ) : (
         <>
-          <h5 className="text-sm font-medium opacity-60">Other skills</h5>
-          <div className="flex flex-wrap gap-1 opacity-60">
-            {nonMatched.map((skill) => {
-              const { label, variant } = mapSkillToChipProps(
-                skill,
-                skill.presentation
-              );
-
-              return (
-                <SkillChip
-                  key={skill.presentation}
-                  label={label}
-                  variant={variant}
-                />
-              );
-            })}
+          <h5 className="text-sm font-medium">Skills</h5>
+          <div className="flex flex-wrap gap-1">
+            {skillChips(nonMatched)}
           </div>
         </>
       )}
