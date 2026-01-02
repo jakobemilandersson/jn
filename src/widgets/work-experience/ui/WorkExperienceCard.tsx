@@ -1,8 +1,8 @@
 import type { WorkExperience, StackType, Skill } from "@entities/resume";
 import { SkillChip } from "@shared/ui";
 import { classifySkills } from "@widgets/work-experience";
-import { mapSkillToChipProps } from "@features/filters/lib/mapSkillToChipProps";
-import { ReactNode } from "react";
+import { mapSkillToChipProps } from "@features/filters";
+import type { ReactNode } from "react";
 
 type Props = {
   experience: WorkExperience;
