@@ -44,6 +44,22 @@ The linting system enforces:
 
 Violations of architectural rules will fail CI and must be fixed before merge.
 
+---
+
+## 🔄 CONTINUOUS INTEGRATION (CI)
+
+The project uses **GitHub Actions** to enforce architectural and behavioral
+guarantees on pull requests.
+
+CI guarantees:
+- ESLint runs with **zero warnings allowed**
+- Vitest runs in **non-watch CI mode** (`vitest run`)
+- Checks re-run on every push to a pull request branch
+- **Draft pull requests do not execute CI**
+- Pull requests cannot be merged unless all checks pass
+
+CI is treated as an **app-level quality gate**, not a convenience.
+
 ## 📦 MODULE RESOLUTION & IMPORT RULES (IMPORTANT)
 
 The project uses **TypeScript + Vite path aliases** as a core architectural constraint.
