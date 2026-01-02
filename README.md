@@ -184,6 +184,20 @@ Format all supported files using Prettier:
 pnpm format
 ```
 
+### Continuous Integration (CI)
+
+All pull requests are automatically validated using **GitHub Actions**:
+
+- ESLint runs with **zero warnings tolerated**
+- Vitest runs in **CI mode** (`vitest run`)
+- Checks re-run on every push to a PR branch
+- **Draft pull requests are ignored**
+- Merges are blocked unless all checks pass
+
+This ensures architectural boundaries and test guarantees are enforced
+before code can be merged.
+
+
 ### Notes
 
 - ESLint uses a flat config (`eslint.config.ts`)
