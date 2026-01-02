@@ -23,6 +23,10 @@ why a result appears.
 ### 🎨 SkillChip
 A presentational chip reflecting `skill.stackType` via colors.
 
+- SkillChips rendered inside **WorkExperience cards** are clickable.
+- Clicking a chip toggles the corresponding skill filter and immediately updates results.
+- This interaction is **scoped to WorkExperience cards only**.
+
 ### 🧱 Structured Skill Model
 ```ts
 type Skill = {
@@ -143,6 +147,7 @@ This ensures:
 ## 🧪 Testing
 - Vitest + React Testing Library.
 - Tests for domain logic, filters, and UI components.
+- Interactive WorkExperience skill filtering is covered by a widget-level test
 - Filter tests assert both **filter semantics** and **result ordering**.
 - Domain tests use explicit mock data (no RESUME coupling).
 
