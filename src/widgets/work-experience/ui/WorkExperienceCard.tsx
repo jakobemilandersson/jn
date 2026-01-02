@@ -38,7 +38,13 @@ export function WorkExperienceCard({
     />
 
     const wrappedChip = onSkillPressed ? (
-      <button onClick={(_) => onSkillPressed(skill)}>{chip}</button>
+      <button
+        type="button"
+        onClick={(_) => onSkillPressed(skill)}
+        aria-label={`Filter by ${skill.presentation}`}
+      >
+        {chip}
+      </button>
     ) : chip;
 
     return wrappedChip;
