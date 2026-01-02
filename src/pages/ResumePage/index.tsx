@@ -1,6 +1,6 @@
 import { FiltersPanel, useFilteredResume, useFilterStore } from "@features/filters";
+import { WorkExperienceSkillBinder } from "@widgets/work-experience"
 import { RESUME } from "@entities/resume";
-import { WorkExperienceCard } from "@widgets/work-experience";
 
 export default function ResumePage() {
   const results = useFilteredResume(RESUME);
@@ -17,7 +17,7 @@ export default function ResumePage() {
         <h2 className="text-xl font-semibold">Results ({results.length})</h2>
         <div className="mt-4 space-y-4">
           {results.map((r) => (
-            <WorkExperienceCard
+            <WorkExperienceSkillBinder
               key={r.id}
               experience={r}
               selectedSkills={skills}

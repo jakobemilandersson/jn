@@ -39,6 +39,9 @@ The linting system enforces:
 - No deep imports except via `index.ts`
 - Alias-only imports (`@features/*`, `@entities/*`, etc.)
 
+- `features` **must not import** from `widgets`
+- `widgets` **may import** from `features`, `entities`, and `shared`
+
 Violations of architectural rules will fail CI and must be fixed before merge.
 
 ## 📦 MODULE RESOLUTION & IMPORT RULES (IMPORTANT)
@@ -183,6 +186,22 @@ Pages must not:
 - Access feature stores directly via internal paths
 - Import feature UI internals
 - Reimplement feature semantics
+
+
+### Interactive Widget Pattern (NEW)
+
+Widgets may define **interaction binders** that:
+- Live inside the widget slice
+- Import feature state (e.g. Zustand stores)
+- Translate localized user intent into feature actions
+
+Example:
+```
+widgets/work-experience/ui/WorkExperienceSkillBinder.tsx
+```
+
+This pattern exists to satisfy strict `features → widgets` import restrictions
+while still enabling contextual interactivity.
 
 ### Work Experience Widget
 ```

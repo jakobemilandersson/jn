@@ -1,19 +1,21 @@
 import type { WorkExperience, StackType, Skill } from "@entities/resume";
 import { SkillChip } from "@shared/ui";
 import { classifySkills } from "@widgets/work-experience";
-import { mapSkillToChipProps } from "@features/filters/lib/mapSkillToChipProps";
-import { ReactNode } from "react";
+import { mapSkillToChipProps } from "@features/filters";
+import type { ReactNode } from "react";
 
 type Props = {
   experience: WorkExperience;
   selectedSkills: string[];
   selectedStackType: StackType | null;
+  onSkillPressed?: (skill: Skill) => void;
 };
 
 export function WorkExperienceCard({
   experience,
   selectedSkills,
   selectedStackType,
+  onSkillPressed,
 }: Props) {
   const { matched, related, other, matchStrength } = classifySkills({
     experience,
@@ -29,12 +31,23 @@ export function WorkExperienceCard({
       skill.presentation
     );
 
-    return (
-      <SkillChip
-        key={skill.presentation}
-        label={label}
-        variant={variant} />
-    );
+    const chip = <SkillChip
+      key={skill.presentation}
+      label={label}
+      variant={variant}
+    />
+
+    const wrappedChip = onSkillPressed ? (
+      <button
+        type="button"
+        onClick={(_) => onSkillPressed(skill)}
+        aria-label={`Filter by ${skill.presentation}`}
+      >
+        {chip}
+      </button>
+    ) : chip;
+
+    return wrappedChip;
   })
 
   return (

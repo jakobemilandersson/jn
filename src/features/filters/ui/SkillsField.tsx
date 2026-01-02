@@ -1,7 +1,7 @@
 import { SKILL_OPTIONS, useFilterStore } from "@features/filters";
 import { SearchableMultiSelect, SkillChip } from "@shared/ui";
 import { resolveSkill } from "@entities/resume";
-import { mapSkillToChipProps } from "../lib/mapSkillToChipProps";
+import { mapSkillToChipProps } from "@features/filters";
 
 export function SkillsField() {
   const skills = useFilterStore((s) => s.skills);
