@@ -1,6 +1,6 @@
 import type { Skill, StackType, WorkExperience } from "@entities/resume"
 import { useFilterStore } from "@features/filters";
-import { WorkExperienceCard } from "@widgets/work-experience/ui/WorkExperienceCard"
+import { WorkExperienceCard } from "@widgets/work-experience"
 
 type Props = {
     experience: WorkExperience;
