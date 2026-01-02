@@ -5,7 +5,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import type { Skill, WorkExperience } from "@entities/resume";
 
 // 🔴 this import will fail until you implement the adapter (good!)
-import { WorkExperienceSkillBinder } from "@widgets/work-experience";
+import { WorkExperienceSkillBinder } from "@features/filters";
 
 // --- mock Zustand store ---
 const toggleSkill = vi.fn();

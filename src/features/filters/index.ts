@@ -1,6 +1,7 @@
 export { StackTypeDropdown } from './ui/StackTypeField'
 export { ClearButton } from './ui/ClearButton'
 export { FiltersPanel } from './ui/FiltersPanel'
+export { WorkExperienceSkillBinder } from './ui/WorkExperienceSkillBinder'
 
 export { applyFilters } from "./lib/applyFilters";
 export { getSkillOptions, SKILL_OPTIONS } from "./lib/getSkillOptions";
