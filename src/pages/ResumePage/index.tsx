@@ -1,4 +1,5 @@
-import { FiltersPanel, useFilteredResume, useFilterStore, WorkExperienceSkillBinder } from "@features/filters";
+import { FiltersPanel, useFilteredResume, useFilterStore } from "@features/filters";
+import { WorkExperienceSkillBinder } from "@widgets/work-experience"
 import { RESUME } from "@entities/resume";
 
 export default function ResumePage() {
