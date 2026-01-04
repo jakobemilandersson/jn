@@ -33,7 +33,16 @@ export const RESUME: WorkExperience[] = [
     end: '2021-12',
     description: {
       title: 'Component development and design system',
-      fulltext: 'Focused on building reusable components and maintaining the design system using React and Storybook.'
+      fulltext: `
+        Focused on building reusable components and maintaining the design system using React and Storybook.
+        Collaborated closely with designers to ensure design fidelity and accessibility compliance.
+
+        Implemented comprehensive testing strategies to ensure component reliability and performance.
+
+        Did more than just code...
+
+        Eat some doughnuts.
+      `.trim()
     }
   },
   {

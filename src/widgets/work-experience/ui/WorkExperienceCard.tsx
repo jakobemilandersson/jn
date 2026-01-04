@@ -82,23 +82,25 @@ export function WorkExperienceCard({
         onClick={() => setIsOpen((v) => !v)}
         className="group w-full rounded-md border border-gray-200 bg-gray-50 px-4 py-3 text-left shadow-sm transition-colors hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400"
         >
-          <div className="flex items-center justify-between gap-4">
             <p className="line-clamp-2 text-sm font-medium leading-snug text-gray-800">
               {experience.description?.title}
             </p>
-
-            <span
-              aria-hidden
-              className={`shrink-0 transition-transform duration-300 ${
-                isOpen ? "rotate-180" : ""
-              }`}>▼</span>
-          </div>
           <div
             id={descriptionId}
-            className={`overflow-hidden transition-[max-height] duration-100 ease-in-out ${
-              isOpen ? "max-h-[1000px]" : "max-h-0"
+            aria-hidden={!isOpen}
+            className={`relative mt-2 overflow-hidden transition-[max-height] duration-1000 ease-in-out ${
+              isOpen ? "max-h-[2000px]" : "max-h-[3em] md:max-h-[4.5em]"
             }`}>
-              {experience.description?.fulltext}
+              <div className="whitespace-pre-line text-sm leading-relaxed text-gray-600">
+                {experience.description?.fulltext}
+              </div>
+              { /* Fade overlay (collasped only) */ }
+              {!isOpen && (
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-b from-transparent to-gray-50"
+                />
+              )}
             </div>
         </button>
 
