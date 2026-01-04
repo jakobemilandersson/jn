@@ -27,28 +27,29 @@ export function SpaceBackground() {
 
     let stars: Star[] = [];
     let rafId = 0;
+    let width = 0;
+    let height = 0;
 
     const resize = () => {
       const dpr = window.devicePixelRatio || 1;
-      const w = window.innerWidth;
-      const h = window.innerHeight;
+      width = window.innerWidth;
+      height = window.innerHeight;
 
-      canvas.width = Math.floor(w * dpr);
-      canvas.height = Math.floor(h * dpr);
-      canvas.style.width = `${w}px`;
-      canvas.style.height = `${h}px`;
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
 
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      const count = Math.floor(w * h * DENSITY);
+      const count = Math.floor(width * height * DENSITY);
       stars = Array.from({ length: count }, () => {
-        const sizes = [0.6, 1.0, 1.4];
         const r =
-          sizes[Math.random() < 0.5 ? 0 : Math.random() < 0.7 ? 1 : 2];
+          Math.random() < 0.5 ? 0.6 : Math.random() < 0.7 ? 1.0 : 1.4;
 
         return {
-          x: Math.random() * w,
-          y: Math.random() * h,
+          x: Math.random() * width,
+          y: Math.random() * height,
           r,
           baseOpacity: 0.75,
           amplitude: 0.15,
@@ -61,24 +62,25 @@ export function SpaceBackground() {
 
     const drawBackground = () => {
       const gradient = ctx.createRadialGradient(
-        canvas.width / 2,
-        canvas.height / 2,
+        width / 2,
+        height / 2,
         0,
-        canvas.width / 2,
-        canvas.height / 2,
-        Math.max(canvas.width, canvas.height)
+        width / 2,
+        height / 2,
+        Math.max(width, height)
       );
 
       gradient.addColorStop(0, "#0b1220");
       gradient.addColorStop(1, "#05080f");
 
       ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillRect(0, 0, width, height);
     };
 
     const animate = (time: number) => {
       ctx.fillStyle = BASE_COLOR;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillRect(0, 0, width, height);
+
       drawBackground();
 
       for (const s of stars) {

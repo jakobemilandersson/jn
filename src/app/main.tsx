@@ -1,18 +1,23 @@
-import React from 'react'
-import { createRoot } from 'react-dom/client'
-import { Footer } from '@shared/ui'
-import ResumePage from '@pages/ResumePage'
+import React from "react";
+import { createRoot } from "react-dom/client";
+import { Footer } from "@shared/ui";
+import ResumePage from "@pages/ResumePage";
 import { SpaceBackground } from "./SpaceBackground";
-import './styles.css'
+import "./styles.css";
 
 function App() {
-  return <React.StrictMode>
-    <main className="min-h-screen px-4">
+  return (
+    <React.StrictMode>
+      {/* App-shell decoration */}
       <SpaceBackground />
-      <ResumePage />
-      <Footer />
-    </main>
-  </React.StrictMode>
+
+      {/* Layout */}
+      <main className="min-h-screen px-4 relative z-0">
+        <ResumePage />
+        <Footer />
+      </main>
+    </React.StrictMode>
+  );
 }
 
-createRoot(document.getElementById('root')!).render(<App />)
+createRoot(document.getElementById("root")!).render(<App />);
