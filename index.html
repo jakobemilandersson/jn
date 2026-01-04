@@ -2,9 +2,58 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>jakob.now — Resume Filter</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Primary SEO -->
+    <title>Jakob – Fullstack Engineer</title>
+
+    <meta
+      name="description"
+      content="Interactive resume of Jakob, a senior fullstack engineer with experience in React, TypeScript, and backend systems, featuring filterable work experience and skills."
+    />
+
+    <link rel="canonical" href="https://jakob.now" />
+
+    <!-- Open Graph (LinkedIn, Slack, Discord, etc.) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Jakob – Fullstack Engineer" />
+    <meta
+      property="og:description"
+      content="Interactive resume of Jakob, a senior fullstack engineer with experience in React, TypeScript, and backend systems, featuring filterable work experience and skills."
+    />
+    <meta property="og:url" content="https://jakob.now" />
+    <meta property="og:image" content="https://jakob.now/og-image.png" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Jakob – Fullstack Engineer" />
+    <meta
+      name="twitter:description"
+      content="Interactive resume of Jakob, a senior fullstack engineer with experience in React, TypeScript, and backend systems, featuring filterable work experience and skills."
+    />
+    <meta name="twitter:image" content="https://jakob.now/og-image.png" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Jakob",
+        "url": "https://jakob.now",
+        "jobTitle": "Senior Fullstack Engineer",
+        "sameAs": [
+          "https://www.linkedin.com/in/jakob-emil-andersson",
+          "https://github.com/jakobemilandersson"
+        ],
+        "knowsAbout": [
+          "React",
+          "TypeScript",
+          "Frontend Engineering",
+          "Backend Engineering",
+          "System Design"
+        ]
+      }
+    </script>
   </head>
+
   <body>
     <div id="root"></div>
     <script type="module" src="/src/app/main.tsx"></script>

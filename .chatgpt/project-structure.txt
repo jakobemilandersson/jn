@@ -7,6 +7,9 @@
 ├── package.json
 ├── pnpm-lock.yaml
 ├── postcss.config.cjs
+├── public
+│   ├── og-image.png
+│   └── robots.txt
 ├── README.md
 ├── setupTests.ts
 ├── src
@@ -45,6 +48,7 @@
 │   │       │   ├── index.ts
 │   │       │   └── SkillChip.tsx
 │   │       ├── Dropdown.tsx
+│   │       ├── Footer.tsx
 │   │       ├── index.ts
 │   │       ├── MultiSelect.tsx
 │   │       └── SearchableMultiSelect.tsx
@@ -81,7 +85,7 @@
 ├── tsconfig.json
 └── vite.config.ts
 
-30 directories, 50 files
+31 directories, 53 files
 ```
 
 Notes:

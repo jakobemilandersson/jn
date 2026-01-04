@@ -24,6 +24,25 @@ The app is deployed on GitHub Pages and follows a **Mini-FSD (Feature-Sliced Des
 
 # 🧱 Architecture (Mini-FSD)
 
+## 🌐 App Shell & SEO Ownership (IMPORTANT)
+
+The application uses a **static SPA shell** (`index.html`) as the canonical
+surface for:
+
+- SEO metadata (`title`, `description`)
+- Canonical URL declaration
+- Open Graph / social preview metadata
+- JSON-LD structured data (e.g. `Person`)
+- Crawl directives (`robots.txt`)
+
+These concerns:
+- **Must not** be implemented in React
+- **Must not** be owned by features, widgets, or pages
+- Are considered **deployment- and identity-level infrastructure**
+
+React components may assume these guarantees but must not reimplement them.
+
+
 ## 📐 ARCHITECTURAL ENFORCEMENT (LINTING)
 
 They are actively enforced via:
@@ -284,6 +303,13 @@ src/shared/ui/
       SkillChip.tsx
       index.ts
 ```
+
+Shared UI may also define **global layout primitives** (e.g. `Footer`) that:
+- Contain no domain or business logic
+- Are globally rendered at the app shell level
+- May include external identity links or static navigation
+
+These components remain domain-agnostic and must not depend on features or entities.
 
 ### SkillChip
 Presentational component; color derives from `skill.stackType`.
