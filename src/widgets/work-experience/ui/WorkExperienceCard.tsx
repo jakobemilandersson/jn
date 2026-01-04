@@ -3,6 +3,7 @@ import { SkillChip } from "@shared/ui";
 import { classifySkills } from "@widgets/work-experience";
 import { mapSkillToChipProps } from "@features/filters";
 import type { ReactNode } from "react";
+import { useState } from "react";
 
 type Props = {
   experience: WorkExperience;
@@ -22,6 +23,9 @@ export function WorkExperienceCard({
     selectedSkills,
     selectedStackType,
   });
+
+  const [isOpen, setIsOpen] = useState(false);
+  const descriptionId = `work-exp-${experience.id}-desc`;
 
   const nonMatched = [...related, ...other];
 
@@ -70,7 +74,33 @@ export function WorkExperienceCard({
         )}
       </div>
 
-      {experience.description && <p>{experience.description}</p>}
+      { /* Description well */ }
+      <button
+        type="button"
+        aria-expanded={isOpen}
+        aria-controls={descriptionId}
+        onClick={() => setIsOpen((v) => !v)}
+        className="group w-full rounded-md border border-gray-200 bg-gray-50 px-4 py-3 text-left shadow-sm transition-colors hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400"
+        >
+          <div className="flex items-center justify-between gap-4">
+            <p className="line-clamp-2 text-sm font-medium leading-snug text-gray-800">
+              {experience.description?.title}
+            </p>
+
+            <span
+              aria-hidden
+              className={`shrink-0 transition-transform duration-300 ${
+                isOpen ? "rotate-180" : ""
+              }`}>▼</span>
+          </div>
+          <div
+            id={descriptionId}
+            className={`overflow-hidden transition-[max-height] duration-100 ease-in-out ${
+              isOpen ? "max-h-[1000px]" : "max-h-0"
+            }`}>
+              {experience.description?.fulltext}
+            </div>
+        </button>
 
       <div className="py-1" />
 
