@@ -68,14 +68,14 @@ export function WorkExperienceCard({
 
 
   return (
-    <article className="space-y-3 rounded border p-4">
+    <article className="space-y-3 rounded border p-4 bg-gray-800/50 text-white shadow-sm">
       <div className="flex justify-between">
         <div>
           <h3 className="font-medium">
             {experience.role} — {experience.company}
           </h3>
 
-          <p className="text-sm text-slate-600">
+          <p className="text-xs text-slate-600 text-white/80">
             {experience.start} — {experience.end ?? "Present"}
           </p>
         </div>
@@ -94,11 +94,15 @@ export function WorkExperienceCard({
         aria-expanded={isOpen}
         aria-controls={descriptionId}
         onClick={() => setIsOpen((v) => !v)}
-        className="group w-full rounded-md border border-gray-200 bg-gray-50 px-4 py-3 text-left shadow-sm transition-colors hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400"
+        className={`
+          group w-full rounded-md border border-gray-200
+          bg-gradient-to-br from-gray-800 via-gray-700 to-gray-600
+          px-4 py-3 text-left shadow-sm transition-colors hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400
+        `}
         >
-        <p className="text-sm font-medium leading-snug text-gray-800">
-              {experience.description?.title}
-            </p>
+        <p className="text-sm font-medium leading-snug text-white">
+          {experience.description?.title}
+        </p>
         {/* Expandable text container */}
         <div
           id={descriptionId}
@@ -115,7 +119,7 @@ export function WorkExperienceCard({
               .replace(/\n{3,}/g, "\n\n");
 
             return (
-              <div className="whitespace-pre-line text-sm leading-relaxed text-gray-600">
+              <div className="whitespace-pre-line text-sm leading-relaxed text-white">
                 {isOpen ? fulltext : previewText}
               </div>
             );
@@ -127,10 +131,9 @@ export function WorkExperienceCard({
               className="
                 pointer-events-none absolute inset-x-0 bottom-0
                 h-[4.875em]
-                bg-gradient-to-b
+                bg-gradient-to-b/20
                 from-transparent
-                via-gray-50/70
-                to-gray-50
+                to-gray-50/20
                 transition-opacity duration-500 ease-in-out
                 opacity-100
               "
