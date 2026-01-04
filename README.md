@@ -12,6 +12,15 @@ Results are **ranked by relevance** when skills are selected: experiences with m
 
 ## 🚀 Features
 
+### 📝 Expandable Experience Descriptions
+
+Each work experience includes a structured description with:
+- A concise **summary title** for quick scanning
+- An expandable **full description** for deeper context
+
+Descriptions use a progressive disclosure pattern, showing a readable preview
+with a subtle fade when collapsed and revealing full content on interaction.
+
 ### 🎯 Result Relevance
 Filtered results visually highlight:
 - Skills that directly match selected filters

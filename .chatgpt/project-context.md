@@ -133,7 +133,10 @@ type WorkExperience = {
   skills: Skill[];
   start: string;
   end?: string;
-  description: string;
+  description?: {
+    title: string;
+    fulltext: string;
+  } | null;
 };
 ```
 
@@ -203,6 +206,21 @@ Pages must not:
 - Import feature UI internals
 - Reimplement feature semantics
 
+### Text Presentation & Progressive Disclosure (IMPORTANT)
+
+Widgets **may normalize domain text for presentation purposes only**, including:
+- Trimming leading/trailing whitespace for previews
+- Collapsing excessive blank lines in collapsed views
+- Deriving preview-only representations of longer text
+- Applying conditional visual affordances (e.g. fades) to indicate overflow
+
+These transformations must:
+- Be **pure and deterministic**
+- Never mutate the underlying domain entity
+- Preserve the original content in expanded or detailed views
+
+Text normalization that affects **business meaning** or **data integrity**
+must remain in the entities layer.
 
 ### Interactive Widget Pattern (NEW)
 
