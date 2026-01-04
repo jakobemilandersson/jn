@@ -35,6 +35,19 @@ surface for:
 - JSON-LD structured data (e.g. `Person`)
 - Crawl directives (`robots.txt`)
 
+### 🎨 App-Shell Decorative Rendering (IMPORTANT)
+
+The app shell may include **purely decorative visual elements** that:
+- Are mounted at the application root
+- Do not depend on entities, features, or widgets
+- Do not affect layout flow or business logic
+- Are non-interactive and accessibility-neutral
+
+Example:
+- Canvas-based animated background (`SpaceBackground`)
+
+Such elements must live in `src/app/` and must not migrate into lower layers.
+
 These concerns:
 - **Must not** be implemented in React
 - **Must not** be owned by features, widgets, or pages
