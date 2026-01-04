@@ -25,40 +25,33 @@ export function SpaceBackground() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    let stars: Star[] = [];
-    let rafId = 0;
-    let width = 0;
-    let height = 0;
+    const dpr = window.devicePixelRatio || 1;
+    const width = document.documentElement.clientWidth;
+    const height = document.documentElement.clientHeight;
 
-    const resize = () => {
-      const dpr = window.devicePixelRatio || 1;
-      width = window.innerWidth;
-      height = window.innerHeight;
+    canvas.width = Math.floor(width * dpr);
+    canvas.height = Math.floor(height * dpr);
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
 
-      canvas.width = Math.floor(width * dpr);
-      canvas.height = Math.floor(height * dpr);
-      canvas.style.width = `${width}px`;
-      canvas.style.height = `${height}px`;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const starCount = Math.floor(width * height * DENSITY);
+    const stars: Star[] = Array.from({ length: starCount }, () => {
+      const r =
+        Math.random() < 0.5 ? 0.6 : Math.random() < 0.7 ? 1.0 : 1.4;
 
-      const count = Math.floor(width * height * DENSITY);
-      stars = Array.from({ length: count }, () => {
-        const r =
-          Math.random() < 0.5 ? 0.6 : Math.random() < 0.7 ? 1.0 : 1.4;
-
-        return {
-          x: Math.random() * width,
-          y: Math.random() * height,
-          r,
-          baseOpacity: 0.75,
-          amplitude: 0.15,
-          speed: 0.05 + Math.random() * 0.1,
-          phase: Math.random() * Math.PI * 2,
-          color: STAR_COLORS[Math.random() < 0.75 ? 0 : 1],
-        };
-      });
-    };
+      return {
+        x: Math.random() * width,
+        y: Math.random() * height,
+        r,
+        baseOpacity: 0.65,
+        amplitude: 0.35,
+        speed: 0.04 + Math.random() * 0.06,
+        phase: Math.random() * Math.PI * 2,
+        color: STAR_COLORS[Math.random() < 0.75 ? 0 : 1],
+      };
+    });
 
     const drawBackground = () => {
       const gradient = ctx.createRadialGradient(
@@ -77,6 +70,8 @@ export function SpaceBackground() {
       ctx.fillRect(0, 0, width, height);
     };
 
+    let rafId = 0;
+
     const animate = (time: number) => {
       ctx.fillStyle = BASE_COLOR;
       ctx.fillRect(0, 0, width, height);
@@ -86,9 +81,9 @@ export function SpaceBackground() {
       for (const s of stars) {
         const opacity =
           s.baseOpacity +
-          Math.sin(time * 0.001 * s.speed + s.phase) * s.amplitude;
+          Math.sin(time * 0.01 * s.speed + s.phase) * s.amplitude;
 
-        ctx.globalAlpha = Math.max(0.6, Math.min(0.9, opacity));
+        ctx.globalAlpha = Math.max(0.3, Math.min(1, opacity));
         ctx.fillStyle = s.color;
         ctx.beginPath();
         ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
@@ -99,12 +94,9 @@ export function SpaceBackground() {
       rafId = requestAnimationFrame(animate);
     };
 
-    resize();
-    window.addEventListener("resize", resize);
     rafId = requestAnimationFrame(animate);
 
     return () => {
-      window.removeEventListener("resize", resize);
       cancelAnimationFrame(rafId);
     };
   }, []);
