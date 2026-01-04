@@ -12,6 +12,16 @@ Results are **ranked by relevance** when skills are selected: experiences with m
 
 ## 🚀 Features
 
+### 🌌 Decorative App Background
+
+The application includes a lightweight, canvas-based animated background:
+- Purely decorative (no interaction or data coupling)
+- Mounted at the app-shell level
+- Uses subtle opacity flicker only
+- Does not affect layout, filtering, or accessibility
+
+This background exists to enhance visual tone without impacting usability.
+
 ### 📝 Expandable Experience Descriptions
 
 Each work experience includes a structured description with:
