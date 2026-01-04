@@ -14,7 +14,10 @@ export const RESUME: WorkExperience[] = [
     ],
     start: '2022-01',
     end: '2023-12',
-    description: 'Built full product features'
+    description: { 
+      title: 'Built full product features',
+      fulltext: 'Developed and maintained full product features using React for frontend and Node.js for backend, deployed on AWS.'
+    }
   },
   {
     id: '2',
@@ -28,7 +31,19 @@ export const RESUME: WorkExperience[] = [
     ],
     start: '2020-06',
     end: '2021-12',
-    description: 'Component development and design system'
+    description: {
+      title: 'Component development and design system',
+      fulltext: `
+        Focused on building reusable components and maintaining the design system using React and Storybook.
+        Collaborated closely with designers to ensure design fidelity and accessibility compliance.
+
+        Implemented comprehensive testing strategies to ensure component reliability and performance.
+
+        Did more than just code...
+
+        Eat some doughnuts.
+      `.trim()
+    }
   },
   {
     id: '3',
@@ -42,6 +57,9 @@ export const RESUME: WorkExperience[] = [
     ],
     start: '2019-01',
     end: '2020-05',
-    description: 'API and data modeling'
+    description: {
+      title: 'API and data modeling',
+      fulltext: 'Designed and implemented RESTful APIs and data models to support application features and ensure data integrity.'
+    }
   }
 ];

@@ -3,6 +3,7 @@ import { SkillChip } from "@shared/ui";
 import { classifySkills } from "@widgets/work-experience";
 import { mapSkillToChipProps } from "@features/filters";
 import type { ReactNode } from "react";
+import { useState } from "react";
 
 type Props = {
   experience: WorkExperience;
@@ -22,6 +23,9 @@ export function WorkExperienceCard({
     selectedSkills,
     selectedStackType,
   });
+
+  const [isOpen, setIsOpen] = useState(false);
+  const descriptionId = `work-exp-${experience.id}-desc`;
 
   const nonMatched = [...related, ...other];
 
@@ -50,8 +54,20 @@ export function WorkExperienceCard({
     return wrappedChip;
   })
 
+  const fulltext = experience.description?.fulltext ?? "";
+
+  const previewText = fulltext
+    .trim()
+    .replace(/\n{3,}/g, "\n\n");
+
+  const previewLineCount = previewText.split("\n").length;
+
+  const shouldFadeWhenCollapsed =
+    !isOpen && previewLineCount >= 3;
+
+
   return (
-    <article className="p-4 border rounded space-y-3">
+    <article className="space-y-3 rounded border p-4">
       <div className="flex justify-between">
         <div>
           <h3 className="font-medium">
@@ -64,13 +80,63 @@ export function WorkExperienceCard({
         </div>
 
         {matchStrength && (
-          <p className="text-xs text-slate-500 py-1">
-            Matches {matchStrength.matched} of {matchStrength.total} selected skills
+          <p className="py-1 text-xs text-slate-500">
+            Matches {matchStrength.matched} of {matchStrength.total} selected
+            skills
           </p>
         )}
       </div>
 
-      {experience.description && <p>{experience.description}</p>}
+      {/* Description well */}
+      <button
+        type="button"
+        aria-expanded={isOpen}
+        aria-controls={descriptionId}
+        onClick={() => setIsOpen((v) => !v)}
+        className="group w-full rounded-md border border-gray-200 bg-gray-50 px-4 py-3 text-left shadow-sm transition-colors hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400"
+        >
+        <p className="text-sm font-medium leading-snug text-gray-800">
+              {experience.description?.title}
+            </p>
+        {/* Expandable text container */}
+        <div
+          id={descriptionId}
+          aria-hidden={!isOpen}
+          className={`relative mt-2 overflow-hidden transition-[max-height] duration-700 ease-in-out ${
+            isOpen ? "max-h-[999px]" : "max-h-[4.875em]"
+          }`}
+        >
+          {(() => {
+            const fulltext = experience.description?.fulltext ?? "";
+
+            const previewText = fulltext
+              .trim()
+              .replace(/\n{3,}/g, "\n\n");
+
+            return (
+              <div className="whitespace-pre-line text-sm leading-relaxed text-gray-600">
+                {isOpen ? fulltext : previewText}
+              </div>
+            );
+          })()}
+          {/* Multi-stop fade overlay (collapsed only) */}
+          {shouldFadeWhenCollapsed && (
+            <div
+              aria-hidden
+              className="
+                pointer-events-none absolute inset-x-0 bottom-0
+                h-[4.875em]
+                bg-gradient-to-b
+                from-transparent
+                via-gray-50/70
+                to-gray-50
+                transition-opacity duration-500 ease-in-out
+                opacity-100
+              "
+            />
+          )}
+          </div>
+        </button>
 
       <div className="py-1" />
 

@@ -5,6 +5,11 @@ export type Skill = {
   stackType: "frontend" | "backend" | "fullstack";
 };
 
+export type WorkExperienceDescription = {
+  title: string;
+  fulltext: string;
+};
+
 export type WorkExperience = {
   id: string
   role: string
@@ -13,5 +18,5 @@ export type WorkExperience = {
   skills: Skill[]
   start: string
   end?: string
-  description?: string
+  description?: WorkExperienceDescription | null
 }
