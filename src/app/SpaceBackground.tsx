@@ -105,7 +105,7 @@ export function SpaceBackground() {
     <canvas
       ref={canvasRef}
       aria-hidden
-      className="fixed inset-0 -z-10 pointer-events-none"
+      className="fixed top-0 left-0 inset-0 z-0 pointer-events-none"
     />
   );
 }
