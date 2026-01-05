@@ -5,9 +5,10 @@ type Star = {
   y: number;
   r: number;
   baseOpacity: number;
-  amplitude: number;
-  speed: number;
-  phase: number;
+  cycle: number;
+  off: number;
+  fade: number;
+  offset: number;
   color: string;
 };
 
@@ -37,6 +38,7 @@ export function SpaceBackground() {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
     const starCount = Math.floor(width * height * DENSITY);
+
     const stars: Star[] = Array.from({ length: starCount }, () => {
       const r =
         Math.random() < 0.5 ? 0.6 : Math.random() < 0.7 ? 1.0 : 1.4;
@@ -45,10 +47,11 @@ export function SpaceBackground() {
         x: Math.random() * width,
         y: Math.random() * height,
         r,
-        baseOpacity: 0.65,
-        amplitude: 0.35,
-        speed: 0.04 + Math.random() * 0.06,
-        phase: Math.random() * Math.PI * 2,
+        baseOpacity: 1.0,
+        cycle: 4000 + Math.random() * 6000, // 4–10s
+        off: 300 + Math.random() * 400,     // fully dark duration
+        fade: 250 + Math.random() * 250,    // fade in/out duration
+        offset: Math.random() * 10000,
         color: STAR_COLORS[Math.random() < 0.75 ? 0 : 1],
       };
     });
@@ -79,11 +82,28 @@ export function SpaceBackground() {
       drawBackground();
 
       for (const s of stars) {
-        const opacity =
-          s.baseOpacity +
-          Math.sin(time * 0.01 * s.speed + s.phase) * s.amplitude;
+        const t = (time + s.offset) % s.cycle;
 
-        ctx.globalAlpha = Math.max(0.3, Math.min(1, opacity));
+        const visibleEnd = s.cycle - (s.off + s.fade * 2);
+        const fadeOutEnd = visibleEnd + s.fade;
+        const darkEnd = fadeOutEnd + s.off;
+
+        let opacity = s.baseOpacity;
+
+        if (t > visibleEnd && t <= fadeOutEnd) {
+          // fade out
+          const p = (t - visibleEnd) / s.fade;
+          opacity = s.baseOpacity * (1 - p);
+        } else if (t > fadeOutEnd && t <= darkEnd) {
+          // fully dark
+          opacity = 0;
+        } else if (t > darkEnd) {
+          // fade in
+          const p = (t - darkEnd) / s.fade;
+          opacity = s.baseOpacity * p;
+        }
+
+        ctx.globalAlpha = opacity;
         ctx.fillStyle = s.color;
         ctx.beginPath();
         ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
@@ -105,7 +125,7 @@ export function SpaceBackground() {
     <canvas
       ref={canvasRef}
       aria-hidden
-      className="fixed top-0 left-0 inset-0 z-0 pointer-events-none"
+      className="fixed inset-0 z-0 pointer-events-none"
     />
   );
 }
