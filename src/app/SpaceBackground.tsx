@@ -40,8 +40,16 @@ export function SpaceBackground() {
     const starCount = Math.floor(width * height * DENSITY);
 
     const stars: Star[] = Array.from({ length: starCount }, () => {
+      const sizeRoll = Math.random();
       const r =
-        Math.random() < 0.5 ? 0.6 : Math.random() < 0.7 ? 1.0 : 1.4;
+        sizeRoll < 0.45
+          ? 0.6
+          : sizeRoll < 0.8
+          ? 1.0
+          : sizeRoll < 0.95
+          ? 1.4
+          : 2.1;
+
 
       return {
         x: Math.random() * width,
