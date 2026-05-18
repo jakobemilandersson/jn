@@ -218,3 +218,71 @@ Examples:
 - Type reflects intent: feat, fix, refactor, chore, test, docs
 - Scope aligns with the owning layer/slice (filters, widgets, entities, etc.)
 - Description reflects observable behavior, not implementation details
+
+***
+
+## PR Review Formula
+
+When asked to review a pull request, use this structure:
+
+```
+## Summary
+One sentence describing what the change does.
+
+## Verified
+<type-specific checklist — only items relevant to this PR type>
+
+## Action items
+- Blocker: <specific violation — must fix before merge>
+- Minor: <non-blocking improvement>
+(omit section entirely if none)
+
+## Verdict
+<"No blockers — safe to merge" or "Blockers present — do not merge">
+```
+
+### Blocker definition
+
+Anything violating rules defined in:
+- `project-context.md` (architectural constraints, layer ownership, import rules, testing rules)
+- `README.md` (git conventions)
+- Space Instructions (tech stack, architectural enforcement)
+
+Everything else is Minor at most.
+
+### Type-specific checklists
+
+**`feat`**
+- Correct layer ownership — logic in right slice
+- Cross-slice imports use aliases, no deep imports
+- New exports exposed via `index.ts`
+- Tests exist and follow testing rules (no RESUME coupling, ordering asserted where relevant)
+- No violations of project-context.md constraints
+
+**`fix`**
+- Root cause addressed, not just symptom
+- Regression test covers the fixed case
+- No unintended behavior changes in adjacent logic
+- No violations of project-context.md constraints
+
+**`refactor`**
+- Behavior unchanged
+- No layer boundary crossings introduced
+- No deep imports introduced
+- No violations of project-context.md constraints
+
+**`test`**
+- No direct RESUME imports — explicit mock data used
+- Module-level constants tested via `vi.mock()` + `vi.resetModules()` + dynamic `import()`
+- Ordering asserted where filter behavior is tested
+- No violations of project-context.md constraints
+
+**`docs`**
+- Content accurate against current source
+- No stale markers or outdated descriptions
+- Formatting consistent
+
+**`chore`**
+- CI still passes
+- Linting enforcement intact
+- No architectural rules inadvertently weakened
