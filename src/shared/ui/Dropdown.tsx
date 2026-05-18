@@ -18,7 +18,7 @@ export const Dropdown = <T extends string>({ id, label, value, options, onChange
         id={id}
         value={value}
         onChange={(e) => onChange(e.target.value as T | '')}
-        className="mt-1 block w-full rounded border p-2 bg-white text-black dark:bg-white dark:text-black"
+        className="mt-1 block w-full h-10 rounded border border-gray-300 dark:border-gray-600 px-3 bg-white dark:bg-gray-800 text-black dark:text-gray-100"
         aria-label={label}
       >
         <option value="">Any</option>
