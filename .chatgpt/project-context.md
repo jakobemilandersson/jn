@@ -201,6 +201,8 @@ the entities layer.
 
 ## Git Conventions
 
+### Commits & PR Titles
+
 Commit messages and PR titles follow conventional commits scoped to the
 Mini-FSD slice being changed:
 
@@ -218,6 +220,24 @@ Examples:
 - Type reflects intent: feat, fix, refactor, chore, test, docs
 - Scope aligns with the owning layer/slice (filters, widgets, entities, etc.)
 - Description reflects observable behavior, not implementation details
+
+### Branch Naming
+
+```
+  <type>/<short-description>
+```
+
+Examples:
+```
+  feat/skill-filter-ranking
+  fix/expanded-description-text
+  docs/update-project-context
+  refactor/extract-work-experience-description
+```
+
+- Lowercase and hyphenated — no spaces, no underscores
+- 3–5 words max after the type prefix
+- Type mirrors the conventional commit type for the change
 
 ***
 
