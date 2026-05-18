@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
 import { useState, useRef, useEffect, useMemo } from "react";
 
+const VISIBLE_CHIP_LIMIT = 2;
+
 export type SearchableMultiSelectProps = {
   id: string;
   label: string;
@@ -45,6 +47,9 @@ export function SearchableMultiSelect({
     return () => window.removeEventListener("mousedown", handler);
   }, []);
 
+  const visibleChips = selected.slice(0, VISIBLE_CHIP_LIMIT);
+  const overflowCount = selected.length - visibleChips.length;
+
   return (
     <div className="relative w-full" ref={containerRef}>
       <label className="text-sm font-medium" htmlFor={id}>
@@ -61,18 +66,26 @@ export function SearchableMultiSelect({
         onClick={() => setOpen(o => !o)}
       >
         {selected.length > 0 ? (
-          <div className="inline-flex flex-wrap gap-1">
-            {selected.map(value =>
+          <div className="flex items-center gap-1 min-w-0">
+            {visibleChips.map(value =>
               renderSelected ? (
                 <span key={value}>{renderSelected(value)}</span>
               ) : (
                 <span
                   key={value}
-                  className="bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 px-2 py-0.5 rounded text-xs"
+                  className="bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 px-2 py-0.5 rounded text-xs whitespace-nowrap"
                 >
                   {value}
                 </span>
               )
+            )}
+            {overflowCount > 0 && (
+              <span
+                aria-label={`${overflowCount} more skill${overflowCount > 1 ? "s" : ""} selected`}
+                className="px-2 py-0.5 rounded text-xs font-medium whitespace-nowrap bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300"
+              >
+                +{overflowCount}
+              </span>
             )}
           </div>
         ) : (
