@@ -1,100 +1,74 @@
-# jakob-now — Project Context for ChatGPT (LLM System Instructions)
+# jakob-now — Project Context
 
-This document provides architectural, structural and behavioral context for the jakob-now project.
-It is consumed by the ChatGPT assistant so that answers remain aligned with the project’s architecture,
-coding standards, design principles, and data modeling choices.
+Architectural constraints, layer ownership rules, domain types, and non-obvious
+decisions for the jakob-now project. Read by the AI pair-programmer at the start
+of each conversation.
 
----
+This document covers decisions that cannot be inferred from reading the source alone.
+It does not document feature implementations — read the source for those.
 
-# 📦 Project Summary
+Update this file only for:
+- Major architectural changes (new layers, new patterns)
+- Design system changes (replacing Tailwind, adding a component library)
+- Tooling changes (new test runner, CI changes, package manager)
+- New domain-level constraints or data model decisions
 
-jakob-now is a **React + TypeScript + Vite SPA** for presenting Jakob’s resume in an interactive,
-filter-driven explorer.
+***
 
-Users can filter work experiences by:
-- Stack Type (`frontend`, `backend`, `fullstack`)
-- Skills (multi-select, **AND or OR semantics via strict toggle**)
+## Project
 
-When skills are selected, filtered results are **ranked by relevance**, where experiences with more
-matching skills are ordered before those with fewer matches.
+React + TypeScript + Vite SPA. Filter-driven resume explorer. Deployed on GitHub Pages at jakob.now.
+Mini-FSD (Feature-Sliced Design) architecture.
 
-The app is deployed on GitHub Pages and follows a **Mini-FSD (Feature-Sliced Design)** architecture.
+***
 
----
+## App Shell & SEO Ownership
 
-# 🧱 Architecture (Mini-FSD)
-
-## 🌐 App Shell & SEO Ownership (IMPORTANT)
-
-The application uses a **static SPA shell** (`index.html`) as the canonical
-surface for:
-
+`index.html` is the canonical surface for:
 - SEO metadata (`title`, `description`)
-- Canonical URL declaration
+- Canonical URL
 - Open Graph / social preview metadata
 - JSON-LD structured data (e.g. `Person`)
 - Crawl directives (`robots.txt`)
 
-### 🎨 App-Shell Decorative Rendering (IMPORTANT)
+These **must not** be implemented in React components. They are deployment- and
+identity-level infrastructure. React components may assume these guarantees but
+must not reimplement them.
 
-The app shell may include **purely decorative visual elements** that:
-- Are mounted at the application root
-- Do not depend on entities, features, or widgets
-- Do not affect layout flow or business logic
-- Are non-interactive and accessibility-neutral
+### Decorative App Shell Elements
 
-Example:
-- Canvas-based animated background (`SpaceBackground`)
+Purely decorative visual elements (e.g. canvas-based animated backgrounds) may
+be mounted at the application root. They must:
+- Live in `src/app/`
+- Not depend on entities, features, or widgets
+- Not affect layout flow or business logic
+- Be non-interactive and accessibility-neutral
 
-Such elements must live in `src/app/` and must not migrate into lower layers.
+***
 
-These concerns:
-- **Must not** be implemented in React
-- **Must not** be owned by features, widgets, or pages
-- Are considered **deployment- and identity-level infrastructure**
+## Layer Ownership
 
-React components may assume these guarantees but must not reimplement them.
+| Layer | Owns |
+|---|---|
+| `entities` | Domain models, raw data, normalization logic |
+| `features` | Business logic, filter state, ordering, domain → view model mapping |
+| `widgets` | UI composition, presentation interpretation, interaction wiring |
+| `shared` | Domain-agnostic UI primitives and layout components |
+| `pages` | Composition only — no logic |
+| `app` | App shell, global styles, decorative root elements |
 
+**Critical constraints:**
+- `features` must **not** import from `widgets`
+- `pages` must **not** access feature stores directly or reimplement feature semantics
+- `shared` UI must **not** depend on `entities` or `features` — consumes view models only
 
-## 📐 ARCHITECTURAL ENFORCEMENT (LINTING)
+***
 
-They are actively enforced via:
-- **ESLint (flat config, ESLint v9)**
-- `eslint-plugin-boundaries`
-- `eslint-plugin-import`
+## Import Rules
 
-### Enforcement Guarantees
-
-The linting system enforces:
-- Feature / entity / widget layer boundaries
-- Public API–only imports across layers
-- No deep imports except via `index.ts`
-- Alias-only imports (`@features/*`, `@entities/*`, etc.)
-
-- `features` **must not import** from `widgets`
-- `widgets` **may import** from `features`, `entities`, and `shared`
-
-Violations of architectural rules will fail CI and must be fixed before merge.
-
----
-
-## 🔄 CONTINUOUS INTEGRATION (CI)
-
-The project uses **GitHub Actions** to enforce architectural and behavioral
-guarantees on pull requests.
-
-CI guarantees:
-- ESLint runs with **zero warnings allowed**
-- Vitest runs in **non-watch CI mode** (`vitest run`)
-- Checks re-run on every push to a pull request branch
-- **Draft pull requests do not execute CI**
-- Pull requests cannot be merged unless all checks pass
-
-CI is treated as an **app-level quality gate**, not a convenience.
-
-## 📦 MODULE RESOLUTION & IMPORT RULES (IMPORTANT)
-
-The project uses **TypeScript + Vite path aliases** as a core architectural constraint.
+Cross-slice imports must use path aliases. Relative imports (`../`) are only
+allowed within the same slice. Each slice exposes a public API via `index.ts`;
+no deep imports across layers.
 
 ### Canonical Aliases
 
@@ -107,56 +81,38 @@ The project uses **TypeScript + Vite path aliases** as a core architectural cons
 @shared/*    → src/shared/*
 ```
 
-### Rules (Mandatory)
-
-- Cross-slice imports **must use aliases**
-- Relative imports (`../`) are allowed **only within the same slice**
-- Each slice exposes a public API via `index.ts`
-- Consumers must not import internal files unless explicitly intended
-
-### Correct Examples
+### Examples
 
 ```ts
+// Correct
 import { applyFilters } from "@features/filters";
 import type { WorkExperience } from "@entities/resume";
 import { SkillChip } from "@shared/ui";
-```
 
-### Forbidden Examples
-
-```ts
+// Forbidden
 import { applyFilters } from "../../../features/filters/lib/applyFilters";
 import { SkillChip } from "../../shared/ui/chips/SkillChip";
 ```
 
-These rules enforce Mini-FSD boundaries, improve refactor safety,
-and are relied upon by the LLM when reasoning about the codebase.
+These rules are enforced by ESLint (`eslint-plugin-boundaries`) and will fail CI.
 
-## ENTITIES LAYER
-Defines **canonical domain models** and pure domain logic.
-No ordering, filtering, or presentation logic lives in entities.
+***
 
-### Resume Domain
-```
-src/entities/resume/
-    data.ts         → Hardcoded resume data (WorkExperience[])
-    types.ts        → Domain types (Skill, StackType, WorkExperience)
-    lib/
-      skillIndex.ts → Canonical skill index (deduplication + resolution)
-```
+## Domain Types
 
-### Domain Models
-
-#### `Skill`
 ```ts
+type StackType = 'fullstack' | 'backend' | 'frontend';
+
 type Skill = {
   presentation: string;
   stackType: 'frontend' | 'backend' | 'fullstack';
 };
-```
 
-#### `WorkExperience`
-```ts
+type WorkExperienceDescription = {
+  title: string;
+  fulltext: string;
+};
+
 type WorkExperience = {
   id: string;
   role: string;
@@ -165,221 +121,191 @@ type WorkExperience = {
   skills: Skill[];
   start: string;
   end?: string;
-  description?: {
-    title: string;
-    fulltext: string;
-  } | null;
+  description?: WorkExperienceDescription | null;
 };
 ```
 
-### skillIndex.ts — Domain Normalization
-Exports:
-- `extractSkills(data: WorkExperience[])`
-  - Deduplicates by `presentation`
-  - Preserves first occurrence
-- `getAllSkills()` (RESUME-backed convenience)
-- `resolveSkill(name, data?)`
+***
 
-No other layer should implement its own skill deduplication or indexing.
+## skillIndex.ts — Canonical Skill Metadata Source
 
----
+`src/entities/resume/lib/skillIndex.ts` is the **only** place skill metadata is
+indexed or deduplicated. No other layer may implement its own skill deduplication
+or indexing.
 
-## FEATURES LAYER
-Encapsulates business logic.
+Exports: `extractSkills(data)`, `getAllSkills()`, `resolveSkill(name, data?)`
 
-```
-src/features/filters/
-    lib/applyFilters.ts
-    lib/getSkillOptions.ts
-    lib/mapSkillToChipProps.ts
-    lib/useFilteredResume.ts
-    model/useFilterStore.ts
-    ui/FiltersPanel.tsx
-    ui/SkillsField.tsx
-    ui/StrictSkillsToggle.tsx
-```
+***
 
-### Presentation Mapping Helpers (IMPORTANT)
+## Presentation Mapping (domain → view model)
 
-Features may define **pure presentation-mapping helpers** that:
-- Convert domain entities into UI-ready view models
+Features may define pure presentation-mapping helpers in `features/*/lib` that
+convert domain entities into UI-ready view models. These helpers:
 - Contain no React or rendering logic
-- Are reusable across features and widgets
-- Prevent shared UI components from depending on entities
+- Are the **only** place domain → presentation mapping occurs
+- Keep shared UI components free from domain entity dependencies
 
-Example:
-```ts
-mapSkillToChipProps(skill, fallbackLabel)
-```
+Shared UI components must consume view models only, never domain entities directly.
 
-These helpers:
-- Belong in `features/*/lib`
-- Must remain pure and testable
-- Are the only place where domain → presentation mapping occurs
+***
 
-Shared UI components must consume view models only, never domain entities.
+## Widgets: Interaction Binder Pattern
 
-## WIDGETS LAYER (IMPORTANT)
+Widgets may define interaction binders that live inside the widget slice, import
+feature state (e.g. Zustand stores), and translate localized user intent into
+feature actions.
 
-Features may expose **feature-level abstractions** via their public `index.ts`, including:
+Example: `widgets/work-experience/ui/WorkExperienceSkillBinder.tsx`
 
-- **UI orchestrators** (e.g. `FiltersPanel`)
-  - Compose internal feature UI
-  - Own Zustand wiring and internal control composition
-  - Are the *only* UI surface pages should consume
+This pattern exists to satisfy the strict `features → widgets` import restriction
+while still enabling contextual interactivity within widget UI.
 
-- **Derived selector hooks** (e.g. `useFilteredResume`)
-  - Encapsulate store access + feature semantics
-  - Return ready-to-consume data for pages
-  - Prevent pages from coordinating feature logic
+***
 
-Pages must not:
-- Access feature stores directly via internal paths
-- Import feature UI internals
-- Reimplement feature semantics
+## Widgets: Text Normalization
 
-### Text Presentation & Progressive Disclosure (IMPORTANT)
-
-Widgets **may normalize domain text for presentation purposes only**, including:
-- Trimming leading/trailing whitespace for previews
-- Collapsing excessive blank lines in collapsed views
-- Deriving preview-only representations of longer text
-- Applying conditional visual affordances (e.g. fades) to indicate overflow
-
-These transformations must:
-- Be **pure and deterministic**
+Widgets may normalize domain text for presentation purposes only (e.g. trimming
+whitespace for previews, collapsing blank lines in collapsed views). These
+transformations must:
+- Be pure and deterministic
 - Never mutate the underlying domain entity
-- Preserve the original content in expanded or detailed views
+- Preserve original content in expanded views
 
-Text normalization that affects **business meaning** or **data integrity**
-must remain in the entities layer.
+Text normalization that affects business meaning or data integrity belongs in
+the entities layer.
 
-### Interactive Widget Pattern (NEW)
+***
 
-Widgets may define **interaction binders** that:
-- Live inside the widget slice
-- Import feature state (e.g. Zustand stores)
-- Translate localized user intent into feature actions
+## Testing Rules
 
-Example:
-```
-widgets/work-experience/ui/WorkExperienceSkillBinder.tsx
-```
+- Tests must **not** import `RESUME` data directly — use explicit mock data
+- Module-level constants (e.g. `SKILL_OPTIONS`) must be tested using `vi.mock()`,
+  `vi.resetModules()`, and dynamic `import()`
+- Filter tests must assert both inclusion/exclusion **and** result ordering
+  where ordering is relevant
 
-This pattern exists to satisfy strict `features → widgets` import restrictions
-while still enabling contextual interactivity.
+***
 
-### Work Experience Widget
-```
-src/widgets/work-experience/
-  lib/
-    classifySkills.ts   // Groups skills into matched / related / other
-  ui/
-    WorkExperienceCard.tsx
-```
+## Zustand Filter Store Shape
 
-**Note:**  
-Skill classification for presentation lives in widgets, not in features or entities.
-Filtering eligibility remains owned by `features/filters`.
-
-### Filtering Behavior
 ```ts
-applyFilters(data, stackType, skills, strict)
+{
+  stackType: StackType | null;
+  skills: string[];
+  strictSkillsMatch: boolean;
+  clear(): void;
+}
 ```
 
-Responsibilities:
-- Filter by stackType
-- Filter by skills:
-  - `strict = true` → ALL selected skills must match
-  - `strict = false` → ANY selected skill may match
-- When skills are provided:
-  - Results are **sorted by number of matching skills (descending)**
-  - Sorting is stable for equal match counts
-- Function is pure and data-injected (no RESUME imports)
+***
 
-Ordering logic belongs to the **features layer**, never pages or entities.
+## Git Conventions
 
-### SKILL_OPTIONS
-- Derived from `getAllSkills()`
-- Deduplicated and sorted A–Z
-- Cached and frozen at module load
-- Used as the canonical skill option list for UI
+### Commits & PR Titles
 
----
-
-## SHARED UI LAYER
+Commit messages and PR titles follow conventional commits scoped to the
+Mini-FSD slice being changed:
 
 ```
-src/shared/ui/
-    SearchableMultiSelect.tsx
-    chips/
-      SkillChip.tsx
-      index.ts
+  <type>(<scope>): <behavioral or UX-level change>
 ```
 
-Shared UI may also define **global layout primitives** (e.g. `Footer`) that:
-- Contain no domain or business logic
-- Are globally rendered at the app shell level
-- May include external identity links or static navigation
+Examples:
+```
+  feat(filters): rank results by number of matching skills
+  fix(widgets): preserve full description text in expanded view
+  refactor(entities): extract WorkExperienceDescription as named type
+```
 
-These components remain domain-agnostic and must not depend on features or entities.
+- Type reflects intent: feat, fix, refactor, chore, test, docs
+- Scope aligns with the owning layer/slice (filters, widgets, entities, etc.)
+- Description reflects observable behavior, not implementation details
 
-### SkillChip
-Presentational component; color derives from `skill.stackType`.
+### Branch Naming
 
-### SearchableMultiSelect
-- Renders SkillChips for selected values
-- Maps `string` → `Skill` via `skillIndex`
-- Memoized for performance
+```
+  <type>/<short-description>
+```
 
----
+Examples:
+```
+  feat/skill-filter-ranking
+  fix/expanded-description-text
+  docs/update-project-context
+  refactor/extract-work-experience-description
+```
 
-## PAGES LAYER
-`ResumePage` composes filters, UI, and results.  
-Pages contain no domain logic.
+- Lowercase and hyphenated — no spaces, no underscores
+- 3–5 words max after the type prefix
+- Type mirrors the conventional commit type for the change
 
----
+***
 
-## STATE MANAGEMENT
+## PR Review Formula
 
-Zustand store:
-- `stackType: StackType | null`
-- `skills: string[]`
-- `strictSkillsMatch: boolean`
+When asked to review a pull request, use this structure:
 
-`clear()` resets all filter fields.
+```
+## Summary
+One sentence describing what the change does.
 
----
+## Verified
+<type-specific checklist — only items relevant to this PR type>
 
-## TESTING RULES
-- Tests must not depend on RESUME directly
-- Domain logic is tested with explicit mock data
-- Module-level constants (e.g. SKILL_OPTIONS) are tested using:
-  - `vi.mock()`
-  - `vi.resetModules()`
-  - dynamic `import()`
-- Filtering tests must assert both:
-  - Inclusion/exclusion
-  - Result ordering when relevant
+## Action items
+- Blocker: <specific violation — must fix before merge>
+- Minor: <non-blocking improvement>
+(omit section entirely if none)
 
----
-
-## DESIGN PRINCIPLES
-- Entities own domain data + normalization
-- Features own filtering + state (including ordering)
-- Widgets define *how matched data is interpreted for UI*
-- Shared UI is pure presentation
-- Pages compose but do not contain logic
-- Skill metadata comes only from skillIndex
+## Verdict
+<"No blockers — safe to merge" or "Blockers present — do not merge">
 
 ---
+*Reviewed by AI pair-programmer (Perplexity)*
+```
 
-## GIT & CHANGE COMMUNICATION (LLM CONTEXT)
+### Blocker definition
 
-- Pull request titles must reflect **behavioral or UX-level changes**
-- Titles should align with Mini-FSD ownership (features > pages > entities)
-- Avoid implementation-focused wording in PR titles
-- Ordering, filtering, and ranking changes are considered **feature logic**
-- LLMs should prefer concise, industry-standard PR titles using:
-  <type>(<scope>): <behavioral change>
+Anything violating rules defined in:
+- `project-context.md` (architectural constraints, layer ownership, import rules, testing rules)
+- `README.md` (git conventions)
+- Space Instructions (tech stack, architectural enforcement)
 
+Everything else is Minor at most.
+
+### Type-specific checklists
+
+**`feat`**
+- Correct layer ownership — logic in right slice
+- Cross-slice imports use aliases, no deep imports
+- New exports exposed via `index.ts`
+- Tests exist and follow testing rules (no RESUME coupling, ordering asserted where relevant)
+- No violations of project-context.md constraints
+
+**`fix`**
+- Root cause addressed, not just symptom
+- Regression test covers the fixed case
+- No unintended behavior changes in adjacent logic
+- No violations of project-context.md constraints
+
+**`refactor`**
+- Behavior unchanged
+- No layer boundary crossings introduced
+- No deep imports introduced
+- No violations of project-context.md constraints
+
+**`test`**
+- No direct RESUME imports — explicit mock data used
+- Module-level constants tested via `vi.mock()` + `vi.resetModules()` + dynamic `import()`
+- Ordering asserted where filter behavior is tested
+- No violations of project-context.md constraints
+
+**`docs`**
+- Content accurate against current source
+- No stale markers or outdated descriptions
+- Formatting consistent
+
+**`chore`**
+- CI still passes
+- Linting enforcement intact
+- No architectural rules inadvertently weakened
