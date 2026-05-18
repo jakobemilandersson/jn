@@ -57,7 +57,7 @@ export function SearchableMultiSelect({
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-label={label}
-        className="mt-1 w-full block border rounded px-3 py-2 text-left bg-white text-black focus:ring focus:outline-none"
+        className="mt-1 w-full block border border-gray-300 dark:border-gray-600 rounded px-3 py-2 text-left bg-white dark:bg-gray-800 text-black dark:text-gray-100 focus:ring focus:outline-none"
         onClick={() => setOpen(o => !o)}
       >
         {selected.length > 0 ? (
@@ -68,7 +68,7 @@ export function SearchableMultiSelect({
               ) : (
                 <span
                   key={value}
-                  className="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-xs"
+                  className="bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 px-2 py-0.5 rounded text-xs"
                 >
                   {value}
                 </span>
@@ -76,15 +76,15 @@ export function SearchableMultiSelect({
             )}
           </div>
         ) : (
-          <span className="text-gray-500">Select skills…</span>
+          <span className="text-gray-400 dark:text-gray-500">Select skills…</span>
         )}
       </button>
 
       {open && (
-        <div className="absolute z-20 mt-1 w-full border rounded bg-white shadow-lg p-2">
+        <div className="absolute z-20 mt-1 w-full border border-gray-200 dark:border-gray-700 rounded bg-white dark:bg-gray-800 shadow-lg p-2">
           <input
             aria-label={`Search ${label}`}
-            className="w-full border rounded px-2 py-1 mb-2 text-sm"
+            className="w-full border border-gray-300 dark:border-gray-600 rounded px-2 py-1 mb-2 text-sm bg-white dark:bg-gray-700 text-black dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500"
             placeholder="Search…"
             value={query}
             onChange={e => setQuery(e.target.value)}
@@ -96,7 +96,7 @@ export function SearchableMultiSelect({
                 key={option}
                 role="option"
                 aria-selected={selected.includes(option)}
-                className="flex items-center gap-2 px-2 py-1 hover:bg-gray-100 cursor-pointer"
+                className="flex items-center gap-2 px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-gray-900 dark:text-gray-100"
                 onClick={() => toggle(option)}
               >
                 <input
@@ -110,7 +110,7 @@ export function SearchableMultiSelect({
             ))}
 
             {filtered.length === 0 && (
-              <li className="px-2 py-1 text-sm text-gray-500">
+              <li className="px-2 py-1 text-sm text-gray-500 dark:text-gray-400">
                 No matches.
               </li>
             )}
