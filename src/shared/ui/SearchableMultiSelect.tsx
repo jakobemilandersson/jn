@@ -76,7 +76,7 @@ export function SearchableMultiSelect({
             )}
           </div>
         ) : (
-          <span className="text-gray-400 dark:text-gray-500">Select skills…</span>
+          <span className="text-gray-500 dark:text-gray-400">Select skills…</span>
         )}
       </button>
 
