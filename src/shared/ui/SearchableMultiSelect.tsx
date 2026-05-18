@@ -57,7 +57,7 @@ export function SearchableMultiSelect({
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-label={label}
-        className="mt-1 w-full block border border-gray-300 dark:border-gray-600 rounded px-3 py-2 text-left bg-white dark:bg-gray-800 text-black dark:text-gray-100 focus:ring focus:outline-none"
+        className="mt-1 w-full h-10 flex items-center border border-gray-300 dark:border-gray-600 rounded px-3 text-left bg-white dark:bg-gray-800 text-black dark:text-gray-100 focus:ring focus:outline-none"
         onClick={() => setOpen(o => !o)}
       >
         {selected.length > 0 ? (
