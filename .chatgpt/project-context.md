@@ -259,6 +259,9 @@ One sentence describing what the change does.
 
 ## Verdict
 <"No blockers — safe to merge" or "Blockers present — do not merge">
+
+---
+*Reviewed by AI pair-programmer (Perplexity)*
 ```
 
 ### Blocker definition
