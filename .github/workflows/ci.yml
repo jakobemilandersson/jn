@@ -1,1 +1,43 @@
-bmFtZTogQ0kKCm9uOgogIHB1bGxfcmVxdWVzdDoKICAgIHR5cGVzOgogICAgICAtIG9wZW5lZAogICAgICAtIHN5bmNocm9uaXplCiAgICAgIC0gcmVvcGVuZWQKICAgICAgLSByZWFkeV9mb3JfcmV2aWV3Cgpqb2JzOgogIGxpbnQtYW5kLXRlc3Q6CiAgICBuYW1lOiBMaW50ICYgVGVzdAogICAgcnVucy1vbjogdWJ1bnR1LWxhdGVzdAoKICAgICMg4pub IFNraXAgZHJhZnQgUFJzIGVudGlyZWx5CiAgICBpZjogZ2l0aHViLmV2ZW50LnB1bGxfcmVxdWVzdC5kcmFmdCA9PSBmYWxzZQoKICAgIHN0ZXBzOgogICAgICAtIG5hbWU6IENoZWNrb3V0IHJlcG9zaXRvcnkKICAgICAgICB1c2VzOiBhY3Rpb25zL2NoZWNrb3V0QHY0CgogICAgICAtIG5hbWU6IFNldHVwIE5vZGUuanMKICAgICAgICB1c2VzOiBhY3Rpb25zL3NldHVwLW5vZGVAdjQKICAgICAgICB3aXRoOgogICAgICAgICAgbm9kZS12ZXJzaW9uOiAyMAoKICAgICAgLSBuYW1lOiBTZXR1cCBwbnBtCiAgICAgICAgdXNlczogcG5wbS9hY3Rpb24tc2V0dXBAdjMKICAgICAgICB3aXRoOgogICAgICAgICAgdmVyc2lvbjogOQoKICAgICAgLSBuYW1lOiBJbnN0YWxsIGRlcGVuZGVuY2llcwogICAgICAgIHJ1bjogcG5wbSBpbnN0YWxsIC0tZnJvemVuLWxvY2tmaWxlCgogICAgICAtIG5hbWU6IFR5cGVTY3JpcHQgdHlwZSBjaGVjawogICAgICAgIHJ1bjogcG5wbSB0c2MgLS1uby1FbWl0CgogICAgICAtIG5hbWU6IFJ1biBFU0xpbnQgKG5vIHdhcm5pbmdzIGFsbG93ZWQpCiAgICAgICAgcnVuOiBwbnBtIGxpbnQgLS1tYXgtd2FybmluZ3M9MAoKICAgICAgLSBuYW1lOiBSdW4gVml0ZXN0CiAgICAgICAgcnVuOiBwbnBtIHRlc3QK
+name: CI
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+
+jobs:
+  lint-and-test:
+    name: Lint & Test
+    runs-on: ubuntu-latest
+
+    # ⛔ Skip draft PRs entirely
+    if: github.event.pull_request.draft == false
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: TypeScript type check
+        run: pnpm tsc --noEmit
+
+      - name: Run ESLint (no warnings allowed)
+        run: pnpm lint --max-warnings=0
+
+      - name: Run Vitest
+        run: pnpm test
