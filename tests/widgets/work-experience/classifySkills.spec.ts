@@ -20,7 +20,7 @@ describe('classifySkills', () => {
     const result = classifySkills({
       experience,
       selectedSkills: ['React'],
-      selectedStackType: null,
+      selectedStackTypes: [],
     })
 
     expect(result.matched.map((s) => s.presentation)).toEqual(['React'])
@@ -32,7 +32,7 @@ describe('classifySkills', () => {
     const result = classifySkills({
       experience,
       selectedSkills: [],
-      selectedStackType: 'backend',
+      selectedStackTypes: ['backend'],
     })
 
     expect(result.matched).toHaveLength(0)
@@ -51,7 +51,7 @@ describe('classifySkills', () => {
         stackType: 'backend',
       },
       selectedSkills: [],
-      selectedStackType: null,
+      selectedStackTypes: [],
     })
 
     expect(result.matched).toHaveLength(0)
@@ -69,7 +69,7 @@ it('provides match strength only when multiple skills are selected', () => {
   const result = classifySkills({
     experience,
     selectedSkills: ['React', 'TypeScript'],
-    selectedStackType: null,
+    selectedStackTypes: [],
   })
 
   expect(result.matchStrength).toEqual({
@@ -82,7 +82,7 @@ it('does not provide match strength when one or fewer skills are selected', () =
   const result = classifySkills({
     experience,
     selectedSkills: ['React'],
-    selectedStackType: null,
+    selectedStackTypes: [],
   })
 
   expect(result.matchStrength).toBeNull()

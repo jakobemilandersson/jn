@@ -27,7 +27,7 @@ describe("WorkExperienceCard", () => {
       <WorkExperienceCard
         experience={experience}
         selectedSkills={[]}
-        selectedStackType={null}
+        selectedStackTypes={[]}
       />
     );
 
@@ -55,7 +55,7 @@ describe("WorkExperienceCard", () => {
       <WorkExperienceCard
         experience={experience}
         selectedSkills={[]}
-        selectedStackType={null}
+        selectedStackTypes={[]}
       />
     );
 
@@ -73,7 +73,7 @@ describe("WorkExperienceCard", () => {
       <WorkExperienceCard
         experience={experience}
         selectedSkills={["React"]}
-        selectedStackType={null}
+        selectedStackTypes={[]}
       />
     );
 
