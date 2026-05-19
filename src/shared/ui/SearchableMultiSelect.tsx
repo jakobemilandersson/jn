@@ -1,9 +1,23 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 
-export type SearchableMultiSelectProps = {
-  id: string;
+export type OptionGroup = {
   label: string;
   options: string[];
+};
+
+type FlatProps = {
+  options: string[];
+  grouped?: never;
+};
+
+type GroupedProps = {
+  grouped: OptionGroup[];
+  options?: never;
+};
+
+export type SearchableMultiSelectProps = (FlatProps | GroupedProps) & {
+  id: string;
+  label: string;
   selected: string[];
   onChange: (next: string[]) => void;
 };
@@ -12,6 +26,7 @@ export function SearchableMultiSelect({
   id,
   label,
   options,
+  grouped,
   selected,
   onChange,
 }: SearchableMultiSelectProps) {
@@ -19,10 +34,27 @@ export function SearchableMultiSelect({
   const [query, setQuery] = useState("");
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const filtered = useMemo(
-    () => options.filter(o => o.toLowerCase().includes(query.toLowerCase())),
-    [options, query]
+  const allOptions = useMemo(
+    () => grouped ? grouped.flatMap(g => g.options) : (options ?? []),
+    [grouped, options]
   );
+
+  const filteredFlat = useMemo(
+    () => allOptions.filter(o => o.toLowerCase().includes(query.toLowerCase())),
+    [allOptions, query]
+  );
+
+  const filteredGroups = useMemo(() => {
+    if (!grouped) return null;
+    return grouped
+      .map(g => ({
+        label: g.label,
+        options: g.options.filter(o =>
+          o.toLowerCase().includes(query.toLowerCase())
+        ),
+      }))
+      .filter(g => g.options.length > 0);
+  }, [grouped, query]);
 
   const toggle = (value: string) => {
     onChange(
@@ -94,25 +126,56 @@ export function SearchableMultiSelect({
           />
 
           <ul role="listbox" aria-multiselectable="true" className="max-h-48 overflow-y-auto">
-            {filtered.map(option => (
-              <li
-                key={option}
-                role="option"
-                aria-selected={selected.includes(option)}
-                className="flex items-center gap-2 px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-gray-900 dark:text-gray-100"
-                onClick={() => toggle(option)}
-              >
-                <input
-                  type="checkbox"
-                  checked={selected.includes(option)}
-                  onChange={() => toggle(option)}
-                  className="rounded"
-                />
-                <span>{option}</span>
-              </li>
-            ))}
+            {filteredGroups
+              ? filteredGroups.map(group => (
+                  <li key={group.label}>
+                    <ul role="group" aria-label={group.label}>
+                      <li
+                        role="presentation"
+                        className="px-2 pt-2 pb-1 text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 select-none"
+                      >
+                        {group.label}
+                      </li>
+                      {group.options.map(option => (
+                        <li
+                          key={option}
+                          role="option"
+                          aria-selected={selected.includes(option)}
+                          className="flex items-center gap-2 px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-gray-900 dark:text-gray-100"
+                          onClick={() => toggle(option)}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={selected.includes(option)}
+                            onChange={() => toggle(option)}
+                            className="rounded"
+                          />
+                          <span>{option}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
+                ))
+              : filteredFlat.map(option => (
+                  <li
+                    key={option}
+                    role="option"
+                    aria-selected={selected.includes(option)}
+                    className="flex items-center gap-2 px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-gray-900 dark:text-gray-100"
+                    onClick={() => toggle(option)}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selected.includes(option)}
+                      onChange={() => toggle(option)}
+                      className="rounded"
+                    />
+                    <span>{option}</span>
+                  </li>
+                ))
+            }
 
-            {filtered.length === 0 && (
+            {filteredFlat.length === 0 && (
               <li className="px-2 py-1 text-sm text-gray-500 dark:text-gray-400">
                 No matches.
               </li>
