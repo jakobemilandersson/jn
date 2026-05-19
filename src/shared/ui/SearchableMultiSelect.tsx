@@ -1,7 +1,4 @@
-import type { ReactNode } from "react";
 import { useState, useRef, useEffect, useMemo } from "react";
-
-const VISIBLE_CHIP_LIMIT = 2;
 
 export type SearchableMultiSelectProps = {
   id: string;
@@ -9,7 +6,6 @@ export type SearchableMultiSelectProps = {
   options: string[];
   selected: string[];
   onChange: (next: string[]) => void;
-  renderSelected?: (value: string) => ReactNode;
 };
 
 export function SearchableMultiSelect({
@@ -18,7 +14,6 @@ export function SearchableMultiSelect({
   options,
   selected,
   onChange,
-  renderSelected,
 }: SearchableMultiSelectProps) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -47,8 +42,10 @@ export function SearchableMultiSelect({
     return () => window.removeEventListener("mousedown", handler);
   }, []);
 
-  const visibleChips = selected.slice(0, VISIBLE_CHIP_LIMIT);
-  const overflowCount = selected.length - visibleChips.length;
+  const triggerLabel =
+    selected.length === 0
+      ? null
+      : `${label} \u00b7 ${selected.length}`;
 
   return (
     <div className="relative w-full" ref={containerRef}>
@@ -61,36 +58,29 @@ export function SearchableMultiSelect({
         type="button"
         aria-haspopup="listbox"
         aria-expanded={open}
-        aria-label={label}
-        className="mt-1 w-full h-10 flex items-center border border-gray-300 dark:border-gray-600 rounded px-3 text-left bg-white dark:bg-gray-800 text-black dark:text-gray-100 focus:ring focus:outline-none"
+        aria-label={`${label}${
+          selected.length > 0 ? `, ${selected.length} selected` : ""
+        }`}
+        className="mt-1 w-full h-10 flex items-center justify-between gap-2 border border-gray-300 dark:border-gray-600 rounded px-3 text-left bg-white dark:bg-gray-800 text-black dark:text-gray-100 focus:ring focus:outline-none"
         onClick={() => setOpen(o => !o)}
       >
-        {selected.length > 0 ? (
-          <div className="flex items-center gap-1 min-w-0">
-            {visibleChips.map(value =>
-              renderSelected ? (
-                <span key={value}>{renderSelected(value)}</span>
-              ) : (
-                <span
-                  key={value}
-                  className="bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 px-2 py-0.5 rounded text-xs whitespace-nowrap"
-                >
-                  {value}
-                </span>
-              )
-            )}
-            {overflowCount > 0 && (
-              <span
-                aria-label={`${overflowCount} more skill${overflowCount > 1 ? "s" : ""} selected`}
-                className="px-2 py-0.5 rounded text-xs font-medium whitespace-nowrap bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300"
-              >
-                +{overflowCount}
-              </span>
-            )}
-          </div>
-        ) : (
-          <span className="text-gray-500 dark:text-gray-400">Select skills…</span>
-        )}
+        <span className="truncate">
+          {triggerLabel ?? (
+            <span className="text-gray-500 dark:text-gray-400">Select skills…</span>
+          )}
+        </span>
+        <svg
+          aria-hidden="true"
+          className="shrink-0 w-4 h-4 text-gray-400"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fillRule="evenodd"
+            d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+            clipRule="evenodd"
+          />
+        </svg>
       </button>
 
       {open && (
@@ -103,7 +93,7 @@ export function SearchableMultiSelect({
             onChange={e => setQuery(e.target.value)}
           />
 
-          <ul role="listbox" className="max-h-48 overflow-y-auto">
+          <ul role="listbox" aria-multiselectable="true" className="max-h-48 overflow-y-auto">
             {filtered.map(option => (
               <li
                 key={option}

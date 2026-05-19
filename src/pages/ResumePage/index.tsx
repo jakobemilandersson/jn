@@ -1,5 +1,6 @@
 import { FiltersPanel, useFilteredResume, useFilterStore } from "@features/filters";
-import { WorkExperienceSkillBinder } from "@widgets/work-experience"
+import { WorkExperienceSkillBinder } from "@widgets/work-experience";
+import { ActiveSkillFilters } from "@widgets/filters";
 import { RESUME } from "@entities/resume";
 
 export default function ResumePage() {
@@ -12,6 +13,7 @@ export default function ResumePage() {
       <h1 className="text-2xl font-bold">Jakob — Interactive Resume</h1>
 
       <FiltersPanel />
+      <ActiveSkillFilters />
 
       <section>
         <h2 className="text-xl font-semibold">Results ({results.length})</h2>
