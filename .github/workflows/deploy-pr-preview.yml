@@ -41,11 +41,14 @@ jobs:
           target-folder: pull/${{ github.event.pull_request.number }}
           clean: false
 
-      # The gh-pages branch needs a CNAME at its root so jakob.now resolves
-      # to it. Production uses actions/deploy-pages (artifact-based) which is
-      # a separate system and never touches gh-pages, so we must write the
-      # CNAME ourselves. We do it after every preview deploy to ensure it
-      # survives even if the branch was recreated.
+      # Production uses actions/deploy-pages (artifact-based) which never
+      # touches the gh-pages branch, so we must keep the CNAME there ourselves.
+      # This step writes jakob.now to gh-pages root after every preview deploy.
+      - name: Prepare CNAME file
+        run: |
+          mkdir -p .cname-root
+          echo "jakob.now" > .cname-root/CNAME
+
       - name: Ensure CNAME on gh-pages root
         uses: JamesIves/github-pages-deploy-action@v4
         with:
@@ -53,11 +56,6 @@ jobs:
           folder: .cname-root
           target-folder: /
           clean: false
-        env:
-          # Trick: write the CNAME file into a temp dir and deploy it to root
-          _: |
-            mkdir -p .cname-root
-            echo "jakob.now" > .cname-root/CNAME
 
       - name: Comment preview URL on PR
         uses: actions/github-script@v7
