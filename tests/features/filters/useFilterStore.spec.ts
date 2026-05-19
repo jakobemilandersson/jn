@@ -47,6 +47,11 @@ describe("useFilterStore", () => {
     expect(useFilterStore.getState().stackTypes).toEqual(["frontend", "backend"]);
   });
 
+  it("replaces the stackTypes array when setStackTypes is called", () => {
+    useFilterStore.getState().setStackTypes(["frontend", "backend"]);
+    expect(useFilterStore.getState().stackTypes).toEqual(["frontend", "backend"]);
+  });
+
   // -----------------------------------------------------
   // skills
   // -----------------------------------------------------

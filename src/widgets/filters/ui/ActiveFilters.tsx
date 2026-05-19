@@ -3,12 +3,6 @@ import { resolveSkill } from "@entities/resume";
 import { SkillChip } from "@shared/ui";
 import type { StackType } from "@entities/resume";
 
-const STACK_TYPE_VARIANT: Record<StackType, 'fullstack' | 'backend' | 'frontend'> = {
-  fullstack: 'fullstack',
-  backend: 'backend',
-  frontend: 'frontend',
-}
-
 export function ActiveFilters() {
   const { skills, toggleSkill, stackTypes, toggleStackType } = useFilterStore((s) => ({
     skills: s.skills,
@@ -28,7 +22,7 @@ export function ActiveFilters() {
       ].join(" ")}
     >
       <div className="flex flex-wrap gap-2 pt-2">
-        {stackTypes.map((value) => (
+        {stackTypes.map((value: StackType) => (
           <button
             key={`stack-${value}`}
             type="button"
@@ -36,7 +30,7 @@ export function ActiveFilters() {
             aria-label={`Remove ${STACK_TYPE_LABELS[value]} filter`}
             className="group inline-flex items-center gap-1 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-gray-400"
           >
-            <SkillChip label={STACK_TYPE_LABELS[value]} variant={STACK_TYPE_VARIANT[value]} />
+            <SkillChip label={STACK_TYPE_LABELS[value]} variant={value} />
             <span
               aria-hidden="true"
               className="text-xs text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-200 transition-colors"
