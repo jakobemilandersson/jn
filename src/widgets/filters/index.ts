@@ -1,1 +1,1 @@
-export { ActiveSkillFilters } from './ui/ActiveSkillFilters';
+export { ActiveFilters } from './ui/ActiveFilters';

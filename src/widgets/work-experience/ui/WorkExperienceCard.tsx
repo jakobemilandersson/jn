@@ -8,20 +8,20 @@ import { useState } from "react";
 type Props = {
   experience: WorkExperience;
   selectedSkills: string[];
-  selectedStackType: StackType | null;
+  selectedStackTypes: StackType[];
   onSkillPressed?: (skill: Skill) => void;
 };
 
 export function WorkExperienceCard({
   experience,
   selectedSkills,
-  selectedStackType,
+  selectedStackTypes,
   onSkillPressed,
 }: Props) {
   const { matched, related, other, matchStrength } = classifySkills({
     experience,
     selectedSkills,
-    selectedStackType,
+    selectedStackTypes,
   });
 
   const [isOpen, setIsOpen] = useState(false);

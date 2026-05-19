@@ -4,7 +4,6 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 
 import type { Skill, WorkExperience } from "@entities/resume";
 
-// 🔴 this import will fail until you implement the adapter (good!)
 import { WorkExperienceSkillBinder } from "@widgets/work-experience";
 
 // --- mock Zustand store ---
@@ -33,14 +32,14 @@ describe("WorkExperienceSkillBinder", () => {
         stackType: "frontend",
         skills: [skill],
         start: "2022-01",
-        description: "Did frontend things",
+        description: null,
     };
 
     it("calls toggleSkill with skill.presentation when a skill chip is pressed", async () => {
         const user = userEvent.setup();
 
         render(
-            <WorkExperienceSkillBinder experience={experience} selectedSkills={[]} selectedStackType={null} />
+            <WorkExperienceSkillBinder experience={experience} selectedSkills={[]} selectedStackTypes={[]} />
         );
 
         // Skill label must be visible
