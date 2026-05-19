@@ -25,15 +25,11 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      # Custom domain (jakob.now) is applied to the whole gh-pages branch,
-      # so the effective root is jakob.now/ — no /jn/ prefix needed.
       - name: Build with PR base path
         run: pnpm build
         env:
           VITE_BASE_PATH: /pull/${{ github.event.pull_request.number }}/
 
-      # Copy index.html → 404.html so GitHub Pages serves the SPA for any
-      # deep-linked path inside the preview (e.g. /pull/25/some/route).
       - name: Add SPA 404 fallback
         run: cp dist/index.html dist/404.html
 
@@ -44,6 +40,24 @@ jobs:
           folder: dist
           target-folder: pull/${{ github.event.pull_request.number }}
           clean: false
+
+      # The gh-pages branch needs a CNAME at its root so jakob.now resolves
+      # to it. Production uses actions/deploy-pages (artifact-based) which is
+      # a separate system and never touches gh-pages, so we must write the
+      # CNAME ourselves. We do it after every preview deploy to ensure it
+      # survives even if the branch was recreated.
+      - name: Ensure CNAME on gh-pages root
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: .cname-root
+          target-folder: /
+          clean: false
+        env:
+          # Trick: write the CNAME file into a temp dir and deploy it to root
+          _: |
+            mkdir -p .cname-root
+            echo "jakob.now" > .cname-root/CNAME
 
       - name: Comment preview URL on PR
         uses: actions/github-script@v7
