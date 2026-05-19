@@ -4,7 +4,10 @@ import path from 'node:path'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/',
+  // Production uses '/' (custom domain jakob.now).
+  // PR preview builds set VITE_BASE_PATH=/jn/pull/<pr-number>/ so that
+  // all asset URLs resolve correctly under the gh-pages subdirectory.
+  base: process.env.VITE_BASE_PATH ?? '/',
   resolve: {
     alias: {
       "@app": path.resolve(__dirname, "src/app"),
