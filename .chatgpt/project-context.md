@@ -311,3 +311,20 @@ Everything else is Minor at most.
 - CI still passes
 - Linting enforcement intact
 - No architectural rules inadvertently weakened
+
+***
+
+## Agent Workflow: "Take action on the latest review"
+
+When instructed with something similar to "take action on the latest review for PR #X",
+follow these steps in order:
+
+1. **Read the review** — fetch the most recent `COMMENT`-type pull request review for PR #X.
+2. **Analyse action items** — identify all items listed under the `## Action items` section
+   of that review. Decide which ones to fix: fix all `Blocker` items unconditionally;
+   fix `Minor` items unless there is a clear reason not to (e.g. out of scope, conflicts
+   with architectural rules, or requires clarification from the user).
+3. **Implement the fixes** — make the necessary code changes on the PR branch, respecting
+   all layer ownership, import alias, and testing rules defined in this document.
+4. **Commit and push** — push the changes to the PR branch in a single commit. Use the
+   conventional commit format: `fix(<scope>): <description of what was fixed>`.
