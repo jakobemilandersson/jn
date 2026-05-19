@@ -33,6 +33,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: TypeScript type check
+        run: pnpm tsc --noEmit
+
       - name: Run ESLint (no warnings allowed)
         run: pnpm lint --max-warnings=0
 
