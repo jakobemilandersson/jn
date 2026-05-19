@@ -23,8 +23,11 @@ export function ActiveFilters() {
     >
       <div className="flex flex-col gap-3 pt-2">
         {stackTypes.length > 0 && (
-          <div className="flex flex-col gap-1.5">
-            <span className="text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wide">
+          <div aria-labelledby="active-filters-stack-label" className="flex flex-col gap-1.5">
+            <span
+              id="active-filters-stack-label"
+              className="text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wide"
+            >
               Stack type
             </span>
             <div className="flex flex-wrap gap-2">
@@ -49,8 +52,11 @@ export function ActiveFilters() {
           </div>
         )}
         {skills.length > 0 && (
-          <div className="flex flex-col gap-1.5">
-            <span className="text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wide">
+          <div aria-labelledby="active-filters-skills-label" className="flex flex-col gap-1.5">
+            <span
+              id="active-filters-skills-label"
+              className="text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wide"
+            >
               Skills
             </span>
             <div className="flex flex-wrap gap-2">
