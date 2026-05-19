@@ -18,13 +18,13 @@ export type ClassifiedSkills = {
 type Params = {
   experience: WorkExperience
   selectedSkills: string[]
-  selectedStackType: StackType | null
+  selectedStackTypes: StackType[]
 }
 
 export function classifySkills({
   experience,
   selectedSkills,
-  selectedStackType,
+  selectedStackTypes,
 }: Params): ClassifiedSkills {
   const matched: Skill[] = []
   const related: Skill[] = []
@@ -40,7 +40,7 @@ export function classifySkills({
 
     const isRelated =
       skill.stackType === experience.stackType ||
-      (selectedStackType !== null && skill.stackType === selectedStackType)
+      (selectedStackTypes.length > 0 && selectedStackTypes.includes(skill.stackType))
 
     if (isRelated) {
       related.push(skill)

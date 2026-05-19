@@ -15,7 +15,7 @@ const exp = (overrides: Partial<WorkExperience>): WorkExperience => ({
   id: "id",
   role: "Dev",
   company: "Corp",
-  description: "",
+  description: null,
   start: "2020",
   end: "2021",
   stackType: "backend",

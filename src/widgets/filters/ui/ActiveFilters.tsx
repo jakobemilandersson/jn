@@ -1,4 +1,4 @@
-import { useFilterStore, mapSkillToChipProps, stackTypeFromLabel, STACK_TYPE_OPTION_LABELS } from "@features/filters";
+import { useFilterStore, mapSkillToChipProps } from "@features/filters";
 import { resolveSkill } from "@entities/resume";
 import { SkillChip } from "@shared/ui";
 import type { StackType } from "@entities/resume";
@@ -7,6 +7,12 @@ const STACK_TYPE_LABELS: Record<StackType, string> = {
   fullstack: 'Fullstack',
   backend: 'Backend',
   frontend: 'Frontend',
+}
+
+const STACK_TYPE_VARIANT: Record<StackType, 'fullstack' | 'backend' | 'frontend'> = {
+  fullstack: 'fullstack',
+  backend: 'backend',
+  frontend: 'frontend',
 }
 
 export function ActiveFilters() {
@@ -36,7 +42,7 @@ export function ActiveFilters() {
             aria-label={`Remove ${STACK_TYPE_LABELS[value]} filter`}
             className="group inline-flex items-center gap-1 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-gray-400"
           >
-            <SkillChip label={STACK_TYPE_LABELS[value]} variant="neutral" />
+            <SkillChip label={STACK_TYPE_LABELS[value]} variant={STACK_TYPE_VARIANT[value]} />
             <span
               aria-hidden="true"
               className="text-xs text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-200 transition-colors"

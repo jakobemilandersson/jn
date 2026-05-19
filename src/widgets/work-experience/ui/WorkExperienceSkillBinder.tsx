@@ -5,10 +5,10 @@ import { WorkExperienceCard } from "@widgets/work-experience"
 type Props = {
     experience: WorkExperience;
     selectedSkills: string[];
-    selectedStackType: StackType | null;
+    selectedStackTypes: StackType[];
 }
 
-export function WorkExperienceSkillBinder({ experience, selectedSkills, selectedStackType }: Props) {
+export function WorkExperienceSkillBinder({ experience, selectedSkills, selectedStackTypes }: Props) {
     const { toggleSkill } = useFilterStore();
 
     const handleSkillPress = (skill: Skill) => {
@@ -19,7 +19,7 @@ export function WorkExperienceSkillBinder({ experience, selectedSkills, selected
         <WorkExperienceCard
             experience={experience}
             selectedSkills={selectedSkills}
-            selectedStackType={selectedStackType}
+            selectedStackTypes={selectedStackTypes}
             onSkillPressed={handleSkillPress}
         />
     )

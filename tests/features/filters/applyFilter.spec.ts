@@ -15,7 +15,7 @@ const makeExp = (overrides: Partial<WorkExperience>): WorkExperience => ({
   id: "id",
   role: "Dev",
   company: "Corp",
-  description: "",
+  description: null,
   start: "2020",
   end: "2021",
   stackType: "fullstack",
@@ -58,27 +58,32 @@ const DATA: WorkExperience[] = [
 // -----------------------------------------------------
 describe("applyFilters — loose mode (ANY skill)", () => {
   it("returns all experiences when no filters are applied", () => {
-    const res = applyFilters(DATA, null, [], false);
+    const res = applyFilters(DATA, [], [], false);
     expect(res.map(r => r.id)).toEqual(["a", "b", "c", "d"]);
   });
 
-  it("filters by stackType only", () => {
-    const res = applyFilters(DATA, "backend", [], false);
+  it("filters by a single stackType", () => {
+    const res = applyFilters(DATA, ["backend"], [], false);
     expect(res.map(r => r.id)).toEqual(["b", "d"]);
   });
 
+  it("filters by multiple stackTypes (OR)", () => {
+    const res = applyFilters(DATA, ["backend", "frontend"], [], false);
+    expect(res.map(r => r.id)).toEqual(["b", "c", "d"]);
+  });
+
   it("returns experiences matching ANY selected skill", () => {
-    const res = applyFilters(DATA, null, ["react"], false);
+    const res = applyFilters(DATA, [], ["react"], false);
     expect(res.map(r => r.id)).toEqual(["a", "c"]);
   });
 
-  it("filters by BOTH stackType and ANY skill", () => {
-    const res = applyFilters(DATA, "backend", ["docker"], false);
+  it("filters by BOTH stackTypes and ANY skill", () => {
+    const res = applyFilters(DATA, ["backend"], ["docker"], false);
     expect(res.map(r => r.id)).toEqual(["d"]);
   });
 
   it("returns empty list when no experience matches ANY skill", () => {
-    const res = applyFilters(DATA, null, ["unknown"], false);
+    const res = applyFilters(DATA, [], ["unknown"], false);
     expect(res.length).toBe(0);
   });
 });
@@ -88,27 +93,27 @@ describe("applyFilters — loose mode (ANY skill)", () => {
 // -----------------------------------------------------
 describe("applyFilters — strict mode (ALL skills)", () => {
   it("requires ALL selected skills to be present", () => {
-    const res = applyFilters(DATA, null, ["react", "ts"], true);
+    const res = applyFilters(DATA, [], ["react", "ts"], true);
     expect(res.map(r => r.id)).toEqual(["a"]);
   });
 
   it("returns empty when at least one required skill is missing", () => {
-    const res = applyFilters(DATA, null, ["react", "ts", "go"], true);
+    const res = applyFilters(DATA, [], ["react", "ts", "go"], true);
     expect(res.length).toBe(0);
   });
 
-  it("filters by BOTH stackType and ALL skills", () => {
-    const res = applyFilters(DATA, "fullstack", ["react", "ts"], true);
+  it("filters by BOTH stackTypes and ALL skills", () => {
+    const res = applyFilters(DATA, ["fullstack"], ["react", "ts"], true);
     expect(res.map(r => r.id)).toEqual(["a"]);
   });
 
   it("does not match experiences missing any required skill", () => {
-    const res = applyFilters(DATA, null, ["react", "ts"], true);
+    const res = applyFilters(DATA, [], ["react", "ts"], true);
     expect(res.map(r => r.id)).toEqual(["a"]); // c has only react
   });
 
   it("treats one-skill strict mode the same as loose mode for one skill", () => {
-    const res = applyFilters(DATA, null, ["ruby"], true);
+    const res = applyFilters(DATA, [], ["ruby"], true);
     expect(res.map(r => r.id)).toEqual(["b"]);
   });
 });
@@ -118,19 +123,19 @@ describe("applyFilters — strict mode (ALL skills)", () => {
 // -----------------------------------------------------
 describe("applyFilters — ordering by matching skill count", () => {
   it("orders results by number of matching skills (descending)", () => {
-    const res = applyFilters(DATA, null, ["react", "ts"], false)
+    const res = applyFilters(DATA, [], ["react", "ts"], false)
     expect(res.map(r => r.id)).toEqual(["a", "c"])
     // a matches 2 skills, c matches 1
   })
 
   it("keeps stable order when match counts are equal", () => {
-    const res = applyFilters(DATA, null, ["react"], false)
+    const res = applyFilters(DATA, [], ["react"], false)
     expect(res.map(r => r.id)).toEqual(["a", "c"])
     // both match 1 skill → preserve original order
   })
 
   it("orders backend results correctly when multiple matches exist", () => {
-    const res = applyFilters(DATA, "backend", ["go", "docker"], false)
+    const res = applyFilters(DATA, ["backend"], ["go", "docker"], false)
     expect(res.map(r => r.id)).toEqual(["d"])
   })
 })
