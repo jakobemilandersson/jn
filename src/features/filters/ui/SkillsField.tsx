@@ -1,4 +1,4 @@
-import { SKILL_OPTIONS, useFilterStore } from "@features/filters";
+import { getGroupedSkillOptions, useFilterStore } from "@features/filters";
 import { SearchableMultiSelect } from "@shared/ui";
 
 export function SkillsField() {
@@ -9,7 +9,7 @@ export function SkillsField() {
     <SearchableMultiSelect
       id="skills"
       label="Skills"
-      options={SKILL_OPTIONS.map((s) => s.presentation)}
+      grouped={getGroupedSkillOptions()}
       selected={skills}
       onChange={setSkills}
     />
