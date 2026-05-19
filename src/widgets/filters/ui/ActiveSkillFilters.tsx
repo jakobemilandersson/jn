@@ -1,11 +1,12 @@
-import { useFilterStore } from "@features/filters";
-import { mapSkillToChipProps } from "@features/filters";
+import { useFilterStore, mapSkillToChipProps } from "@features/filters";
 import { resolveSkill } from "@entities/resume";
 import { SkillChip } from "@shared/ui";
 
 export function ActiveSkillFilters() {
-  const skills = useFilterStore((s) => s.skills);
-  const toggleSkill = useFilterStore((s) => s.toggleSkill);
+  const { skills, toggleSkill } = useFilterStore((s) => ({
+    skills: s.skills,
+    toggleSkill: s.toggleSkill,
+  }));
 
   const visible = skills.length > 0;
 
@@ -14,7 +15,8 @@ export function ActiveSkillFilters() {
       aria-live="polite"
       className={[
         "overflow-hidden transition-all duration-200 ease-in-out",
-        visible ? "max-h-40 opacity-100" : "max-h-0 opacity-0",
+        // max-h-96 (384px) gives ample room for many wrapped chips before clipping
+        visible ? "max-h-96 opacity-100" : "max-h-0 opacity-0",
       ].join(" ")}
     >
       <div className="flex flex-wrap gap-2 pt-2">
