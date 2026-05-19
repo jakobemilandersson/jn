@@ -25,18 +25,18 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      # Custom domain (jakob.now) is applied to the whole gh-pages branch,
-      # so the effective root is jakob.now/ — no /jn/ prefix needed.
       - name: Build with PR base path
         run: pnpm build
         env:
           VITE_BASE_PATH: /pull/${{ github.event.pull_request.number }}/
 
-      # Copy index.html → 404.html so GitHub Pages serves the SPA for any
-      # deep-linked path inside the preview (e.g. /pull/25/some/route).
       - name: Add SPA 404 fallback
         run: cp dist/index.html dist/404.html
 
+      # Deploy into pull/<pr-number>/ only. clean: false so we never
+      # touch the production root or other preview folders.
+      # The CNAME in dist/ (copied from public/) is harmless here —
+      # GitHub Pages only reads the CNAME at the branch root.
       - name: Deploy preview to gh-pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
