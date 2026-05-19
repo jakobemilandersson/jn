@@ -264,6 +264,8 @@ One sentence describing what the change does.
 *Reviewed by AI pair-programmer (Perplexity)*
 ```
 
+The review should be done on the GitHub pull request with review type 'COMMENT'.
+
 ### Blocker definition
 
 Anything violating rules defined in:
