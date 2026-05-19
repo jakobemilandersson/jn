@@ -17,15 +17,15 @@ const countMatchingSkills = (experience: WorkExperience, selectedSkills: string[
 
 export const applyFilters = (
   data: WorkExperience[],
-  stackType: StackType | null,
+  stackTypes: StackType[],
   skills: string[],
   strict: boolean
 ): WorkExperience[] => {
   const filtered = data.filter((r) => {
     let isMatch = true
 
-    if (stackType) {
-      isMatch &&= r.stackType === stackType
+    if (stackTypes.length > 0) {
+      isMatch &&= stackTypes.includes(r.stackType)
     }
 
     if (skills.length > 0) {

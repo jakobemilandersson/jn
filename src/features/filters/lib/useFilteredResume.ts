@@ -4,12 +4,12 @@ import { useFilterStore } from "@features/filters";
 import type { WorkExperience } from "@entities/resume";
 
 export function useFilteredResume(data: WorkExperience[]) {
-    const stackType = useFilterStore((s) => s.stackType);
+    const stackTypes = useFilterStore((s) => s.stackTypes);
     const skills = useFilterStore((s) => s.skills);
     const strictSkills = useFilterStore((s) => s.strictSkillsMatch);
 
     return useMemo(
-        () => applyFilters(data, stackType, skills, strictSkills),
-        [data, stackType, skills, strictSkills]
+        () => applyFilters(data, stackTypes, skills, strictSkills),
+        [data, stackTypes, skills, strictSkills]
     );
 }

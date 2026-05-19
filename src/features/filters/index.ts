@@ -1,4 +1,4 @@
-export { StackTypeDropdown } from './ui/StackTypeField'
+export { StackTypeField, STACK_TYPE_OPTION_LABELS, stackTypeFromLabel } from './ui/StackTypeField'
 export { ClearButton } from './ui/ClearButton'
 export { FiltersPanel } from './ui/FiltersPanel'
 
