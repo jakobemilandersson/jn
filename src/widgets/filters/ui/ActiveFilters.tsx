@@ -1,13 +1,7 @@
-import { useFilterStore, mapSkillToChipProps } from "@features/filters";
+import { useFilterStore, mapSkillToChipProps, STACK_TYPE_LABELS } from "@features/filters";
 import { resolveSkill } from "@entities/resume";
 import { SkillChip } from "@shared/ui";
 import type { StackType } from "@entities/resume";
-
-const STACK_TYPE_LABELS: Record<StackType, string> = {
-  fullstack: 'Fullstack',
-  backend: 'Backend',
-  frontend: 'Frontend',
-}
 
 const STACK_TYPE_VARIANT: Record<StackType, 'fullstack' | 'backend' | 'frontend'> = {
   fullstack: 'fullstack',

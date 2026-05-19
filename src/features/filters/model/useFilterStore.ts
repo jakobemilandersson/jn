@@ -6,6 +6,7 @@ type FilterState = {
   skills: string[],
   strictSkillsMatch: boolean,
   toggleStackType: (s: StackType) => void
+  setStackTypes: (stackTypes: StackType[]) => void
   toggleSkill: (skill: string) => void
   setSkills: (skills: string[]) => void
   setStrictSkillsMatch: (strict: boolean) => void,
@@ -22,6 +23,7 @@ export const useFilterStore = create<FilterState>((set) => ({
         ? state.stackTypes.filter((s) => s !== stackType)
         : [...state.stackTypes, stackType]
     })),
+  setStackTypes: (stackTypes) => set({ stackTypes }),
   toggleSkill: (skill) =>
     set((state) => ({
       skills: state.skills.includes(skill)
