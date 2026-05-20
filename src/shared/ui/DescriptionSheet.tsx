@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Props = {
   isOpen: boolean;
@@ -10,6 +10,17 @@ type Props = {
 export function DescriptionSheet({ isOpen, onClose, title, children }: Props) {
   const panelRef = useRef<HTMLDivElement>(null);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
+
+  // Keep the panel mounted during the exit transition, then unmount
+  const [isMounted, setIsMounted] = useState(isOpen);
+  useEffect(() => {
+    if (isOpen) {
+      setIsMounted(true);
+    } else {
+      const id = setTimeout(() => setIsMounted(false), 300);
+      return () => clearTimeout(id);
+    }
+  }, [isOpen]);
 
   // Focus the close button when the sheet opens
   useEffect(() => {
@@ -52,13 +63,16 @@ export function DescriptionSheet({ isOpen, onClose, title, children }: Props) {
     };
     document.addEventListener("keydown", trap);
     return () => document.removeEventListener("keydown", trap);
-  }, [isOpen]);
+    // panelRef is a stable ref object; including it satisfies exhaustive-deps without causing re-runs
+  }, [isOpen, panelRef]);
+
+  if (!isMounted) return null;
 
   return (
     <>
       {/* Backdrop */}
       <div
-        aria-hidden
+        aria-hidden="true"
         onClick={onClose}
         className={`fixed inset-0 z-40 bg-black/60 transition-opacity duration-300 ${
           isOpen ? "opacity-100" : "pointer-events-none opacity-0"
@@ -104,7 +118,7 @@ export function DescriptionSheet({ isOpen, onClose, title, children }: Props) {
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
-              aria-hidden
+              aria-hidden="true"
             >
               <line x1="18" y1="6" x2="6" y2="18" />
               <line x1="6" y1="6" x2="18" y2="18" />

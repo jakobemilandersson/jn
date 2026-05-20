@@ -96,7 +96,7 @@ export function WorkExperienceCard({
             <p className="text-sm font-medium leading-snug text-white">
               {experience.description?.title}
             </p>
-            <p aria-hidden className="mt-2 text-xs text-white/50 group-hover:text-white/70 transition-colors">
+            <p aria-hidden="true" className="mt-2 text-xs text-white/50 group-hover:text-white/70 transition-colors">
               Read more →
             </p>
           </button>
