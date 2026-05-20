@@ -1,1 +1,159 @@
-aW1wb3J0IHR5cGUgeyBXb3JrRXhwZXJpZW5jZSwgU3RhY2tUeXBlLCBTa2lsbCB9IGZyb20gXCJAZW50aXRpZXMvcmVzdW1lXCI7CmltcG9ydCB7IFNraWxsQ2hpcCwgQm90dG9tU2hlZXQgfSBmcm9tIFwiQHNoYXJlZC91aVwiOwppbXBvcnQgeyBjbGFzc2lmeVNraWxscyB9IGZyb20gXCJAd2lkZ2V0cy93b3JrLWV4cGVyaWVuY2VcIjsKaW1wb3J0IHsgbWFwU2tpbGxUb0NoaXBQcm9wcyB9IGZyb20gXCJAZmVhdHVyZXMvZmlsdGVyc1wiOwppbXBvcnQgdHlwZSB7IFJlYWN0Tm9kZSB9IGZyb20gInJlYWN0IjsKaW1wb3J0IHsgdXNlU3RhdGUgfSBmcm9tICJyZWFjdCI7Cgp0eXBlIFByb3BzID0gewogIGV4cGVyaWVuY2U6IFdvcmtFeHBlcmllbmNlOwogIHNlbGVjdGVkU2tpbGxzOiBzdHJpbmdbXTsKICBzZWxlY3RlZFN0YWNrVHlwZXM6IFN0YWNrVHlwZVtdOwogIG9uU2tpbGxQcmVzc2VkPzogKHNraWxsOiBTa2lsbCkgPT4gdm9pZDsKfTsKCmV4cG9ydCBmdW5jdGlvbiBXb3JrRXhwZXJpZW5jZUNhcmQoewogIGV4cGVyaWVuY2UsCiAgc2VsZWN0ZWRTa2lsbHMsCiAgc2VsZWN0ZWRTdGFja1R5cGVzLAogIG9uU2tpbGxQcmVzc2VkLAp9OiBQcm9wcykgewogIGNvbnN0IHsgbWF0Y2hlZCwgcmVsYXRlZCwgb3RoZXIsIG1hdGNoU3RyZW5ndGggfSA9IGNsYXNzaWZ5U2tpbGxzKHsKICAgIGV4cGVyaWVuY2UsCiAgICBzZWxlY3RlZFNraWxscywKICAgIHNlbGVjdGVkU3RhY2tUeXBlcywKICB9KTsKCiAgY29uc3QgW2lzU2hlZXRPcGVuLCBzZXRJc1NoZWV0T3Blbl0gPSB1c2VTdGF0ZShmYWxzZSk7CgogIGNvbnN0IG5vbk1hdGNoZWQgPSBbLi4ucmVsYXRlZCwgLi4ub3RoZXJdOwoKICBjb25zdCBza2lsbENoaXBzID0gKHNraWxsczogU2tpbGxbXSk6IFJlYWN0Tm9kZVtdID0+CiAgICBza2lsbHMubWFwKChza2lsbCkgPT4gewogICAgICBjb25zdCB7IGxhYmVsLCB2YXJpYW50IH0gPSBtYXBTa2lsbFRvQ2hpcFByb3BzKHNraWxsLCBza2lsbC5wcmVzZW50YXRpb24pOwoKICAgICAgY29uc3QgY2hpcCA9ICgKICAgICAgICA8U2tpbGxDaGlwCiAgICAgICAgICBrZXk9e3NraWxsLnByZXNlbnRhdGlvbn0KICAgICAgICAgIGxhYmVsPXtsYWJlbH0KICAgICAgICAgIHZhcmlhbnQ9e3ZhcmlhbnR9CiAgICAgICAgLz4KICAgICAgKTsKCiAgICAgIGNvbnN0IHdyYXBwZWRDaGlwID0gb25Ta2lsbFByZXNzZWQgPyAoCiAgICAgICAgPGJ1dHRvbgogICAgICAgICAga2V5PXtgd3JhcHBlZC0ke3NraWxsLnByZXNlbnRhdGlvbn1gfQogICAgICAgICAgdHlwZT0iYnV0dG9uIgogICAgICAgICAgb25DbGljaz17KF8pID0+IG9uU2tpbGxQcmVzc2VkKHNraWxsKX0KICAgICAgICAgIGFyaWEtbGFiZWw9e2BGaWx0ZXIgYnkgJHtza2lsbC5wcmVzZW50YXRpb259YH0KICAgICAgICA+CiAgICAgICAgICB7Y2hpcH0KICAgICAgICA8L2J1dHRvbj4KICAgICAgKSA6IGNoaXA7CgogICAgICByZXR1cm4gd3JhcHBlZENoaXA7CiAgICB9KTsKCiAgY29uc3QgaGFzRGVzY3JpcHRpb24gPQogICAgZXhwZXJpZW5jZS5kZXNjcmlwdGlvbj8udGl0bGUgfHwgZXhwZXJpZW5jZS5kZXNjcmlwdGlvbj8uZnVsbHRleHQ7CgogIGNvbnN0IGhhc1NraWxscyA9IGV4cGVyaWVuY2Uuc2tpbGxzLmxlbmd0aCA+IDA7CiAgY29uc3QgaGFzU2hlZXQgPSBoYXNEZXNjcmlwdGlvbiB8fCBoYXNTa2lsbHM7CgogIGNvbnN0IHNoZWV0VGl0bGUgPSBgJHtleHBlcmllbmNlLnJvbGV9IOKAlCAke2V4cGVyaWVuY2UuY29tcGFueX1gOwoKICByZXR1cm4gKAogICAgPD4KICAgICAgPGFydGljbGUgY2xhc3NOYW1lPSJzcGFjZS15LTMgcm91bmRlZCBib3JkZXIgcC00IGJnLWdyYXktODAwLzUwIHRleHQtd2hpdGUgc2hhZG93LXNtIj4KICAgICAgICA8ZGl2IGNsYXNzTmFtZT0iZmxleCBqdXN0aWZ5LWJldHdlZW4iPgogICAgICAgICAgPGRpdj4KICAgICAgICAgICAgPGgzIGNsYXNzTmFtZT0iZm9udC1tZWRpdW0iPgogICAgICAgICAgICAgIHtleHBlcmllbmNlLnJvbGV9IOKAlCAme3hleHBlcmllbmNlLmNvbXBhbnl9CiAgICAgICAgICAgIDwvaDM+CgogICAgICAgICAgICA8cCBjbGFzc05hbWU9InRleHQteHMgdGV4dC1zbGF0ZS02MDAgdGV4dC13aGl0ZS84MCI+CiAgICAgICAgICAgICAge2V4cGVyaWVuY2Uuc3RhcnR9IOKAlCAme3hleHBlcmllbmNlLmVuZCA/PyAiUHJlc2VudCJ9CiAgICAgICAgICAgIDwvcD4KICAgICAgICAgIDwvZGl2PgoKICAgICAgICAgIHttYXRjaFN0cmVuZ3RoICYmICgKICAgICAgICAgICAgPHAgY2xhc3NOYW1lPSJweS0xIHRleHQteHMgdGV4dC1zbGF0ZS01MDAiPgogICAgICAgICAgICAgIE1hdGNoZXMge21hdGNoU3RyZW5ndGgubWF0Y2hlZH0gb2Yge21hdGNoU3RyZW5ndGgudG90YWx9IHNlbGVjdGVkCiAgICAgICAgICAgICAgc2tpbGxzCiAgICAgICAgICAgIDwvcD4KICAgICAgICAgICl9CiAgICAgICAgPC9kaXY+CgogICAgICAgIHtoYXNTaGVldCAmJiAoCiAgICAgICAgICA8YnV0dG9uCiAgICAgICAgICAgIHR5cGU9ImJ1dHRvbiIKICAgICAgICAgICAgYXJpYS1sYWJlbD17YFJlYWQgbW9yZSBhYm91dCAke3NoZWV0VGl0bGV9YH0KICAgICAgICAgICAgYXJpYS1oYXNwb3B1cD0iZGlhbG9nIgogICAgICAgICAgICBvbkNsaWNrPXsoKSA9PiBzZXRJc1NoZWV0T3Blbih0cnVlKX0KICAgICAgICAgICAgY2xhc3NOYW1lPSIKICAgICAgICAgICAgICBncm91cCB3LWZ1bGwgcm91bmRlZC1tZCBib3JkZXIgYm9yZGVyLWdyYXktMjAwCiAgICAgICAgICAgICAgYmctZ3JhZGllbnQtdG8tYnIgZnJvbS1ncmF5LTgwMCB2aWEtZ3JheS03MDAgdG8tZ3JheS02MDAKICAgICAgICAgICAgICBweC00IHB5LTMgdGV4dC1sZWZ0IHNoYWRvdy1zbSB0cmFuc2l0aW9uLWNvbG9ycyBob3ZlcjpiZy1ncmF5LTEwMCBmb2N1czpvdXRsaW5lLW5vbmUgZm9jdXMtdmlzaWJsZTpyaW5nLTIgZm9jdXMtdmlzaWJsZTpyaW5nLWdyYXktNDAwCiAgICAgICAgICAgICIKICAgICAgICAgID4KICAgICAgICAgICAge2hhc0Rlc2NyaXB0aW9uICYmICgKICAgICAgICAgICAgICA8cCBjbGFzc05hbWU9InRleHQtc20gZm9udC1tZWRpdW0gbGVhZGluZy1zbmF5IHRleHQtd2hpdGUiPgogICAgICAgICAgICAgICAge2V4cGVyaWVuY2UuZGVzY3JpcHRpb24/LnRpdGxlfQogICAgICAgICAgICAgIDwvcD4KICAgICAgICAgICAgKX0KICAgICAgICAgICAgPHAgYXJpYS1oaWRkZW49InRydWUiIGNsYXNzTmFtZT0ibXQtMiB0ZXh0LXhzIHRleHQtd2hpdGUvNTAgZ3JvdXAtaG92ZXI6dGV4dC13aGl0ZS83MCB0cmFuc2l0aW9uLWNvbG9ycyI+CiAgICAgICAgICAgICAge2hhc0Rlc2NyaXB0aW9uID8gIlJlYWQgbW9yZSDigqYiIDogIlZpZXcgc2tpbGxzIOKCpiJ9CiAgICAgICAgICAgIDwvcD4KICAgICAgICAgIDwvYnV0dG9uPgogICAgICAgICl9CiAgICAgIDwvYXJ0aWNsZT4KCiAgICAgIHtoYXNTaGVldCAmJiAoCiAgICAgICAgPEJvdHRvbVNoZWV0CiAgICAgICAgICBpc09wZW49e2lzU2hlZXRPcGVufQogICAgICAgICAgb25DbG9zZT17KCkgPT4gc2V0SXNTaGVldE9wZW4oZmFsc2UpfQogICAgICAgICAgdGl0bGU9e3NoZWV0VGl0bGV9CiAgICAgICAgPgogICAgICAgICAge2V4cGVyaWVuY2UuZGVzY3JpcHRpb24/LnRpdGxlICYmICgKICAgICAgICAgICAgPHAgY2xhc3NOYW1lPSJtYi00IHRleHQtc20gZm9udC1zZW1pYm9sZCB0ZXh0LXdoaXRlLzkwIGxlYWRpbmctc25hZyI+CiAgICAgICAgICAgICAge2V4cGVyaWVuY2UuZGVzY3JpcHRpb24udGl0bGV9CiAgICAgICAgICAgIDwvcD4KICAgICAgICAgICl9CiAgICAgICAgICB7ZXhwZXJpZW5jZS5kZXNjcmlwdGlvbj8uZnVsbHRleHQgJiYgKAogICAgICAgICAgICA8cCBjbGFzc05hbWU9IndoaXRlc3BhY2UtcHJlLWxpbmUgdGV4dC1zbSBsZWFkaW5nLXJlbGF4ZWQgdGV4dC13aGl0ZS84MCI+CiAgICAgICAgICAgICAge2V4cGVyaWVuY2UuZGVzY3JpcHRpb24uZnVsbHRleHR9CiAgICAgICAgICAgIDwvcD4KICAgICAgICAgICl9CgogICAgICAgICAge2hhc1NraWxscyAmJiAoCiAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJtdC02Ij4KICAgICAgICAgICAgICB7c2VsZWN0ZWRTa2lsbHMubGVuZ3RoID4gMCA/ICgKICAgICAgICAgICAgICAgIDw+CiAgICAgICAgICAgICAgICAgIHttYXRjaGVkLmxlbmd0aCA+IDAgJiYgKAogICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJtYi00Ij4KICAgICAgICAgICAgICAgICAgICAgIDxoNSBjbGFzc05hbWU9Im1iLTIgdGV4dC1zbSBmb250LW1lZGl1bSI+TWF0Y2hlZCBza2lsbHM8L2g1PgogICAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9ImZsZXggZmxleC13cmFwIGdhcC0xIj57c2tpbGxDaGlwcyhtYXRjaGVkKX08L2Rpdj4KICAgICAgICAgICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgICAgICAgICAgKX0KICAgICAgICAgICAgICAgICAge25vbk1hdGNoZWQubGVuZ3RoID4gMCAmJiAoCiAgICAgICAgICAgICAgICAgICAgPGRpdj4KICAgICAgICAgICAgICAgICAgICAgIDxoNSBjbGFzc05hbWU9Im1iLTIgdGV4dC1zbSBmb250LW1lZGl1bSBvcGFjaXR5LTYwIj5PdGhlciBza2lsbHM8L2g1PgogICAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9ImZsZXggZmxleC13cmFwIGdhcC0xIG9wYWNpdHktNjAiPgogICAgICAgICAgICAgICAgICAgICAgICB7c2tpbGxDaGlwcyhub25NYXRjaGVkKX0KICAgICAgICAgICAgICAgICAgICAgIDwvZGl2PgogICAgICAgICAgICAgICAgICAgIDwvZGl2PgogICAgICAgICAgICAgICAgICApfQogICAgICAgICAgICAgICAgPC8+CiAgICAgICAgICAgICAgKSA6ICgKICAgICAgICAgICAgICAgIDw+CiAgICAgICAgICAgICAgICAgIDxoNSBjbGFzc05hbWU9Im1iLTIgdGV4dC1zbSBmb250LW1lZGl1bSI+U2tpbGxzPC9oNT4KICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9ImZsZXggZmxleC13cmFwIGdhcC0xIj57c2tpbGxDaGlwcyhub25NYXRjaGVkKX08L2Rpdj4KICAgICAgICAgICAgICAgIDwvPgogICAgICAgICAgICAgICl9CiAgICAgICAgICAgIDwvZGl2PgogICAgICAgICAgKX0KICAgICAgICA8L0JvdHRvbVNoZWV0PgogICAgICApfQogICAgPC8+CiAgKTsKfQo=
+import type { WorkExperience, StackType, Skill } from "@entities/resume";
+import { SkillChip, BottomSheet } from "@shared/ui";
+import { classifySkills } from "@widgets/work-experience";
+import { mapSkillToChipProps } from "@features/filters";
+import type { ReactNode } from "react";
+import { useState } from "react";
+
+type Props = {
+  experience: WorkExperience;
+  selectedSkills: string[];
+  selectedStackTypes: StackType[];
+  onSkillPressed?: (skill: Skill) => void;
+};
+
+export function WorkExperienceCard({
+  experience,
+  selectedSkills,
+  selectedStackTypes,
+  onSkillPressed,
+}: Props) {
+  const { matched, related, other, matchStrength } = classifySkills({
+    experience,
+    selectedSkills,
+    selectedStackTypes,
+  });
+
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+
+  const nonMatched = [...related, ...other];
+
+  const skillChips = (skills: Skill[]): ReactNode[] =>
+    skills.map((skill) => {
+      const { label, variant } = mapSkillToChipProps(skill, skill.presentation);
+
+      const chip = (
+        <SkillChip
+          key={skill.presentation}
+          label={label}
+          variant={variant}
+        />
+      );
+
+      const wrappedChip = onSkillPressed ? (
+        <button
+          key={`wrapped-${skill.presentation}`}
+          type="button"
+          onClick={(_) => onSkillPressed(skill)}
+          aria-label={`Filter by ${skill.presentation}`}
+        >
+          {chip}
+        </button>
+      ) : chip;
+
+      return wrappedChip;
+    });
+
+  const hasDescription =
+    experience.description?.title || experience.description?.fulltext;
+
+  const hasSkills = experience.skills.length > 0;
+  const hasSheet = hasDescription || hasSkills;
+
+  const sheetTitle = `${experience.role} — ${experience.company}`;
+
+  return (
+    <>
+      <article className="space-y-3 rounded border p-4 bg-gray-800/50 text-white shadow-sm">
+        <div className="flex justify-between">
+          <div>
+            <h3 className="font-medium">
+              {experience.role} — {experience.company}
+            </h3>
+
+            <p className="text-xs text-slate-600 text-white/80">
+              {experience.start} — {experience.end ?? "Present"}
+            </p>
+          </div>
+
+          {matchStrength && (
+            <p className="py-1 text-xs text-slate-500">
+              Matches {matchStrength.matched} of {matchStrength.total} selected
+              skills
+            </p>
+          )}
+        </div>
+
+        {hasSheet && (
+          <button
+            type="button"
+            aria-label={`Read more about ${sheetTitle}`}
+            aria-haspopup="dialog"
+            onClick={() => setIsSheetOpen(true)}
+            className="
+              group w-full rounded-md border border-gray-200
+              bg-gradient-to-br from-gray-800 via-gray-700 to-gray-600
+              px-4 py-3 text-left shadow-sm transition-colors hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400
+            "
+          >
+            {hasDescription && (
+              <p className="text-sm font-medium leading-snug text-white">
+                {experience.description?.title}
+              </p>
+            )}
+            <p aria-hidden="true" className="mt-2 text-xs text-white/50 group-hover:text-white/70 transition-colors">
+              {hasDescription ? "Read more →" : "View skills →"}
+            </p>
+          </button>
+        )}
+      </article>
+
+      {hasSheet && (
+        <BottomSheet
+          isOpen={isSheetOpen}
+          onClose={() => setIsSheetOpen(false)}
+          title={sheetTitle}
+        >
+          {experience.description?.title && (
+            <p className="mb-4 text-sm font-semibold text-white/90 leading-snug">
+              {experience.description.title}
+            </p>
+          )}
+          {experience.description?.fulltext && (
+            <p className="whitespace-pre-line text-sm leading-relaxed text-white/80">
+              {experience.description.fulltext}
+            </p>
+          )}
+
+          {hasSkills && (
+            <div className="mt-6">
+              {selectedSkills.length > 0 ? (
+                <>
+                  {matched.length > 0 && (
+                    <div className="mb-4">
+                      <h5 className="mb-2 text-sm font-medium">Matched skills</h5>
+                      <div className="flex flex-wrap gap-1">{skillChips(matched)}</div>
+                    </div>
+                  )}
+                  {nonMatched.length > 0 && (
+                    <div>
+                      <h5 className="mb-2 text-sm font-medium opacity-60">Other skills</h5>
+                      <div className="flex flex-wrap gap-1 opacity-60">
+                        {skillChips(nonMatched)}
+                      </div>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <>
+                  <h5 className="mb-2 text-sm font-medium">Skills</h5>
+                  <div className="flex flex-wrap gap-1">{skillChips(nonMatched)}</div>
+                </>
+              )}
+            </div>
+          )}
+        </BottomSheet>
+      )}
+    </>
+  );
+}
