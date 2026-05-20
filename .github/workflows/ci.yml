@@ -63,6 +63,7 @@ jobs:
         run: pnpm coverage
 
       - name: Post coverage report as PR comment
+        if: always()
         uses: davelosert/vitest-coverage-report-action@v2
         with:
           json-summary-path: coverage/coverage-summary.json
