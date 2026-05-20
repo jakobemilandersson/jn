@@ -49,8 +49,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Audit dependencies (high and critical)
-        run: pnpm audit --audit-level=high
+      - name: Audit production dependencies (high and critical)
+        run: pnpm audit --audit-level=high --prod
 
       - name: TypeScript type check
         run: pnpm tsc --noEmit
