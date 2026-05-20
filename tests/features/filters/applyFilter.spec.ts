@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { applyFilters } from "@features/filters/lib/applyFilters";
-import type { WorkExperience, Skill } from "@entities/resume/types";
+import type { WorkExperience, Skill, YearMonth } from "@entities/resume/types";
 
 // -----------------------------------------------------
 // Minimal deterministic factories
@@ -16,8 +16,8 @@ const makeExp = (overrides: Partial<WorkExperience>): WorkExperience => ({
   role: "Dev",
   company: "Corp",
   description: null,
-  start: "2020",
-  end: "2021",
+  start: "2020-01" as YearMonth,
+  end: "2021-01" as YearMonth,
   stackType: "fullstack",
   skills: [],
   ...overrides,

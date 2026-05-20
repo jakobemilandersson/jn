@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
-import type { Skill, WorkExperience } from "@entities/resume";
+import type { Skill, WorkExperience, YearMonth } from "@entities/resume";
 
 import { WorkExperienceSkillBinder } from "@widgets/work-experience";
 
@@ -31,7 +31,7 @@ describe("WorkExperienceSkillBinder", () => {
         company: "ACME",
         stackType: "frontend",
         skills: [skill],
-        start: "2022-01",
+        start: "2022-01" as YearMonth,
         description: null,
     };
 

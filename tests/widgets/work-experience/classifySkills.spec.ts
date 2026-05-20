@@ -1,13 +1,13 @@
 import { describe, it, expect } from 'vitest'
 import { classifySkills } from '@widgets/work-experience/lib/classifySkills'
-import type { WorkExperience } from '@entities/resume/types'
+import type { WorkExperience, YearMonth } from '@entities/resume/types'
 
 const experience: WorkExperience = {
   id: '1',
   role: 'Frontend Dev',
   company: 'Acme',
   stackType: 'frontend',
-  start: '2022-01',
+  start: '2022-01' as YearMonth,
   skills: [
     { presentation: 'React', stackType: 'frontend' },
     { presentation: 'TypeScript', stackType: 'frontend' },

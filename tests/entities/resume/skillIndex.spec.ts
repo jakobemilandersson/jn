@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { extractSkills, resolveSkill } from "@entities/resume/lib/skillIndex";
-import type { Skill, StackType, WorkExperience } from "@entities/resume/types";
+import type { Skill, StackType, WorkExperience, YearMonth } from "@entities/resume/types";
 
 // -----------------------------------------------------
 // Mock factories
@@ -16,8 +16,8 @@ const exp = (overrides: Partial<WorkExperience>): WorkExperience => ({
   role: "Dev",
   company: "Corp",
   description: null,
-  start: "2020",
-  end: "2021",
+  start: "2020-01" as YearMonth,
+  end: "2021-01" as YearMonth,
   stackType: "backend",
   skills: [],
   ...overrides,
