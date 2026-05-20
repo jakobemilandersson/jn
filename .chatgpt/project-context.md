@@ -8,7 +8,7 @@ This document covers decisions that cannot be inferred from reading the source a
 It does not document feature implementations — read the source for those.
 
 Update this file only for:
-- Major architectural changes (new layers, new patterns)
+- Major architectural changes (new layers, new architectural patterns)
 - Design system changes (replacing Tailwind, adding a component library)
 - Tooling changes (new test runner, CI changes, package manager)
 - New domain-level constraints or data model decisions
@@ -113,14 +113,17 @@ type WorkExperienceDescription = {
   fulltext: string;
 };
 
+/** A month+year string in "YYYY-MM" format, e.g. "2024-03". */
+type YearMonth = string & { readonly __brand: 'YearMonth' };
+
 type WorkExperience = {
   id: string;
   role: string;
   company: string;
   stackType: StackType;
   skills: Skill[];
-  start: string;
-  end?: string;
+  start: YearMonth;
+  end?: YearMonth;
   description?: WorkExperienceDescription | null;
 };
 ```
@@ -190,9 +193,18 @@ the entities layer.
 
 ```ts
 {
-  stackType: StackType | null;
+  stackTypes: StackType[];
   skills: string[];
   strictSkillsMatch: boolean;
+  dateFrom: YearMonth | null;
+  dateTo: YearMonth | null;
+  toggleStackType(s: StackType): void;
+  setStackTypes(stackTypes: StackType[]): void;
+  toggleSkill(skill: string): void;
+  setSkills(skills: string[]): void;
+  setStrictSkillsMatch(strict: boolean): void;
+  setDateFrom(date: YearMonth | null): void;
+  setDateTo(date: YearMonth | null): void;
   clear(): void;
 }
 ```
