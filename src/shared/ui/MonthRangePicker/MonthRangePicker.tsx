@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from 'react'
-import { formatDateLabel } from '@features/filters'
 
 const MONTHS = [
   'January', 'February', 'March', 'April', 'May', 'June',
@@ -21,6 +20,17 @@ function parseYearMonth(ym: string | null): { month: string; year: number } | nu
   if (!ym) return null
   const [y, m] = ym.split('-')
   return { year: Number(y), month: m }
+}
+
+function formatLabel(value: MonthRangeValue): string | null {
+  const from = parseYearMonth(value.from)
+  const to = parseYearMonth(value.to)
+  if (!from && !to) return null
+  const fmt = (p: { month: string; year: number }) =>
+    `${MONTHS[Number(p.month) - 1].slice(0, 3)} ${p.year}`
+  if (from && to) return `${fmt(from)} \u2013 ${fmt(to)}`
+  if (from) return `From ${fmt(from)}`
+  return `Until ${fmt(to!)}`
 }
 
 function yearRange(min: number, max: number): number[] {
@@ -50,26 +60,26 @@ export function MonthRangePicker({ id, label, value, onChange, minYear, maxYear 
   // Selecting just one does not silently inject the other.
   const handleFromMonth = (m: string) => {
     if (!m) { onChange({ ...value, from: null }); return }
-    if (!fromParsed?.year) return // year not yet chosen — wait
+    if (!fromParsed?.year) return
     onChange({ ...value, from: `${fromParsed.year}-${m}` })
   }
   const handleFromYear = (y: string) => {
     if (!y) { onChange({ ...value, from: null }); return }
-    if (!fromParsed?.month) return // month not yet chosen — wait
+    if (!fromParsed?.month) return
     onChange({ ...value, from: `${y}-${fromParsed.month}` })
   }
   const handleToMonth = (m: string) => {
     if (!m) { onChange({ ...value, to: null }); return }
-    if (!toParsed?.year) return // year not yet chosen — wait
+    if (!toParsed?.year) return
     onChange({ ...value, to: `${toParsed.year}-${m}` })
   }
   const handleToYear = (y: string) => {
     if (!y) { onChange({ ...value, to: null }); return }
-    if (!toParsed?.month) return // month not yet chosen — wait
+    if (!toParsed?.month) return
     onChange({ ...value, to: `${y}-${toParsed.month}` })
   }
 
-  const triggerLabel = formatDateLabel(value.from, value.to)
+  const triggerLabel = formatLabel(value)
   const selectCls = 'w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-sm text-black dark:text-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400'
 
   return (

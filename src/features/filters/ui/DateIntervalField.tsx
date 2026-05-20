@@ -1,4 +1,4 @@
-import { useFilterStore } from '../model/useFilterStore'
+import { useFilterStore } from '@features/filters'
 import { MonthRangePicker } from '@shared/ui'
 import type { MonthRangeValue } from '@shared/ui'
 import type { YearMonth } from '@entities/resume'
