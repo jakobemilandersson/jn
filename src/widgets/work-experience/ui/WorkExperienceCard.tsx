@@ -1,5 +1,5 @@
 import type { WorkExperience, StackType, Skill } from "@entities/resume";
-import { SkillChip, DescriptionSheet } from "@shared/ui";
+import { SkillChip, BottomSheet } from "@shared/ui";
 import { classifySkills } from "@widgets/work-experience";
 import { mapSkillToChipProps } from "@features/filters";
 import type { ReactNode } from "react";
@@ -132,7 +132,7 @@ export function WorkExperienceCard({
       </article>
 
       {hasDescription && (
-        <DescriptionSheet
+        <BottomSheet
           isOpen={isSheetOpen}
           onClose={() => setIsSheetOpen(false)}
           title={sheetTitle}
@@ -147,7 +147,7 @@ export function WorkExperienceCard({
               {experience.description.fulltext}
             </p>
           )}
-        </DescriptionSheet>
+        </BottomSheet>
       )}
     </>
   );
