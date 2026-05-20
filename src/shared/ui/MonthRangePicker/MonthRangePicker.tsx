@@ -16,17 +16,19 @@ type Props = {
   maxYear: number
 }
 
-function parseYearMonth(ym: string | null): { month: string; year: number } | null {
+type DraftSide = { month: string | null; year: string | null }
+
+function parseYearMonth(ym: string | null): { month: string; year: string } | null {
   if (!ym) return null
   const [y, m] = ym.split('-')
-  return { year: Number(y), month: m }
+  return { year: y, month: m }
 }
 
 function formatLabel(value: MonthRangeValue): string | null {
   const from = parseYearMonth(value.from)
   const to = parseYearMonth(value.to)
   if (!from && !to) return null
-  const fmt = (p: { month: string; year: number }) =>
+  const fmt = (p: { month: string; year: string }) =>
     `${MONTHS[Number(p.month) - 1].slice(0, 3)} ${p.year}`
   if (from && to) return `${fmt(from)} \u2013 ${fmt(to)}`
   if (from) return `From ${fmt(from)}`
@@ -43,6 +45,29 @@ export function MonthRangePicker({ id, label, value, onChange, minYear, maxYear 
   const [open, setOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
 
+  // Draft state holds partially-selected month/year before both are chosen.
+  // Seeded from value so external clears are reflected.
+  const parsedFrom = parseYearMonth(value.from)
+  const parsedTo = parseYearMonth(value.to)
+  const [fromDraft, setFromDraft] = useState<DraftSide>({
+    month: parsedFrom?.month ?? null,
+    year: parsedFrom?.year ?? null,
+  })
+  const [toDraft, setToDraft] = useState<DraftSide>({
+    month: parsedTo?.month ?? null,
+    year: parsedTo?.year ?? null,
+  })
+
+  // Keep draft in sync when value is cleared externally (e.g. clear button).
+  useEffect(() => {
+    const p = parseYearMonth(value.from)
+    setFromDraft({ month: p?.month ?? null, year: p?.year ?? null })
+  }, [value.from])
+  useEffect(() => {
+    const p = parseYearMonth(value.to)
+    setToDraft({ month: p?.month ?? null, year: p?.year ?? null })
+  }, [value.to])
+
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (!containerRef.current?.contains(e.target as Node)) setOpen(false)
@@ -53,30 +78,48 @@ export function MonthRangePicker({ id, label, value, onChange, minYear, maxYear 
 
   const years = yearRange(minYear, maxYear)
 
-  const fromParsed = parseYearMonth(value.from)
-  const toParsed = parseYearMonth(value.to)
-
-  // Only emit a value when BOTH month and year are selected.
-  // Selecting just one does not silently inject the other.
   const handleFromMonth = (m: string) => {
-    if (!m) { onChange({ ...value, from: null }); return }
-    if (!fromParsed?.year) return
-    onChange({ ...value, from: `${fromParsed.year}-${m}` })
+    if (!m) {
+      setFromDraft({ month: null, year: null })
+      onChange({ ...value, from: null })
+      return
+    }
+    const next = { ...fromDraft, month: m }
+    setFromDraft(next)
+    if (next.year) onChange({ ...value, from: `${next.year}-${m}` })
   }
+
   const handleFromYear = (y: string) => {
-    if (!y) { onChange({ ...value, from: null }); return }
-    if (!fromParsed?.month) return
-    onChange({ ...value, from: `${y}-${fromParsed.month}` })
+    if (!y) {
+      setFromDraft({ month: null, year: null })
+      onChange({ ...value, from: null })
+      return
+    }
+    const next = { ...fromDraft, year: y }
+    setFromDraft(next)
+    if (next.month) onChange({ ...value, from: `${y}-${next.month}` })
   }
+
   const handleToMonth = (m: string) => {
-    if (!m) { onChange({ ...value, to: null }); return }
-    if (!toParsed?.year) return
-    onChange({ ...value, to: `${toParsed.year}-${m}` })
+    if (!m) {
+      setToDraft({ month: null, year: null })
+      onChange({ ...value, to: null })
+      return
+    }
+    const next = { ...toDraft, month: m }
+    setToDraft(next)
+    if (next.year) onChange({ ...value, to: `${next.year}-${m}` })
   }
+
   const handleToYear = (y: string) => {
-    if (!y) { onChange({ ...value, to: null }); return }
-    if (!toParsed?.month) return
-    onChange({ ...value, to: `${y}-${toParsed.month}` })
+    if (!y) {
+      setToDraft({ month: null, year: null })
+      onChange({ ...value, to: null })
+      return
+    }
+    const next = { ...toDraft, year: y }
+    setToDraft(next)
+    if (next.month) onChange({ ...value, to: `${y}-${next.month}` })
   }
 
   const triggerLabel = formatLabel(value)
@@ -108,8 +151,8 @@ export function MonthRangePicker({ id, label, value, onChange, minYear, maxYear 
       {open && (
         <div className="absolute z-20 mt-1 w-full border border-gray-200 dark:border-gray-700 rounded bg-white dark:bg-gray-800 shadow-lg p-3 flex flex-col gap-4">
           {([
-            { rowLabel: 'From', monthVal: fromParsed?.month, yearVal: fromParsed?.year, onMonth: handleFromMonth, onYear: handleFromYear },
-            { rowLabel: 'To',   monthVal: toParsed?.month,   yearVal: toParsed?.year,   onMonth: handleToMonth,   onYear: handleToYear },
+            { rowLabel: 'From', monthVal: fromDraft.month, yearVal: fromDraft.year, onMonth: handleFromMonth, onYear: handleFromYear },
+            { rowLabel: 'To',   monthVal: toDraft.month,   yearVal: toDraft.year,   onMonth: handleToMonth,   onYear: handleToYear },
           ] as const).map(({ rowLabel, monthVal, yearVal, onMonth, onYear }) => (
             <div key={rowLabel} className="flex flex-col gap-1.5">
               <span className="text-xs text-gray-400 dark:text-gray-500">{rowLabel}</span>
