@@ -2,7 +2,7 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { useFilterStore } from "@features/filters/model/useFilterStore";
-import { ActiveSkillFilters } from "@widgets/filters/ui/ActiveSkillFilters";
+import { ActiveSkillFilters } from "@widgets/filters";
 import type { YearMonth } from "@entities/resume";
 
 const resetStore = () =>
