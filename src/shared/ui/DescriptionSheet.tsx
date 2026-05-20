@@ -22,11 +22,16 @@ export function DescriptionSheet({ isOpen, onClose, title, children }: Props) {
   useEffect(() => {
     if (isOpen) {
       setIsMounted(true);
+      // Both rAF handles are captured so the cleanup can cancel either,
+      // regardless of which frame boundary the effect teardown fires on.
+      let raf2: number;
       const raf1 = requestAnimationFrame(() => {
-        const raf2 = requestAnimationFrame(() => setIsVisible(true));
-        return () => cancelAnimationFrame(raf2);
+        raf2 = requestAnimationFrame(() => setIsVisible(true));
       });
-      return () => cancelAnimationFrame(raf1);
+      return () => {
+        cancelAnimationFrame(raf1);
+        cancelAnimationFrame(raf2);
+      };
     } else {
       setIsVisible(false);
       const id = setTimeout(() => setIsMounted(false), 300);

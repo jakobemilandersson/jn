@@ -86,6 +86,7 @@ export function WorkExperienceCard({
           <button
             type="button"
             aria-label={`Read full description for ${sheetTitle}`}
+            aria-haspopup="dialog"
             onClick={() => setIsSheetOpen(true)}
             className="
               group w-full rounded-md border border-gray-200
