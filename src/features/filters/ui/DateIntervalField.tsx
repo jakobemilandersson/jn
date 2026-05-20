@@ -1,5 +1,10 @@
 import { useFilterStore } from '@features/filters'
+import { MonthRangePicker } from '@shared/ui'
+import type { MonthRangeValue } from '@shared/ui'
 import type { YearMonth } from '@entities/resume'
+
+const MIN_YEAR = 2019
+const MAX_YEAR = new Date().getFullYear()
 
 export function DateIntervalField() {
   const dateFrom = useFilterStore((s) => s.dateFrom)
@@ -7,48 +12,23 @@ export function DateIntervalField() {
   const setDateFrom = useFilterStore((s) => s.setDateFrom)
   const setDateTo = useFilterStore((s) => s.setDateTo)
 
-  const handleFrom = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const v = e.target.value
-    setDateFrom(v ? (v as YearMonth) : null)
-  }
-
-  const handleTo = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const v = e.target.value
-    setDateTo(v ? (v as YearMonth) : null)
+  const handleChange = ({ from, to }: MonthRangeValue) => {
+    const nextFrom = from ? (from as YearMonth) : null
+    const nextTo = to ? (to as YearMonth) : null
+    // clear `to` if it ends up before `from`
+    const toIsBeforeFrom = nextFrom && nextTo && nextTo < nextFrom
+    setDateFrom(nextFrom)
+    setDateTo(toIsBeforeFrom ? null : nextTo)
   }
 
   return (
-    <div className="flex flex-col gap-1.5">
-      <label className="text-xs text-gray-400 uppercase tracking-wide">
-        Date interval
-      </label>
-      <div className="flex items-center gap-2">
-        <input
-          type="month"
-          id="date-from"
-          aria-label="From month"
-          value={dateFrom ?? ''}
-          onChange={handleFrom}
-          className="
-            w-full rounded border border-gray-600 bg-gray-800 px-2 py-1.5
-            text-sm text-white placeholder-gray-500
-            focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400
-          "
-        />
-        <span className="text-xs text-gray-500 shrink-0">–</span>
-        <input
-          type="month"
-          id="date-to"
-          aria-label="To month"
-          value={dateTo ?? ''}
-          onChange={handleTo}
-          className="
-            w-full rounded border border-gray-600 bg-gray-800 px-2 py-1.5
-            text-sm text-white placeholder-gray-500
-            focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400
-          "
-        />
-      </div>
-    </div>
+    <MonthRangePicker
+      id="date-interval"
+      label="Date interval"
+      value={{ from: dateFrom, to: dateTo }}
+      onChange={handleChange}
+      minYear={MIN_YEAR}
+      maxYear={MAX_YEAR}
+    />
   )
 }
