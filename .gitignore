@@ -39,6 +39,9 @@ logs/
 debug.log
 error.log
 
+# --- Tests ---
+coverage/
+
 # --- OS Crap ---
 # macOS
 .DS_Store
