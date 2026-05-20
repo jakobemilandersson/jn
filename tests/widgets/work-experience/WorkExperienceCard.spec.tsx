@@ -32,7 +32,7 @@ describe("WorkExperienceCard", () => {
     );
 
     const toggle = screen.getByRole("button", {
-      name: /Read full description for Frontend Dev/i,
+      name: /Read more about Frontend Dev/i,
     });
 
     // Sheet not yet open — fulltext not in the document
@@ -48,7 +48,6 @@ describe("WorkExperienceCard", () => {
     ).toBeInTheDocument();
   });
 
-
   it("renders a single flat Skills section when no skills are selected", () => {
     render(
       <WorkExperienceCard
@@ -57,6 +56,9 @@ describe("WorkExperienceCard", () => {
         selectedStackTypes={[]}
       />
     );
+
+    // Open the sheet to reveal skills
+    fireEvent.click(screen.getByRole("button", { name: /Read more about Frontend Dev/i }));
 
     expect(screen.getByText("Skills")).toBeInTheDocument();
     expect(screen.queryByText("Matched skills")).toBeNull();
@@ -75,6 +77,9 @@ describe("WorkExperienceCard", () => {
         selectedStackTypes={[]}
       />
     );
+
+    // Open the sheet to reveal skills
+    fireEvent.click(screen.getByRole("button", { name: /Read more about Frontend Dev/i }));
 
     expect(screen.getByText("Matched skills")).toBeInTheDocument();
     expect(screen.getByText("Other skills")).toBeInTheDocument();

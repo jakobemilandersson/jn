@@ -42,6 +42,9 @@ describe("WorkExperienceSkillBinder", () => {
             <WorkExperienceSkillBinder experience={experience} selectedSkills={[]} selectedStackTypes={[]} />
         );
 
+        // Open the sheet to reveal skill chips
+        await user.click(screen.getByRole("button", { name: /Frontend Developer/i }));
+
         // Skill label must be visible
         const chip = screen.getByText("React");
 
