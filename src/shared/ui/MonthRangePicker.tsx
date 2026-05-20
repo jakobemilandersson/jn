@@ -16,17 +16,17 @@ type Props = {
   maxYear: number
 }
 
-function parseYearMonth(ym: string | null): { month: number; year: number } | null {
+function parseYearMonth(ym: string | null): { month: string; year: number } | null {
   if (!ym) return null
-  const [y, m] = ym.split('-').map(Number)
-  return { year: y, month: m }
+  const [y, m] = ym.split('-')
+  return { year: Number(y), month: m }
 }
 
 function formatLabel(value: MonthRangeValue): string | null {
   const from = parseYearMonth(value.from)
   const to = parseYearMonth(value.to)
   if (!from && !to) return null
-  const fmt = (p: { month: number; year: number }) => `${MONTHS[p.month - 1].slice(0, 3)} ${p.year}`
+  const fmt = (p: { month: string; year: number }) => `${MONTHS[Number(p.month) - 1].slice(0, 3)} ${p.year}`
   if (from && to) return `${fmt(from)} \u2013 ${fmt(to)}`
   if (from) return `From ${fmt(from)}`
   return `Until ${fmt(to!)}`
@@ -57,19 +57,19 @@ export function MonthRangePicker({ id, label, value, onChange, minYear, maxYear 
 
   const handleFromMonth = (m: string) => {
     const year = fromParsed?.year ?? minYear
-    onChange({ ...value, from: m ? `${year}-${m.padStart(2, '0')}` : null })
+    onChange({ ...value, from: m ? `${year}-${m}` : null })
   }
   const handleFromYear = (y: string) => {
-    const month = fromParsed?.month ?? 1
-    onChange({ ...value, from: y ? `${y}-${String(month).padStart(2, '0')}` : null })
+    const month = fromParsed?.month ?? '01'
+    onChange({ ...value, from: y ? `${y}-${month}` : null })
   }
   const handleToMonth = (m: string) => {
     const year = toParsed?.year ?? maxYear
-    onChange({ ...value, to: m ? `${year}-${m.padStart(2, '0')}` : null })
+    onChange({ ...value, to: m ? `${year}-${m}` : null })
   }
   const handleToYear = (y: string) => {
-    const month = toParsed?.month ?? 12
-    onChange({ ...value, to: y ? `${y}-${String(month).padStart(2, '0')}` : null })
+    const month = toParsed?.month ?? '12'
+    onChange({ ...value, to: y ? `${y}-${month}` : null })
   }
 
   const triggerLabel = formatLabel(value)
