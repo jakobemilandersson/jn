@@ -1,65 +1,118 @@
 import type { WorkExperience } from './types';
 
+
 export const RESUME: WorkExperience[] = [
   {
     id: '1',
-    role: 'Fullstack Developer',
-    company: 'Acme Corp',
+    role: 'IT Consultant',
+    company: 'Independent',
     stackType: 'fullstack',
     skills: [
-      { presentation: 'react', stackType: 'frontend' },
-      { presentation: 'node', stackType: 'backend' },
-      { presentation: 'mysql', stackType: 'backend' },
-      { presentation: 'aws', stackType: 'fullstack' }
+      { presentation: 'React Native', stackType: 'frontend' },
+      { presentation: 'Flutter', stackType: 'frontend' },
+      { presentation: 'system design', stackType: 'fullstack' },
+      { presentation: 'project management', stackType: 'fullstack' },
+      { presentation: 'firestore', stackType: 'backend' },
     ],
-    start: '2022-01',
-    end: '2023-12',
-    description: { 
-      title: 'Built full product features',
-      fulltext: 'Developed and maintained full product features using React for frontend and Node.js for backend, deployed on AWS.'
-    }
+    start: '2025-01',
+    description: {
+      title: 'Full-cycle client project delivery',
+      fulltext: `Founded and run an independent consultancy focused on software development and technical advisory.
+        
+Built a social mobile game from scratch for a client — covering requirements gathering, architecture, real-time data modelling, UI, and international launch.
+
+
+Responsible for the full delivery chain: technical decisions, client communication, and ongoing optimisation.`,
+    },
   },
   {
     id: '2',
-    role: 'Frontend Engineer',
-    company: 'Widget Ltd',
-    stackType: 'frontend',
+    role: 'Full Stack Developer',
+    company: 'Plick',
+    stackType: 'fullstack',
     skills: [
-      { presentation: 'react', stackType: 'frontend' },
-      { presentation: 'storybook', stackType: 'frontend' },
-      { presentation: 'testing', stackType: 'frontend' }
+      { presentation: 'Ruby on Rails', stackType: 'backend' },
+      { presentation: 'Python', stackType: 'backend' },
+      { presentation: 'Flutter', stackType: 'frontend' },
+      { presentation: 'React', stackType: 'frontend' },
+      { presentation: 'PostgreSQL', stackType: 'backend' },
+      { presentation: 'GraphQL', stackType: 'backend' },
+      { presentation: 'REST API', stackType: 'backend' },
+      { presentation: 'Docker', stackType: 'fullstack' },
+      { presentation: 'GitHub Actions', stackType: 'fullstack' },
+      { presentation: 'MiniTest', stackType: 'backend' },
+      { presentation: 'Sidekiq', stackType: 'backend' },
     ],
-    start: '2020-06',
-    end: '2021-12',
+    start: '2022-08',
+    end: '2025-12',
     description: {
-      title: 'Component development and design system',
-      fulltext: `
-        Focused on building reusable components and maintaining the design system using React and Storybook.
-        Collaborated closely with designers to ensure design fidelity and accessibility compliance.
+      title: 'Scalable backend & AI feature development',
+      fulltext: `Built and maintained scalable backend and frontend solutions for a high-traffic e-commerce platform.
 
-        Implemented comprehensive testing strategies to ensure component reliability and performance.
 
-        Did more than just code...
+Designed and operated integration flows between internal systems and external services, including API design, data modelling, and PostgreSQL optimisation (indexing, schema improvements).
 
-        Eat some doughnuts.
-      `.trim()
-    }
+
+Contributed to CI/CD pipelines with GitHub Actions and Docker. 
+
+
+Collaborated closely with product owners, designers, and engineers in an agile team.
+
+
+Built app and web interfaces in Flutter and Ruby on Rails / Turbo.`,
+    },
   },
   {
     id: '3',
-    role: 'Backend Engineer',
-    company: 'DataCo',
+    role: 'Full Stack Developer',
+    company: 'Ductus',
+    stackType: 'fullstack',
+    skills: [
+      { presentation: 'Python (Flask)', stackType: 'backend' },
+      { presentation: 'React', stackType: 'frontend' },
+      { presentation: 'PostgreSQL', stackType: 'backend' },
+      { presentation: 'REST API', stackType: 'backend' },
+      { presentation: 'Swagger/OpenAPI', stackType: 'backend' },
+      { presentation: 'Linux', stackType: 'backend' },
+      { presentation: 'PowerShell', stackType: 'backend' },
+    ],
+    start: '2019-08',
+    end: '2022-08',
+    description: {
+      title: 'IPAM system for major telecom client',
+      fulltext: `Developed and maintained a business-critical IP address management (IPAM) system for a major telecom client — responsible for full-stack development, REST API design, and production operations.
+
+
+Designed system architecture with a strong focus on correctness, reliability, and long-term maintainability.
+
+
+Handled database migrations, troubleshooting, and production support on-site with the client.
+
+
+Worked closely with the client on requirements gathering, wrote technical specifications, and translated business needs into implementable solutions.
+
+
+Mentored a junior developer in backend practices, system architecture, and code quality during the final year.`,
+    },
+  },
+  {
+    id: '4',
+    role: "Master's Thesis Student",
+    company: 'Ductus',
     stackType: 'backend',
     skills: [
-      { presentation: 'mysql', stackType: 'backend' },
-      { presentation: 'node', stackType: 'backend' },
-      { presentation: 'integration testing', stackType: 'backend' }
+      { presentation: 'algorithms', stackType: 'backend' },
+      { presentation: 'data extraction', stackType: 'backend' },
+      { presentation: 'technical documentation', stackType: 'backend' },
+      { presentation: 'constraint programming', stackType: 'backend' },
     ],
     start: '2019-01',
-    end: '2020-05',
+    end: '2019-06',
     description: {
-      title: 'API and data modeling',
-      fulltext: 'Designed and implemented RESTful APIs and data models to support application features and ensure data integrity.'
-    }
-  }
+      title: 'Automated data extraction algorithms',
+      fulltext:`Developed and evaluated algorithms for automated extraction and validation of numerical data from complex documents.
+        
+Documented technical findings and presented improvement proposals for potential production use.`,
+    },
+  },
 ];
