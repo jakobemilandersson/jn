@@ -22,7 +22,7 @@ const experience: WorkExperience = {
 };
 
 describe("WorkExperienceCard", () => {
-  it("toggles description fulltext visibility", () => {
+  it("opens description sheet when the read-more button is clicked", () => {
     render(
       <WorkExperienceCard
         experience={experience}
@@ -32,18 +32,17 @@ describe("WorkExperienceCard", () => {
     );
 
     const toggle = screen.getByRole("button", {
-      name: /Built and maintained frontend systems/i,
+      name: /Read full description for Frontend Dev/i,
     });
 
-    // Initial state
-    expect(toggle).toHaveAttribute("aria-expanded", "false");
+    // Sheet not yet open — fulltext not in the document
+    expect(
+      screen.queryByText(/Worked extensively with React/i)
+    ).not.toBeInTheDocument();
 
     fireEvent.click(toggle);
 
-    // Expanded state
-    expect(toggle).toHaveAttribute("aria-expanded", "true");
-
-    // Content is present (always rendered)
+    // Sheet is mounted — fulltext is now present
     expect(
       screen.getByText(/Worked extensively with React/i)
     ).toBeInTheDocument();
