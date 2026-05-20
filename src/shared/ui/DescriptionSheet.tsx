@@ -11,12 +11,20 @@ export function DescriptionSheet({ isOpen, onClose, title, children }: Props) {
   const panelRef = useRef<HTMLDivElement>(null);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
 
-  // Keep the panel mounted during the exit transition, then unmount
-  const [isMounted, setIsMounted] = useState(isOpen);
+  // Two-phase mount: mount first, then animate in on the next frame.
+  // Without this the element is painted in its final position before the
+  // transition has a chance to run, so no animation is visible on open.
+  const [isMounted, setIsMounted] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+
   useEffect(() => {
     if (isOpen) {
       setIsMounted(true);
+      // Let the browser paint the off-screen position first, then animate in
+      const raf = requestAnimationFrame(() => setIsVisible(true));
+      return () => cancelAnimationFrame(raf);
     } else {
+      setIsVisible(false);
       const id = setTimeout(() => setIsMounted(false), 300);
       return () => clearTimeout(id);
     }
@@ -70,13 +78,16 @@ export function DescriptionSheet({ isOpen, onClose, title, children }: Props) {
 
   return (
     <>
-      {/* Backdrop */}
+      {/* Backdrop — explicit top/left/w/h instead of inset-0 to work around
+          fixed-positioning viewport bugs in Android WebView / Brave on mobile.
+          100dvh overrides the inline style on browsers that support it. */}
       <div
         aria-hidden="true"
         onClick={onClose}
-        className={`fixed inset-0 z-40 bg-black/60 transition-opacity duration-300 ${
-          isOpen ? "opacity-100" : "pointer-events-none opacity-0"
+        className={`fixed top-0 left-0 z-40 w-screen bg-black/60 transition-opacity duration-300 ${
+          isVisible ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
+        style={{ height: "100dvh" }}
       />
 
       {/* Panel — slides in from the right on md+, slides up from bottom on mobile */}
@@ -92,7 +103,7 @@ export function DescriptionSheet({ isOpen, onClose, title, children }: Props) {
           bottom-0 left-0 right-0 max-h-[85dvh] rounded-t-2xl
           md:inset-y-0 md:right-0 md:left-auto md:w-[480px] md:max-h-none md:rounded-none md:rounded-l-2xl
           ${
-            isOpen
+            isVisible
               ? "translate-y-0 md:translate-x-0"
               : "translate-y-full md:translate-y-0 md:translate-x-full"
           }
