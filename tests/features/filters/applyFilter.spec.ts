@@ -195,8 +195,9 @@ describe("applyFilters — date interval", () => {
     expect(res.map(r => r.id)).toEqual(["past", "mid", "recent", "ongoing"])
   })
 
-  it("returns empty when the interval is after all roles", () => {
+  it("returns only ongoing roles when the interval is entirely in the future (ongoing roles are open-ended)", () => {
     const res = applyFilters(DATE_DATA, [], [], false, "2030-01" as YearMonth, "2030-12" as YearMonth)
-    expect(res.map(r => r.id)).toEqual([])
+    // All completed roles ended before 2030-01; ongoing has no end → still active in 2030
+    expect(res.map(r => r.id)).toEqual(["ongoing"])
   })
 })
