@@ -1,15 +1,19 @@
 import { create } from 'zustand'
-import type { StackType } from '@entities/resume'
+import type { StackType, YearMonth } from '@entities/resume'
 
 type FilterState = {
   stackTypes: StackType[],
   skills: string[],
   strictSkillsMatch: boolean,
+  dateFrom: YearMonth | null,
+  dateTo: YearMonth | null,
   toggleStackType: (s: StackType) => void
   setStackTypes: (stackTypes: StackType[]) => void
   toggleSkill: (skill: string) => void
   setSkills: (skills: string[]) => void
   setStrictSkillsMatch: (strict: boolean) => void,
+  setDateFrom: (date: YearMonth | null) => void,
+  setDateTo: (date: YearMonth | null) => void,
   clear: () => void
 }
 
@@ -17,6 +21,8 @@ export const useFilterStore = create<FilterState>((set) => ({
   stackTypes: [],
   skills: [],
   strictSkillsMatch: false,
+  dateFrom: null,
+  dateTo: null,
   toggleStackType: (stackType) =>
     set((state) => ({
       stackTypes: state.stackTypes.includes(stackType)
@@ -32,5 +38,7 @@ export const useFilterStore = create<FilterState>((set) => ({
     })),
   setSkills: (skills) => set({ skills }),
   setStrictSkillsMatch: (strictSkillsMatch) => set({ strictSkillsMatch }),
-  clear: () => set({ stackTypes: [], skills: [], strictSkillsMatch: false })
+  setDateFrom: (dateFrom) => set({ dateFrom }),
+  setDateTo: (dateTo) => set({ dateTo }),
+  clear: () => set({ stackTypes: [], skills: [], strictSkillsMatch: false, dateFrom: null, dateTo: null })
 }))

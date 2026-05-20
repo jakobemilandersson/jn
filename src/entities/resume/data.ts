@@ -1,4 +1,4 @@
-import type { WorkExperience } from './types';
+import type { WorkExperience, YearMonth } from './types';
 
 
 export const RESUME: WorkExperience[] = [
@@ -14,7 +14,7 @@ export const RESUME: WorkExperience[] = [
       { presentation: 'project management', stackType: 'fullstack' },
       { presentation: 'firestore', stackType: 'backend' },
     ],
-    start: '2025-01',
+    start: '2025-01' as YearMonth,
     description: {
       title: 'Full-cycle client project delivery',
       fulltext: `Founded and run an independent consultancy focused on software development and technical advisory.
@@ -42,8 +42,8 @@ Responsible for the full delivery chain: technical decisions, client communicati
       { presentation: 'MiniTest', stackType: 'backend' },
       { presentation: 'Sidekiq', stackType: 'backend' },
     ],
-    start: '2022-08',
-    end: '2025-12',
+    start: '2022-08' as YearMonth,
+    end: '2025-12' as YearMonth,
     description: {
       title: 'Scalable backend & AI feature development',
       fulltext: `Built and maintained scalable backend and frontend solutions for a high-traffic e-commerce platform.
@@ -71,8 +71,8 @@ Built app and web interfaces in Flutter and Ruby on Rails / Turbo.`,
       { presentation: 'Linux', stackType: 'backend' },
       { presentation: 'PowerShell', stackType: 'backend' },
     ],
-    start: '2019-08',
-    end: '2022-08',
+    start: '2019-08' as YearMonth,
+    end: '2022-08' as YearMonth,
     description: {
       title: 'IPAM system for major telecom client',
       fulltext: `Developed and maintained a business-critical IP address management (IPAM) system for a major telecom client — responsible for full-stack development, REST API design, and production operations.
@@ -97,8 +97,8 @@ Mentored a junior developer in backend practices, system architecture, and code 
       { presentation: 'technical documentation', stackType: 'backend' },
       { presentation: 'constraint programming', stackType: 'backend' },
     ],
-    start: '2019-01',
-    end: '2019-06',
+    start: '2019-01' as YearMonth,
+    end: '2019-06' as YearMonth,
     description: {
       title: 'Automated data extraction algorithms',
       fulltext:`Developed and evaluated algorithms for automated extraction and validation of numerical data from complex documents.

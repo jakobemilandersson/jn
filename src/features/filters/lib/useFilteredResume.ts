@@ -7,9 +7,11 @@ export function useFilteredResume(data: WorkExperience[]) {
     const stackTypes = useFilterStore((s) => s.stackTypes);
     const skills = useFilterStore((s) => s.skills);
     const strictSkills = useFilterStore((s) => s.strictSkillsMatch);
+    const dateFrom = useFilterStore((s) => s.dateFrom);
+    const dateTo = useFilterStore((s) => s.dateTo);
 
     return useMemo(
-        () => applyFilters(data, stackTypes, skills, strictSkills),
-        [data, stackTypes, skills, strictSkills]
+        () => applyFilters(data, stackTypes, skills, strictSkills, dateFrom, dateTo),
+        [data, stackTypes, skills, strictSkills, dateFrom, dateTo]
     );
 }
