@@ -45,8 +45,6 @@ export function MonthRangePicker({ id, label, value, onChange, minYear, maxYear 
   const [open, setOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
 
-  // Draft state holds partially-selected month/year before both are chosen.
-  // Seeded from value so external clears are reflected.
   const parsedFrom = parseYearMonth(value.from)
   const parsedTo = parseYearMonth(value.to)
   const [fromDraft, setFromDraft] = useState<DraftSide>({
@@ -58,7 +56,7 @@ export function MonthRangePicker({ id, label, value, onChange, minYear, maxYear 
     year: parsedTo?.year ?? null,
   })
 
-  // Keep draft in sync when value is cleared externally (e.g. clear button).
+  // Keep drafts in sync when value is cleared externally (e.g. clear button).
   useEffect(() => {
     const p = parseYearMonth(value.from)
     setFromDraft({ month: p?.month ?? null, year: p?.year ?? null })
@@ -78,6 +76,8 @@ export function MonthRangePicker({ id, label, value, onChange, minYear, maxYear 
 
   const years = yearRange(minYear, maxYear)
 
+  // --- From handlers ---
+
   const handleFromMonth = (m: string) => {
     if (!m) {
       setFromDraft({ month: null, year: null })
@@ -95,10 +95,23 @@ export function MonthRangePicker({ id, label, value, onChange, minYear, maxYear 
       onChange({ ...value, from: null })
       return
     }
-    const next = { ...fromDraft, year: y }
+    // Default month to January when none has been selected yet.
+    const month = fromDraft.month ?? '01'
+    const next: DraftSide = { month, year: y }
     setFromDraft(next)
-    if (next.month) onChange({ ...value, from: `${y}-${next.month}` })
+    const nextFrom = `${y}-${month}`
+    // If the committed To value is now before the new From, reset To.
+    const nextValue: MonthRangeValue =
+      value.to !== null && value.to < nextFrom
+        ? { from: nextFrom, to: null }
+        : { ...value, from: nextFrom }
+    if (nextValue.to === null) {
+      setToDraft({ month: null, year: null })
+    }
+    onChange(nextValue)
   }
+
+  // --- To handlers ---
 
   const handleToMonth = (m: string) => {
     if (!m) {
@@ -117,9 +130,18 @@ export function MonthRangePicker({ id, label, value, onChange, minYear, maxYear 
       onChange({ ...value, to: null })
       return
     }
-    const next = { ...toDraft, year: y }
+    // Default month to December when none has been selected yet.
+    const month = toDraft.month ?? '12'
+    const nextTo = `${y}-${month}`
+    // If the new To is before the committed From, reset To entirely.
+    if (value.from !== null && nextTo < value.from) {
+      setToDraft({ month: null, year: null })
+      onChange({ ...value, to: null })
+      return
+    }
+    const next: DraftSide = { month, year: y }
     setToDraft(next)
-    if (next.month) onChange({ ...value, to: `${y}-${next.month}` })
+    onChange({ ...value, to: nextTo })
   }
 
   const triggerLabel = formatLabel(value)
