@@ -2,6 +2,7 @@ export { StackTypeField, STACK_TYPE_OPTION_LABELS, STACK_TYPE_LABELS, stackTypeF
 export { ClearButton } from './ui/ClearButton'
 export { FiltersPanel } from './ui/FiltersPanel'
 export { SkillsField } from './ui/SkillsField'
+export { DateIntervalField } from './ui/DateIntervalField'
 
 export { useFilterStore } from './model/useFilterStore'
 export { useFilteredResume } from './lib/useFilteredResume'
