@@ -129,8 +129,8 @@ export function DescriptionSheet({ isOpen, onClose, title, children }: Props) {
           </button>
         </div>
 
-        {/* Scrollable body */}
-        <div className="flex-1 overflow-y-auto px-5 py-4">
+        {/* Scrollable body — overscroll-contain prevents scroll chaining to the page */}
+        <div className="flex-1 overflow-y-auto overscroll-contain px-5 py-4">
           {children}
         </div>
       </div>
