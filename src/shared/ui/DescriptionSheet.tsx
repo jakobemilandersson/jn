@@ -10,7 +10,6 @@ type Props = {
 export function DescriptionSheet({ isOpen, onClose, title, children }: Props) {
   const panelRef = useRef<HTMLDivElement>(null);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
-  const headerRef = useRef<HTMLDivElement>(null);
 
   // Two-phase mount with double-rAF:
   // 1. isMounted true  → element renders in off-screen position (translate-y-full)
@@ -79,15 +78,6 @@ export function DescriptionSheet({ isOpen, onClose, title, children }: Props) {
     // panelRef is a stable ref object; including it satisfies exhaustive-deps without causing re-runs
   }, [isOpen, panelRef]);
 
-  // Prevent the non-scrollable header from passing touchmove events to the page
-  useEffect(() => {
-    const header = headerRef.current;
-    if (!header) return;
-    const block = (e: TouchEvent) => e.preventDefault();
-    header.addEventListener("touchmove", block, { passive: false });
-    return () => header.removeEventListener("touchmove", block);
-  }, []);
-
   if (!isMounted) return null;
 
   return (
@@ -111,11 +101,8 @@ export function DescriptionSheet({ isOpen, onClose, title, children }: Props) {
           }
         `}
       >
-        {/* Header — touchmove blocked via ref to prevent page scroll on mobile */}
-        <div
-          ref={headerRef}
-          className="flex items-center justify-between border-b border-white/10 px-5 py-4"
-        >
+        {/* Header */}
+        <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
           <h2 className="text-sm font-semibold text-white/90 leading-snug">{title}</h2>
           <button
             ref={closeBtnRef}
