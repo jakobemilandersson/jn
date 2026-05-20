@@ -81,14 +81,14 @@ export function WorkExperienceCard({
           )}
         </div>
 
-        {/* Description preview — opens sheet on click */}
+        {/* Description title — opens sheet on click */}
         {hasDescription && (
           <button
             type="button"
             aria-label={`Read full description for ${sheetTitle}`}
             onClick={() => setIsSheetOpen(true)}
             className="
-              group w-full rounded-md border border-gray-200
+              group flex w-full items-center justify-between rounded-md border border-gray-200
               bg-gradient-to-br from-gray-800 via-gray-700 to-gray-600
               px-4 py-3 text-left shadow-sm transition-colors hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400
             "
@@ -96,14 +96,9 @@ export function WorkExperienceCard({
             <p className="text-sm font-medium leading-snug text-white">
               {experience.description?.title}
             </p>
-            {experience.description?.fulltext && (
-              <p className="mt-2 line-clamp-3 whitespace-pre-line text-sm leading-relaxed text-white/80">
-                {experience.description.fulltext}
-              </p>
-            )}
-            <p className="mt-2 text-xs text-white/50 group-hover:text-white/70">
-              Read more →
-            </p>
+            <span aria-hidden className="ml-3 shrink-0 text-white/40 group-hover:text-white/70 transition-colors">
+              ›
+            </span>
           </button>
         )}
 
