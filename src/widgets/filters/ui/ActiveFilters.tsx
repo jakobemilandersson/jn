@@ -1,23 +1,7 @@
-import { useFilterStore, mapSkillToChipProps, STACK_TYPE_LABELS } from "@features/filters";
+import { useFilterStore, mapSkillToChipProps, STACK_TYPE_LABELS, formatDateLabel } from "@features/filters";
 import { resolveSkill } from "@entities/resume";
 import { SkillChip } from "@shared/ui";
 import type { StackType } from "@entities/resume";
-
-const MONTHS = [
-  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
-] as const;
-
-function formatDateLabel(from: string | null, to: string | null): string | null {
-  if (!from && !to) return null;
-  const fmt = (ym: string) => {
-    const [y, m] = ym.split('-');
-    return `${MONTHS[Number(m) - 1]} ${y}`;
-  };
-  if (from && to) return `${fmt(from)} \u2013 ${fmt(to)}`;
-  if (from) return `From ${fmt(from)}`;
-  return `Until ${fmt(to!)}`;
-}
 
 export function ActiveFilters() {
   const { skills, toggleSkill, stackTypes, toggleStackType, dateFrom, dateTo, setDateFrom, setDateTo } = useFilterStore((s) => ({
