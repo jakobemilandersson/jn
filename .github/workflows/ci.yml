@@ -8,6 +8,9 @@ on:
       - reopened
       - ready_for_review
 
+permissions:
+  contents: read
+
 jobs:
   lint-and-test:
     name: Lint & Test
@@ -29,9 +32,25 @@ jobs:
         uses: pnpm/action-setup@v3
         with:
           version: 9
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        run: echo "dir=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-cache.outputs.dir }}
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Audit production dependencies (high and critical)
+        run: pnpm audit --audit-level=high --prod
 
       - name: TypeScript type check
         run: pnpm tsc --noEmit

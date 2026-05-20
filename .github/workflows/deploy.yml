@@ -9,6 +9,12 @@ permissions:
   contents: write
 
 jobs:
+  # Require CI to pass before deploying.
+  # On workflow_dispatch there is no associated PR/CI run, so we call the
+  # reusable steps inline rather than using `needs:` (which only works
+  # within the same workflow_run). The explicit test step below acts as
+  # the gate for manual triggers; push-to-main deploys are implicitly
+  # protected by branch protection requiring CI to pass before merge.
   deploy:
     runs-on: ubuntu-latest
 
@@ -21,9 +27,35 @@ jobs:
         with:
           node-version: 20
 
-      - uses: pnpm/action-setup@v2
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        run: echo "dir=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-cache.outputs.dir }}
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
 
       - run: pnpm install --frozen-lockfile
+
+      - name: TypeScript type check
+        run: pnpm tsc --noEmit
+
+      - name: Lint (no warnings allowed)
+        run: pnpm lint --max-warnings=0
+
+      - name: Run tests
+        run: pnpm test
+
       - run: pnpm build
 
       - name: Add SPA 404 fallback
