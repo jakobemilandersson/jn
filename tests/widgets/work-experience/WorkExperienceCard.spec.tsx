@@ -2,14 +2,14 @@
 import { describe, it, expect } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { WorkExperienceCard } from "@widgets/work-experience";
-import type { WorkExperience } from "@entities/resume";
+import type { WorkExperience, YearMonth } from "@entities/resume";
 
 const experience: WorkExperience = {
   id: "1",
   role: "Frontend Dev",
   company: "Acme",
   stackType: "frontend",
-  start: "2022-01",
+  start: "2022-01" as YearMonth,
   skills: [
     { presentation: "React", stackType: "frontend" },
     { presentation: "TypeScript", stackType: "frontend" },

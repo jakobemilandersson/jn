@@ -1,11 +1,14 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { useFilterStore } from "@features/filters/model/useFilterStore";
+import type { YearMonth } from "@entities/resume/types";
 
 // Helper: reset Zustand store between tests
 const resetStore = () => useFilterStore.setState({
   stackTypes: [],
   skills: [],
   strictSkillsMatch: false,
+  dateFrom: null,
+  dateTo: null,
 });
 
 describe("useFilterStore", () => {
@@ -22,6 +25,8 @@ describe("useFilterStore", () => {
     expect(state.stackTypes).toEqual([]);
     expect(state.skills).toEqual([]);
     expect(state.strictSkillsMatch).toBe(false);
+    expect(state.dateFrom).toBeNull();
+    expect(state.dateTo).toBeNull();
   });
 
   // -----------------------------------------------------
@@ -79,14 +84,41 @@ describe("useFilterStore", () => {
   });
 
   // -----------------------------------------------------
+  // dateFrom / dateTo
+  // -----------------------------------------------------
+  it("sets dateFrom when setDateFrom is called", () => {
+    useFilterStore.getState().setDateFrom("2023-01" as YearMonth);
+    expect(useFilterStore.getState().dateFrom).toBe("2023-01");
+  });
+
+  it("clears dateFrom when setDateFrom is called with null", () => {
+    useFilterStore.getState().setDateFrom("2023-01" as YearMonth);
+    useFilterStore.getState().setDateFrom(null);
+    expect(useFilterStore.getState().dateFrom).toBeNull();
+  });
+
+  it("sets dateTo when setDateTo is called", () => {
+    useFilterStore.getState().setDateTo("2024-12" as YearMonth);
+    expect(useFilterStore.getState().dateTo).toBe("2024-12");
+  });
+
+  it("clears dateTo when setDateTo is called with null", () => {
+    useFilterStore.getState().setDateTo("2024-12" as YearMonth);
+    useFilterStore.getState().setDateTo(null);
+    expect(useFilterStore.getState().dateTo).toBeNull();
+  });
+
+  // -----------------------------------------------------
   // clear()
   // -----------------------------------------------------
-  it("resets stackTypes, skills, and strictSkillsMatch when clear() is called", () => {
+  it("resets all filter state when clear() is called", () => {
     const state = useFilterStore.getState();
 
     state.toggleStackType("backend");
     state.setSkills(["X"]);
     state.setStrictSkillsMatch(true);
+    state.setDateFrom("2022-01" as YearMonth);
+    state.setDateTo("2023-12" as YearMonth);
 
     state.clear();
 
@@ -94,5 +126,7 @@ describe("useFilterStore", () => {
     expect(cleared.stackTypes).toEqual([]);
     expect(cleared.skills).toEqual([]);
     expect(cleared.strictSkillsMatch).toBe(false);
+    expect(cleared.dateFrom).toBeNull();
+    expect(cleared.dateTo).toBeNull();
   });
 });
