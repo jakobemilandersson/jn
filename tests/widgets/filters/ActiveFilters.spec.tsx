@@ -21,9 +21,6 @@ describe("ActiveFilters", () => {
 
   it("is visually hidden when all filters are empty", () => {
     render(<ActiveFilters />);
-    const container = screen.getByRole("region", { hidden: true }) ??
-      document.querySelector('[aria-live="polite"]');
-    // The outermost div carries max-h-0 when nothing is active
     const el = document.querySelector('[aria-live="polite"]') as HTMLElement;
     expect(el).not.toBeNull();
     expect(el.className).toMatch(/max-h-0/);
