@@ -27,7 +27,7 @@ function formatLabel(value: MonthRangeValue): string | null {
   const to = parseYearMonth(value.to)
   if (!from && !to) return null
   const fmt = (p: { month: number; year: number }) => `${MONTHS[p.month - 1].slice(0, 3)} ${p.year}`
-  if (from && to) return `${fmt(from)} – ${fmt(to)}`
+  if (from && to) return `${fmt(from)} \u2013 ${fmt(to)}`
   if (from) return `From ${fmt(from)}`
   return `Until ${fmt(to!)}`
 }
@@ -73,7 +73,7 @@ export function MonthRangePicker({ id, label, value, onChange, minYear, maxYear 
   }
 
   const triggerLabel = formatLabel(value)
-  const selectCls = 'bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-sm text-black dark:text-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400'
+  const selectCls = 'w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-sm text-black dark:text-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400'
 
   return (
     <div className="relative w-full" ref={containerRef}>
@@ -99,35 +99,37 @@ export function MonthRangePicker({ id, label, value, onChange, minYear, maxYear 
       </button>
 
       {open && (
-        <div className="absolute z-20 mt-1 w-full border border-gray-200 dark:border-gray-700 rounded bg-white dark:bg-gray-800 shadow-lg p-3 flex flex-col gap-3">
+        <div className="absolute z-20 mt-1 w-full border border-gray-200 dark:border-gray-700 rounded bg-white dark:bg-gray-800 shadow-lg p-3 flex flex-col gap-4">
           {([
             { rowLabel: 'From', monthVal: fromParsed?.month, yearVal: fromParsed?.year, onMonth: handleFromMonth, onYear: handleFromYear },
             { rowLabel: 'To',   monthVal: toParsed?.month,   yearVal: toParsed?.year,   onMonth: handleToMonth,   onYear: handleToYear },
           ] as const).map(({ rowLabel, monthVal, yearVal, onMonth, onYear }) => (
-            <div key={rowLabel} className="flex items-center gap-2">
-              <span className="w-8 text-xs text-gray-400 dark:text-gray-500 shrink-0">{rowLabel}</span>
-              <select
-                aria-label={`${rowLabel} month`}
-                value={monthVal ?? ''}
-                onChange={e => onMonth(e.target.value)}
-                className={selectCls}
-              >
-                <option value="">Month</option>
-                {MONTHS.map((name, i) => (
-                  <option key={name} value={String(i + 1).padStart(2, '0')}>{name}</option>
-                ))}
-              </select>
-              <select
-                aria-label={`${rowLabel} year`}
-                value={yearVal ?? ''}
-                onChange={e => onYear(e.target.value)}
-                className={selectCls}
-              >
-                <option value="">Year</option>
-                {years.map(y => (
-                  <option key={y} value={String(y)}>{y}</option>
-                ))}
-              </select>
+            <div key={rowLabel} className="flex flex-col gap-1.5">
+              <span className="text-xs text-gray-400 dark:text-gray-500">{rowLabel}</span>
+              <div className="flex gap-2">
+                <select
+                  aria-label={`${rowLabel} month`}
+                  value={monthVal ?? ''}
+                  onChange={e => onMonth(e.target.value)}
+                  className={selectCls}
+                >
+                  <option value="">Month</option>
+                  {MONTHS.map((name, i) => (
+                    <option key={name} value={String(i + 1).padStart(2, '0')}>{name}</option>
+                  ))}
+                </select>
+                <select
+                  aria-label={`${rowLabel} year`}
+                  value={yearVal ?? ''}
+                  onChange={e => onYear(e.target.value)}
+                  className={selectCls}
+                >
+                  <option value="">Year</option>
+                  {years.map(y => (
+                    <option key={y} value={String(y)}>{y}</option>
+                  ))}
+                </select>
+              </div>
             </div>
           ))}
         </div>
