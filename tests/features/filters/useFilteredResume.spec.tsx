@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { renderHook } from "@testing-library/react";
-import { useFilterStore } from "@features/filters/model/useFilterStore";
+import { useFilterStore } from "@features/filters";
 import { useFilteredResume } from "@features/filters";
 import type { WorkExperience, YearMonth } from "@entities/resume";
 
