@@ -11,18 +11,22 @@ export function DescriptionSheet({ isOpen, onClose, title, children }: Props) {
   const panelRef = useRef<HTMLDivElement>(null);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
 
-  // Two-phase mount: mount first, then animate in on the next frame.
-  // Without this the element is painted in its final position before the
-  // transition has a chance to run, so no animation is visible on open.
+  // Two-phase mount with double-rAF:
+  // 1. isMounted true  → element renders in off-screen position (translate-y-full)
+  // 2. Two rAFs later  → isVisible true → CSS transition animates it into view
+  // A single rAF is not always enough on Android — the browser may batch the
+  // style recalc and skip the intermediate paint, losing the transition.
   const [isMounted, setIsMounted] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
       setIsMounted(true);
-      // Let the browser paint the off-screen position first, then animate in
-      const raf = requestAnimationFrame(() => setIsVisible(true));
-      return () => cancelAnimationFrame(raf);
+      const raf1 = requestAnimationFrame(() => {
+        const raf2 = requestAnimationFrame(() => setIsVisible(true));
+        return () => cancelAnimationFrame(raf2);
+      });
+      return () => cancelAnimationFrame(raf1);
     } else {
       setIsVisible(false);
       const id = setTimeout(() => setIsMounted(false), 300);
@@ -78,18 +82,6 @@ export function DescriptionSheet({ isOpen, onClose, title, children }: Props) {
 
   return (
     <>
-      {/* Backdrop — explicit top/left/w/h instead of inset-0 to work around
-          fixed-positioning viewport bugs in Android WebView / Brave on mobile.
-          100dvh overrides the inline style on browsers that support it. */}
-      <div
-        aria-hidden="true"
-        onClick={onClose}
-        className={`fixed top-0 left-0 z-40 w-screen bg-black/60 transition-opacity duration-300 ${
-          isVisible ? "opacity-100" : "pointer-events-none opacity-0"
-        }`}
-        style={{ height: "100dvh" }}
-      />
-
       {/* Panel — slides in from the right on md+, slides up from bottom on mobile */}
       <div
         ref={panelRef}
