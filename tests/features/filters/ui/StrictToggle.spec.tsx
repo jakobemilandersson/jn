@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { useFilterStore } from "@features/filters/model/useFilterStore";
-import { StrictToggle } from "@features/filters/ui/StrictSkillsToggle";
+import { useFilterStore, StrictToggle } from "@features/filters";
 
 const resetStore = () =>
   useFilterStore.setState({

@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { useFilterStore } from "@features/filters/model/useFilterStore";
-import { ClearButton } from "@features/filters";
+import { useFilterStore, ClearButton } from "@features/filters";
 import type { YearMonth } from "@entities/resume";
 
 const resetStore = () =>

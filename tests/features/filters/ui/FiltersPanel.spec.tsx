@@ -1,7 +1,6 @@
 import { describe, it, beforeEach } from "vitest";
 import { render } from "@testing-library/react";
-import { useFilterStore } from "@features/filters/model/useFilterStore";
-import { FiltersPanel } from "@features/filters";
+import { useFilterStore, FiltersPanel } from "@features/filters";
 
 const resetStore = () =>
   useFilterStore.setState({
