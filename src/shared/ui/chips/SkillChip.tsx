@@ -1,4 +1,4 @@
-export type SkillChipVariant = "frontend" | "backend" | "fullstack";
+export type SkillChipVariant = "frontend" | "backend" | "fullstack" | "neutral";
 
 export type SkillChipProps = {
   label: string;
@@ -7,9 +7,10 @@ export type SkillChipProps = {
 };
 
 const VARIANT_STYLES: Record<SkillChipVariant, string> = {
-  frontend: "bg-purple-100 text-purple-700",
-  backend: "bg-green-100 text-green-700",
+  frontend:  "bg-purple-100 text-purple-700",
+  backend:   "bg-green-100 text-green-700",
   fullstack: "bg-blue-100 text-blue-700",
+  neutral:   "bg-slate-100 text-slate-600",
 };
 
 export function SkillChip({ label, variant, className = "" }: SkillChipProps) {
