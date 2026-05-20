@@ -18,9 +18,8 @@ export const RESUME: WorkExperience[] = [
     description: {
       title: 'Full-cycle client project delivery',
       fulltext: `Founded and run an independent consultancy focused on software development and technical advisory.
-        
-Built a social mobile game from scratch for a client — covering requirements gathering, architecture, real-time data modelling, UI, and international launch.
 
+Built a social mobile game from scratch for a client — covering requirements gathering, architecture, real-time data modelling, UI, and international launch.
 
 Responsible for the full delivery chain: technical decisions, client communication, and ongoing optimisation.`,
     },
@@ -49,15 +48,11 @@ Responsible for the full delivery chain: technical decisions, client communicati
       title: 'Scalable backend & AI feature development',
       fulltext: `Built and maintained scalable backend and frontend solutions for a high-traffic e-commerce platform.
 
-
 Designed and operated integration flows between internal systems and external services, including API design, data modelling, and PostgreSQL optimisation (indexing, schema improvements).
 
-
-Contributed to CI/CD pipelines with GitHub Actions and Docker. 
-
+Contributed to CI/CD pipelines with GitHub Actions and Docker.
 
 Collaborated closely with product owners, designers, and engineers in an agile team.
-
 
 Built app and web interfaces in Flutter and Ruby on Rails / Turbo.`,
     },
@@ -82,15 +77,11 @@ Built app and web interfaces in Flutter and Ruby on Rails / Turbo.`,
       title: 'IPAM system for major telecom client',
       fulltext: `Developed and maintained a business-critical IP address management (IPAM) system for a major telecom client — responsible for full-stack development, REST API design, and production operations.
 
-
 Designed system architecture with a strong focus on correctness, reliability, and long-term maintainability.
-
 
 Handled database migrations, troubleshooting, and production support on-site with the client.
 
-
 Worked closely with the client on requirements gathering, wrote technical specifications, and translated business needs into implementable solutions.
-
 
 Mentored a junior developer in backend practices, system architecture, and code quality during the final year.`,
     },
@@ -111,7 +102,7 @@ Mentored a junior developer in backend practices, system architecture, and code 
     description: {
       title: 'Automated data extraction algorithms',
       fulltext:`Developed and evaluated algorithms for automated extraction and validation of numerical data from complex documents.
-        
+
 Documented technical findings and presented improvement proposals for potential production use.`,
     },
   },
