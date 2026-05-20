@@ -3,15 +3,36 @@ import { resolveSkill } from "@entities/resume";
 import { SkillChip } from "@shared/ui";
 import type { StackType } from "@entities/resume";
 
+const MONTHS = [
+  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+] as const;
+
+function formatDateLabel(from: string | null, to: string | null): string | null {
+  if (!from && !to) return null;
+  const fmt = (ym: string) => {
+    const [y, m] = ym.split('-');
+    return `${MONTHS[Number(m) - 1]} ${y}`;
+  };
+  if (from && to) return `${fmt(from)} \u2013 ${fmt(to)}`;
+  if (from) return `From ${fmt(from)}`;
+  return `Until ${fmt(to!)}`;
+}
+
 export function ActiveFilters() {
-  const { skills, toggleSkill, stackTypes, toggleStackType } = useFilterStore((s) => ({
+  const { skills, toggleSkill, stackTypes, toggleStackType, dateFrom, dateTo, setDateFrom, setDateTo } = useFilterStore((s) => ({
     skills: s.skills,
     toggleSkill: s.toggleSkill,
     stackTypes: s.stackTypes,
     toggleStackType: s.toggleStackType,
+    dateFrom: s.dateFrom,
+    dateTo: s.dateTo,
+    setDateFrom: s.setDateFrom,
+    setDateTo: s.setDateTo,
   }));
 
-  const visible = skills.length > 0 || stackTypes.length > 0;
+  const dateLabel = formatDateLabel(dateFrom, dateTo);
+  const visible = skills.length > 0 || stackTypes.length > 0 || dateLabel !== null;
 
   return (
     <div
@@ -40,12 +61,7 @@ export function ActiveFilters() {
                   className="group inline-flex items-center gap-1 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-gray-400"
                 >
                   <SkillChip label={STACK_TYPE_LABELS[value]} variant={value} />
-                  <span
-                    aria-hidden="true"
-                    className="text-xs text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-200 transition-colors"
-                  >
-                    ×
-                  </span>
+                  <span aria-hidden="true" className="text-xs text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-200 transition-colors">×</span>
                 </button>
               ))}
             </div>
@@ -63,7 +79,6 @@ export function ActiveFilters() {
               {skills.map((value) => {
                 const skill = resolveSkill(value);
                 const { label, variant } = mapSkillToChipProps(skill, value);
-
                 return (
                   <button
                     key={value}
@@ -73,15 +88,31 @@ export function ActiveFilters() {
                     className="group inline-flex items-center gap-1 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-gray-400"
                   >
                     <SkillChip label={label} variant={variant} />
-                    <span
-                      aria-hidden="true"
-                      className="text-xs text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-200 transition-colors"
-                    >
-                      ×
-                    </span>
+                    <span aria-hidden="true" className="text-xs text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-200 transition-colors">×</span>
                   </button>
                 );
               })}
+            </div>
+          </div>
+        )}
+        {dateLabel !== null && (
+          <div aria-labelledby="active-filters-date-label" className="flex flex-col gap-1.5">
+            <span
+              id="active-filters-date-label"
+              className="text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wide"
+            >
+              Date interval
+            </span>
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => { setDateFrom(null); setDateTo(null); }}
+                aria-label="Remove date interval filter"
+                className="group inline-flex items-center gap-1 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-gray-400"
+              >
+                <SkillChip label={dateLabel} variant="neutral" />
+                <span aria-hidden="true" className="text-xs text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-200 transition-colors">×</span>
+              </button>
             </div>
           </div>
         )}
