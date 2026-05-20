@@ -10,6 +10,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: write
 
 jobs:
   lint-and-test:
@@ -58,5 +59,11 @@ jobs:
       - name: Run ESLint (no warnings allowed)
         run: pnpm lint --max-warnings=0
 
-      - name: Run Vitest
-        run: pnpm test
+      - name: Run Vitest with coverage
+        run: pnpm coverage
+
+      - name: Post coverage report as PR comment
+        uses: davelosert/vitest-coverage-report-action@v2
+        with:
+          json-summary-path: coverage/coverage-summary.json
+          json-final-path: coverage/coverage-final.json
