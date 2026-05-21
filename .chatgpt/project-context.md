@@ -1,8 +1,7 @@
 # jakob-now — Project Context
 
-Architectural constraints, layer ownership rules, domain types, and non-obvious
-decisions for the jakob-now project. Read by the AI pair-programmer at the start
-of each conversation.
+Architectural constraints, layer ownership rules, and non-obvious decisions for
+the jakob-now project. Read by the AI pair-programmer at the start of each conversation.
 
 This document covers decisions that cannot be inferred from reading the source alone.
 It does not document feature implementations — read the source for those.
@@ -12,6 +11,17 @@ Update this file only for:
 - Design system changes (replacing Tailwind, adding a component library)
 - Tooling changes (new test runner, CI changes, package manager)
 - New domain-level constraints or data model decisions
+
+## See also
+
+- `CONTEXT.md` — domain language, UI presentation rules, bounded context
+- `docs/adr/` — architectural decision records
+- `AGENTS.md` — skill entry point (issue tracker, triage labels, domain doc layout)
+
+> **Content split:** this file owns architectural constraints, layer rules, import
+> rules, testing rules, git/PR conventions, the Zustand store shape, and AI workflow
+> instructions. `CONTEXT.md` owns domain language and UI presentation rules.
+> Never duplicate content across these files — cross-reference instead.
 
 ***
 
@@ -100,33 +110,8 @@ These rules are enforced by ESLint (`eslint-plugin-boundaries`) and will fail CI
 
 ## Domain Types
 
-```ts
-type StackType = 'fullstack' | 'backend' | 'frontend';
-
-type Skill = {
-  presentation: string;
-  stackType: 'frontend' | 'backend' | 'fullstack';
-};
-
-type WorkExperienceDescription = {
-  title: string;
-  fulltext: string;
-};
-
-/** A month+year string in "YYYY-MM" format, e.g. "2024-03". */
-type YearMonth = string & { readonly __brand: 'YearMonth' };
-
-type WorkExperience = {
-  id: string;
-  role: string;
-  company: string;
-  stackType: StackType;
-  skills: Skill[];
-  start: YearMonth;
-  end?: YearMonth;
-  description?: WorkExperienceDescription | null;
-};
-```
+See `CONTEXT.md` for the canonical domain language glossary. The TypeScript type
+definitions live in `src/entities/resume/types.ts`.
 
 ***
 
@@ -340,3 +325,18 @@ follow these steps in order:
    all layer ownership, import alias, and testing rules defined in this document.
 4. **Commit and push** — push the changes to the PR branch in a single commit. Use the
    conventional commit format: `fix(<scope>): <description of what was fixed>`.
+
+***
+
+## Agent Workflow: Skills with CI feedback loops
+
+Skills like `tdd`, `diagnose`, and `improve-codebase-architecture` assume the agent
+can run commands and observe output locally. In this environment (chatbot + GitHub
+connector), the agent cannot execute code directly.
+
+When running these skills:
+1. Write the code change and push it to the PR branch.
+2. **Pause and ask the user to run CI** (or `pnpm test` locally) and share the output.
+3. Resume the skill loop once the user reports the result.
+
+Do not attempt to infer test pass/fail from static analysis alone.

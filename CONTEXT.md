@@ -4,6 +4,10 @@ Filter-driven resume explorer SPA. Lets a visitor filter work experience entries
 by stack type, skills, and date range to surface the most relevant parts of a
 resume for a given role or audience.
 
+> **Scope:** domain language, UI presentation rules, and bounded context only.
+> Architectural constraints, layer ownership, import rules, and the Zustand store
+> shape live in `.chatgpt/project-context.md`. Cross-reference, don't duplicate.
+
 ## Domain language
 
 | Term | Meaning |
@@ -29,8 +33,8 @@ with real work experience entries (IT Consultant, Plick, Academic Work, CGI).
 
 ## Key invariants
 
-- `skillIndex.ts` is the only place skill metadata is indexed or deduplicated.
-- Filter state lives exclusively in the Zustand store in `features/filters/`.
+- `skillIndex.ts` invariant: see `.chatgpt/project-context.md`.
+- Filter state and Zustand store shape: see `.chatgpt/project-context.md`.
 - Domain → UI mapping happens only in `features/*/lib` presentation helpers.
 - `shared/` UI components consume view models, never domain entities directly.
 - `WorkExperience.end` is optional — omitting it signals an ongoing role.
@@ -48,26 +52,6 @@ with real work experience entries (IT Consultant, Plick, Academic Work, CGI).
 
 ## Dark mode
 
-- Dark mode is driven by `prefers-color-scheme` (system preference) via Tailwind’s `darkMode: 'media'` config.
+- Dark mode is driven by `prefers-color-scheme` (system preference) via Tailwind's `darkMode: 'media'` config.
 - No manual toggle exists — the app always follows the OS setting.
 - Native `<select>` elements rely on OS rendering for dark mode; custom components like `SearchableMultiSelect` require explicit dark-mode classes.
-
-## Zustand filter store shape
-
-```ts
-{
-  stackTypes: StackType[];
-  skills: string[];
-  strictSkillsMatch: boolean;
-  dateFrom: YearMonth | null;
-  dateTo: YearMonth | null;
-  toggleStackType(s: StackType): void;
-  setStackTypes(stackTypes: StackType[]): void;
-  toggleSkill(skill: string): void;
-  setSkills(skills: string[]): void;
-  setStrictSkillsMatch(strict: boolean): void;
-  setDateFrom(date: YearMonth | null): void;
-  setDateTo(date: YearMonth | null): void;
-  clear(): void;
-}
-```
