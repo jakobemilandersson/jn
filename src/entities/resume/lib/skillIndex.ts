@@ -13,11 +13,11 @@ export const extractSkills = (data: WorkExperience[]): Skill[] => {
   return Array.from(seen.values());
 };
 
-export const getAllSkills = (): Skill[] => extractSkills(RESUME);
+export const getAllSkills = (): Skill[] => extractSkills(RESUME.experiences);
 
 export const resolveSkill = (
   presentation: string,
-  data: WorkExperience[] = RESUME
+  data: WorkExperience[] = RESUME.experiences
 ): Skill | null => {
   const map = new Map(
     data.flatMap((r) => r.skills).map((s) => [s.presentation, s])
