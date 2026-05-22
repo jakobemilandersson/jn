@@ -56,6 +56,21 @@ be mounted at the application root. They must:
 
 ***
 
+## Routing
+
+The app currently uses **hash-based routing** via a `useHashRoute` hook in
+`src/app/main.tsx`. Routes: `#/` → `ResumePage`, `#/about` → `AboutPage`.
+
+This is a **temporary approach** — see `docs/adr/ADR-004-hash-routing.md`.
+Migration to React Router v6 + `404.html` is tracked in issue #50.
+
+When #50 is delivered:
+- Replace `useHashRoute` with `BrowserRouter` + `<Route>` definitions in `main.tsx`
+- Extract the inline nav into `src/app/Nav.tsx` using `<NavLink>`
+- Update ADR-004 status to Superseded and remove this note
+
+***
+
 ## Layer Ownership
 
 | Layer | Owns |
@@ -65,7 +80,7 @@ be mounted at the application root. They must:
 | `widgets` | UI composition, presentation interpretation, interaction wiring |
 | `shared` | Domain-agnostic UI primitives and layout components |
 | `pages` | Composition only — no logic |
-| `app` | App shell, global styles, decorative root elements |
+| `app` | App shell, routing, global styles, decorative root elements |
 
 **Critical constraints:**
 - `features` must **not** import from `widgets`
