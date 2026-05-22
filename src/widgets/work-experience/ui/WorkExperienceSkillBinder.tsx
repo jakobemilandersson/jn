@@ -6,9 +6,12 @@ type Props = {
     experience: WorkExperience;
     selectedSkills: string[];
     selectedStackTypes: StackType[];
+    isOpen?: boolean;
+    onOpen?: () => void;
+    onClose?: () => void;
 }
 
-export function WorkExperienceSkillBinder({ experience, selectedSkills, selectedStackTypes }: Props) {
+export function WorkExperienceSkillBinder({ experience, selectedSkills, selectedStackTypes, isOpen, onOpen, onClose }: Props) {
     const { toggleSkill } = useFilterStore();
 
     const handleSkillPress = (skill: Skill) => {
@@ -21,6 +24,9 @@ export function WorkExperienceSkillBinder({ experience, selectedSkills, selected
             selectedSkills={selectedSkills}
             selectedStackTypes={selectedStackTypes}
             onSkillPressed={handleSkillPress}
+            isOpen={isOpen}
+            onOpen={onOpen}
+            onClose={onClose}
         />
     )
 }
