@@ -211,6 +211,25 @@ the entities layer.
 
 ***
 
+## Definition of Done (feat / refactor PRs)
+
+Before a `feat` or `refactor` PR is considered ready to merge, the following
+docs audit must be completed consciously — "not needed" is a valid answer, but
+an omission is not.
+
+- [ ] `CONTEXT.md` is accurate — domain language table reflects any new types,
+      terms, or UI components introduced by the PR
+- [ ] `project-context.md` is accurate — any new architectural constraint, layer
+      rule, routing decision, or tooling change is recorded
+- [ ] An ADR exists in `docs/adr/` if the PR introduces or changes an architectural
+      decision (new pattern, new dependency, new layer rule, deviation from an
+      existing ADR)
+- [ ] Space instructions are up to date if any agent workflow rule changed
+
+This checklist is part of the PR Review Formula `feat` checklist below.
+
+***
+
 ## Git Conventions
 
 ### Commits & PR Titles
@@ -295,6 +314,7 @@ Everything else is Minor at most.
 - New exports exposed via `index.ts`
 - Tests exist and follow testing rules (no RESUME coupling, ordering asserted where relevant)
 - No violations of project-context.md constraints
+- Docs audit complete — CONTEXT.md, project-context.md, ADRs checked (or explicitly confirmed not needed)
 
 **`fix`**
 - Root cause addressed, not just symptom
@@ -307,6 +327,7 @@ Everything else is Minor at most.
 - No layer boundary crossings introduced
 - No deep imports introduced
 - No violations of project-context.md constraints
+- Docs audit complete — CONTEXT.md, project-context.md, ADRs checked (or explicitly confirmed not needed)
 
 **`test`**
 - No direct RESUME imports — explicit mock data used
