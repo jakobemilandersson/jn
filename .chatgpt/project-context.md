@@ -376,3 +376,22 @@ When running these skills:
 3. Resume the skill loop once the user reports the result.
 
 Do not attempt to infer test pass/fail from static analysis alone.
+
+***
+
+## External Skill Source
+
+This project uses external skills from [`mattpocock/skills`](https://github.com/mattpocock/skills).
+
+When a referenced Pocock skill is needed, fetch the corresponding `SKILL.md` from
+that repository's `skills/` directory before executing.
+
+Skills currently referenced by this project's workflow:
+- `grill-me`
+- `domain-model`
+- `to-prd`
+- `to-issues`
+- `tdd`
+
+These definitions are the canonical external source unless this repository
+explicitly overrides them.
