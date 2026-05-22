@@ -38,14 +38,18 @@ describe("WorkExperienceSkillBinder", () => {
     it("calls toggleSkill with skill.presentation when a skill chip is pressed", async () => {
         const user = userEvent.setup();
 
+        // isOpen=true renders the sheet immediately; this test is about the
+        // skill-press wiring, not the open/close lifecycle.
         render(
-            <WorkExperienceSkillBinder experience={experience} selectedSkills={[]} selectedStackTypes={[]} />
+            <WorkExperienceSkillBinder
+                experience={experience}
+                selectedSkills={[]}
+                selectedStackTypes={[]}
+                isOpen={true}
+            />
         );
 
-        // Open the sheet to reveal skill chips
-        await user.click(screen.getByRole("button", { name: /Frontend Developer/i }));
-
-        // Skill label must be visible
+        // Skill label must be visible inside the open sheet
         const chip = screen.getByText("React");
 
         await user.click(chip);

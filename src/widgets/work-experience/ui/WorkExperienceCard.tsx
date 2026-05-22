@@ -3,13 +3,15 @@ import { SkillChip, BottomSheet } from "@shared/ui";
 import { classifySkills } from "@widgets/work-experience";
 import { mapSkillToChipProps } from "@features/filters";
 import type { ReactNode } from "react";
-import { useState } from "react";
 
 type Props = {
   experience: WorkExperience;
   selectedSkills: string[];
   selectedStackTypes: StackType[];
   onSkillPressed?: (skill: Skill) => void;
+  isOpen?: boolean;
+  onOpen?: () => void;
+  onClose?: () => void;
 };
 
 export function WorkExperienceCard({
@@ -17,14 +19,15 @@ export function WorkExperienceCard({
   selectedSkills,
   selectedStackTypes,
   onSkillPressed,
+  isOpen = false,
+  onOpen,
+  onClose,
 }: Props) {
   const { matched, related, other, matchStrength } = classifySkills({
     experience,
     selectedSkills,
     selectedStackTypes,
   });
-
-  const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   const nonMatched = [...related, ...other];
 
@@ -62,6 +65,8 @@ export function WorkExperienceCard({
 
   const sheetTitle = `${experience.role} — ${experience.company}`;
 
+  const handleClose = () => onClose?.();
+
   return (
     <>
       <article className="space-y-3 rounded border p-4 bg-gray-800/50 text-white shadow-sm">
@@ -89,7 +94,7 @@ export function WorkExperienceCard({
             type="button"
             aria-label={`Read more about ${sheetTitle}`}
             aria-haspopup="dialog"
-            onClick={() => setIsSheetOpen(true)}
+            onClick={() => onOpen?.()}
             className="
               group w-full rounded-md border border-gray-200
               bg-gradient-to-br from-gray-800 via-gray-700 to-gray-600
@@ -110,8 +115,8 @@ export function WorkExperienceCard({
 
       {hasSheet && (
         <BottomSheet
-          isOpen={isSheetOpen}
-          onClose={() => setIsSheetOpen(false)}
+          isOpen={isOpen}
+          onClose={handleClose}
           title={sheetTitle}
         >
           {experience.description?.title && (
