@@ -1,2 +1,2 @@
-export type { TimelineEvent, TimelineEventKind } from './types';
+export type { TimelineEvent, TimelineEventKind, YearMonth } from './types';
 export { TIMELINE } from './data';

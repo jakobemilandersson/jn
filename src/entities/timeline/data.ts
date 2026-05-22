@@ -1,5 +1,4 @@
-import type { TimelineEvent } from './types';
-import type { YearMonth } from '@entities/resume';
+import type { TimelineEvent, YearMonth } from './types';
 
 export const TIMELINE: TimelineEvent[] = [
   {

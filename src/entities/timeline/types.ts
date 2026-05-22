@@ -1,4 +1,5 @@
-import type { YearMonth } from '@entities/resume';
+/** A month+year string in "YYYY-MM" format, e.g. "2024-03". */
+export type YearMonth = string & { readonly __brand: 'YearMonth' };
 
 export type TimelineEventKind = 'work' | 'education' | 'project';
 
