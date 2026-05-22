@@ -12,6 +12,8 @@ resume for a given role or audience.
 
 | Term | Meaning |
 |---|---|
+| `Resume` | The top-level domain object: `{ profile: ResumeProfile, experiences: WorkExperience[] }`. The canonical instance is exported as `RESUME` from `src/entities/resume/data.ts`. |
+| `ResumeProfile` | Identity and contact information for the person behind the resume: `name`, `title`, `bio`, and `contact` (`email`, `linkedin`, `github`). Not filterable. Used by the About page. |
 | `WorkExperience` | A single job or engagement: role, company, stack type, skills, date range, optional description |
 | `Skill` | A named technology or capability, tagged with a `stackType` |
 | `StackType` | One of `frontend`, `backend`, `fullstack` — classifies an experience or skill |
@@ -29,7 +31,7 @@ resume for a given role or audience.
 This is a single-page, read-only presentation of resume data. There is no backend,
 no authentication, and no mutable state beyond UI filter selections. The canonical
 data source is the static `RESUME` object in `src/entities/resume/data.ts`, populated
-with real work experience entries (IT Consultant, Plick, Academic Work, CGI).
+with real work experience entries (IT Consultant, Plick, Ductus).
 
 ## Key invariants
 
@@ -41,6 +43,7 @@ with real work experience entries (IT Consultant, Plick, Academic Work, CGI).
 - `applyFilters` date-interval logic uses `"9999-12"` as a sentinel for open-ended roles; this must not be changed without updating tests.
 - `BottomSheet` must not import from `entities` or `features` — it is domain-agnostic.
 - `getGroupedSkillOptions` is the only place skill-to-group mapping occurs; no other layer may reimplement this grouping.
+- `RESUME` is the single canonical source for all personal and professional data. `RESUME.profile` is the only source for identity and contact information — no other file may duplicate these values.
 
 ## UI presentation rules
 

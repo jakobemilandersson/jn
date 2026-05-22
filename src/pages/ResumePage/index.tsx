@@ -4,7 +4,7 @@ import { ActiveFilters } from "@widgets/filters";
 import { RESUME } from "@entities/resume";
 
 export default function ResumePage() {
-  const results = useFilteredResume(RESUME);
+  const results = useFilteredResume(RESUME.experiences);
   const skills = useFilterStore((s) => s.skills);
   const stackTypes = useFilterStore((s) => s.stackTypes);
 

@@ -23,3 +23,19 @@ export type WorkExperience = {
   end?: YearMonth
   description?: WorkExperienceDescription | null
 }
+
+export type ResumeProfile = {
+  name: string;
+  title: string;
+  bio: string;
+  contact: {
+    email: string;
+    linkedin: string;
+    github: string;
+  };
+};
+
+export type Resume = {
+  profile: ResumeProfile;
+  experiences: WorkExperience[];
+};
