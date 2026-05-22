@@ -1,4 +1,5 @@
-import { RESUME } from "@entities/resume";
+import { RESUME } from '@entities/resume';
+import { Timeline } from '@widgets/timeline';
 
 const { profile } = RESUME;
 
@@ -46,6 +47,11 @@ export default function AboutPage() {
             </a>
           </li>
         </ul>
+      </section>
+
+      <section className="space-y-4">
+        <h2 className="text-base font-semibold text-white/50 uppercase tracking-widest text-xs">Timeline</h2>
+        <Timeline />
       </section>
     </div>
   );
