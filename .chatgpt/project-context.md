@@ -56,6 +56,21 @@ be mounted at the application root. They must:
 
 ***
 
+## Routing
+
+The app currently uses **hash-based routing** via a `useHashRoute` hook in
+`src/app/main.tsx`. Routes: `#/` → `ResumePage`, `#/about` → `AboutPage`.
+
+This is a **temporary approach** — see `docs/adr/ADR-004-hash-routing.md`.
+Migration to React Router v6 + `404.html` is tracked in issue #50.
+
+When #50 is delivered:
+- Replace `useHashRoute` with `BrowserRouter` + `<Route>` definitions in `main.tsx`
+- Extract the inline nav into `src/app/Nav.tsx` using `<NavLink>`
+- Update ADR-004 status to Superseded and remove this note
+
+***
+
 ## Layer Ownership
 
 | Layer | Owns |
@@ -65,7 +80,7 @@ be mounted at the application root. They must:
 | `widgets` | UI composition, presentation interpretation, interaction wiring |
 | `shared` | Domain-agnostic UI primitives and layout components |
 | `pages` | Composition only — no logic |
-| `app` | App shell, global styles, decorative root elements |
+| `app` | App shell, routing, global styles, decorative root elements |
 
 **Critical constraints:**
 - `features` must **not** import from `widgets`
@@ -196,6 +211,25 @@ the entities layer.
 
 ***
 
+## Definition of Done (feat / refactor PRs)
+
+Before a `feat` or `refactor` PR is considered ready to merge, the following
+docs audit must be completed consciously — "not needed" is a valid answer, but
+an omission is not.
+
+- [ ] `CONTEXT.md` is accurate — domain language table reflects any new types,
+      terms, or UI components introduced by the PR
+- [ ] `project-context.md` is accurate — any new architectural constraint, layer
+      rule, routing decision, or tooling change is recorded
+- [ ] An ADR exists in `docs/adr/` if the PR introduces or changes an architectural
+      decision (new pattern, new dependency, new layer rule, deviation from an
+      existing ADR)
+- [ ] Space instructions are up to date if any agent workflow rule changed
+
+This checklist is part of the PR Review Formula `feat` checklist below.
+
+***
+
 ## Git Conventions
 
 ### Commits & PR Titles
@@ -280,6 +314,7 @@ Everything else is Minor at most.
 - New exports exposed via `index.ts`
 - Tests exist and follow testing rules (no RESUME coupling, ordering asserted where relevant)
 - No violations of project-context.md constraints
+- Docs audit complete — CONTEXT.md, project-context.md, ADRs checked (or explicitly confirmed not needed)
 
 **`fix`**
 - Root cause addressed, not just symptom
@@ -292,6 +327,7 @@ Everything else is Minor at most.
 - No layer boundary crossings introduced
 - No deep imports introduced
 - No violations of project-context.md constraints
+- Docs audit complete — CONTEXT.md, project-context.md, ADRs checked (or explicitly confirmed not needed)
 
 **`test`**
 - No direct RESUME imports — explicit mock data used
