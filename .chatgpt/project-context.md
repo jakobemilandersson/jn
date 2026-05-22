@@ -383,15 +383,30 @@ Do not attempt to infer test pass/fail from static analysis alone.
 
 This project uses external skills from [`mattpocock/skills`](https://github.com/mattpocock/skills).
 
-When a referenced Pocock skill is needed, fetch the corresponding `SKILL.md` from
-that repository's `skills/` directory before executing.
+### Correct skill paths
+
+Skills live at `skills/engineering/<skill-name>/SKILL.md` in the `mattpocock/skills` repo.
+Always fetch via the GitHub MCP tool before executing a skill.
 
 Skills currently referenced by this project's workflow:
-- `grill-me`
-- `domain-model`
-- `to-prd`
-- `to-issues`
-- `tdd`
 
-These definitions are the canonical external source unless this repository
-explicitly overrides them.
+| Invocation name | Path in mattpocock/skills |
+|---|---|
+| `grill-with-docs` | `skills/engineering/grill-with-docs/SKILL.md` |
+| `to-prd` | `skills/engineering/to-prd/SKILL.md` |
+| `to-issues` | `skills/engineering/to-issues/SKILL.md` |
+| `tdd` | `skills/engineering/tdd/SKILL.md` |
+
+### New feature workflow
+
+When the user expresses intent to add, change, or build a feature, execute this skill
+chain in order: **grill-with-docs → to-prd → to-issues → tdd**
+
+**Interaction rule (mandatory):** Run each skill **one question at a time**. Ask a
+single question per message, wait for the user's answer, then ask the next. Do not
+batch multiple questions in one message. Do not advance to the next skill until the
+current one is complete. After `to-issues`, pause and show the user the created issues
+before starting `tdd`.
+
+If a question can be answered by reading the codebase, read the codebase instead of
+asking the user.
