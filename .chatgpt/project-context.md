@@ -364,6 +364,55 @@ follow these steps in order:
 
 ***
 
+## Agent Workflow: Bug report
+
+**Trigger:** Any message beginning with `Bug:` (e.g. `Bug: date filter excludes ongoing roles`).
+
+When triggered, follow these steps in order:
+
+1. **Read the codebase** — inspect the relevant source files to understand current
+   behaviour, identify the owning layer(s), and locate any existing tests that cover
+   the affected logic. Do not ask the user for information that can be inferred from
+   the code.
+2. **Ask a follow-up only if truly needed** — if steps to reproduce cannot be inferred
+   from static analysis alone (e.g. requires a specific user interaction or data
+   combination not visible in code), ask a single, focused question before proceeding.
+   Otherwise skip directly to step 3.
+3. **Create a GitHub issue** with:
+   - **Title:** plain language description of the broken behaviour (not conventional
+     commit format — that belongs on the branch/PR, not the issue)
+   - **Body** using this template:
+     ```
+     ## What's broken
+     <one sentence>
+
+     ## Expected behaviour
+     <one sentence>
+
+     ## Likely cause
+     <brief description of root cause based on codebase inspection>
+
+     ## Owning layer
+     <entities | features | widgets | shared | app/pages>
+
+     ## Relevant files
+     <list of files likely involved>
+
+     ## Test coverage
+     <existing tests that cover this area, or "none found">
+     ```
+   - Label: `bug`
+4. **Present the issue** — share the link and a one-line complexity signal:
+   - "Looks straightforward — touches one layer, no cross-slice changes needed."
+   - "Moderate — touches multiple layers or requires careful test updates."
+   - "Complex — architectural implications or risk of unintended side effects."
+5. **Ask:** "Shall I go ahead and fix this?"
+6. **If yes** — implement the fix following all layer ownership, import alias, and
+   testing rules. Push to a `fix/<short-description>` branch and open a PR. Then
+   pause and ask the user to run CI before proceeding.
+
+***
+
 ## Agent Workflow: Skills with CI feedback loops
 
 Skills like `tdd`, `diagnose`, and `improve-codebase-architecture` assume the agent
