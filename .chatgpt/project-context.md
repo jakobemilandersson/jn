@@ -16,11 +16,12 @@ Update this file only for:
 
 - `CONTEXT.md` — domain language, UI presentation rules, bounded context
 - `docs/adr/` — architectural decision records
-- `AGENTS.md` — skill entry point (issue tracker, triage labels, domain doc layout)
+- `AGENTS.md` — skill entry point (issue tracker, triage labels, domain doc layout, project skills)
 
 > **Content split:** this file owns architectural constraints, layer rules, import
-> rules, testing rules, git/PR conventions, the Zustand store shape, and AI workflow
-> instructions. `CONTEXT.md` owns domain language and UI presentation rules.
+> rules, testing rules, git/PR conventions, and the Zustand store shape.
+> Agent workflow procedures live in `skills/project/` — see `AGENTS.md`.
+> `CONTEXT.md` owns domain language and UI presentation rules.
 > Never duplicate content across these files — cross-reference instead.
 
 ***
@@ -226,7 +227,7 @@ an omission is not.
       existing ADR)
 - [ ] Space instructions are up to date if any agent workflow rule changed
 
-This checklist is part of the PR Review Formula `feat` checklist below.
+This checklist is part of the PR Review Formula — see `skills/project/pr-review/SKILL.md`.
 
 ***
 
@@ -272,190 +273,9 @@ Examples:
 
 ***
 
-## PR Review Formula
-
-When asked to review a pull request, use this structure:
-
-```
-## Summary
-One sentence describing what the change does.
-
-## Verified
-<type-specific checklist — only items relevant to this PR type>
-
-## Action items
-- Blocker: <specific violation — must fix before merge>
-- Minor: <non-blocking improvement>
-(omit section entirely if none)
-
-## Verdict
-<"No blockers — safe to merge" or "Blockers present — do not merge">
-
----
-*Reviewed by AI pair-programmer (Perplexity)*
-```
-
-The review should be done on the GitHub pull request with review type 'COMMENT'.
-
-### Blocker definition
-
-Anything violating rules defined in:
-- `project-context.md` (architectural constraints, layer ownership, import rules, testing rules)
-- `README.md` (git conventions)
-- Space Instructions (tech stack, architectural enforcement)
-
-Everything else is Minor at most.
-
-### Type-specific checklists
-
-**`feat`**
-- Correct layer ownership — logic in right slice
-- Cross-slice imports use aliases, no deep imports
-- New exports exposed via `index.ts`
-- Tests exist and follow testing rules (no RESUME coupling, ordering asserted where relevant)
-- No violations of project-context.md constraints
-- Docs audit complete — CONTEXT.md, project-context.md, ADRs checked (or explicitly confirmed not needed)
-
-**`fix`**
-- Root cause addressed, not just symptom
-- Regression test covers the fixed case
-- No unintended behavior changes in adjacent logic
-- No violations of project-context.md constraints
-
-**`refactor`**
-- Behavior unchanged
-- No layer boundary crossings introduced
-- No deep imports introduced
-- No violations of project-context.md constraints
-- Docs audit complete — CONTEXT.md, project-context.md, ADRs checked (or explicitly confirmed not needed)
-
-**`test`**
-- No direct RESUME imports — explicit mock data used
-- Module-level constants tested via `vi.mock()` + `vi.resetModules()` + dynamic `import()`
-- Ordering asserted where filter behavior is tested
-- No violations of project-context.md constraints
-
-**`docs`**
-- Content accurate against current source
-- No stale markers or outdated descriptions
-- Formatting consistent
-
-**`chore`**
-- CI still passes
-- Linting enforcement intact
-- No architectural rules inadvertently weakened
-
-***
-
-## Agent Workflow: "Take action on the latest review"
-
-When instructed with something similar to "take action on the latest review for PR #X",
-follow these steps in order:
-
-1. **Read the review** — fetch the most recent `COMMENT`-type pull request review for PR #X.
-2. **Analyse action items** — identify all items listed under the `## Action items` section
-   of that review. Decide which ones to fix: fix all `Blocker` items unconditionally;
-   fix `Minor` items unless there is a clear reason not to (e.g. out of scope, conflicts
-   with architectural rules, or requires clarification from the user).
-3. **Implement the fixes** — make the necessary code changes on the PR branch, respecting
-   all layer ownership, import alias, and testing rules defined in this document.
-4. **Commit and push** — push the changes to the PR branch in a single commit. Use the
-   conventional commit format: `fix(<scope>): <description of what was fixed>`.
-
-***
-
-## Agent Workflow: Bug report
-
-**Trigger:** Any message beginning with `Bug:` (e.g. `Bug: date filter excludes ongoing roles`).
-
-When triggered, follow these steps in order:
-
-1. **Read the codebase** — inspect the relevant source files to understand current
-   behaviour, identify the owning layer(s), and locate any existing tests that cover
-   the affected logic. Do not ask the user for information that can be inferred from
-   the code.
-2. **Ask a follow-up only if truly needed** — if steps to reproduce cannot be inferred
-   from static analysis alone (e.g. requires a specific user interaction or data
-   combination not visible in code), ask a single, focused question before proceeding.
-   Otherwise skip directly to step 3.
-3. **Create a GitHub issue** with:
-   - **Title:** plain language description of the broken behaviour (not conventional
-     commit format — that belongs on the branch/PR, not the issue)
-   - **Body** using this template:
-     ```
-     ## What's broken
-     <one sentence>
-
-     ## Expected behaviour
-     <one sentence>
-
-     ## Likely cause
-     <brief description of root cause based on codebase inspection>
-
-     ## Owning layer
-     <entities | features | widgets | shared | app/pages>
-
-     ## Relevant files
-     <list of files likely involved>
-
-     ## Test coverage
-     <existing tests that cover this area, or "none found">
-     ```
-   - Label: `bug`
-4. **Present the issue** — share the link and a one-line complexity signal:
-   - "Looks straightforward — touches one layer, no cross-slice changes needed."
-   - "Moderate — touches multiple layers or requires careful test updates."
-   - "Complex — architectural implications or risk of unintended side effects."
-5. **Ask:** "Shall I go ahead and fix this?"
-6. **If yes** — implement the fix following all layer ownership, import alias, and
-   testing rules. Push to a `fix/<short-description>` branch and open a PR. Then
-   pause and ask the user to run CI before proceeding.
-
-***
-
-## Agent Workflow: Skills with CI feedback loops
-
-Skills like `tdd`, `diagnose`, and `improve-codebase-architecture` assume the agent
-can run commands and observe output locally. In this environment (chatbot + GitHub
-connector), the agent cannot execute code directly.
-
-When running these skills:
-1. Write the code change and push it to the PR branch.
-2. **Pause and ask the user to run CI** (or `pnpm test` locally) and share the output.
-3. Resume the skill loop once the user reports the result.
-
-Do not attempt to infer test pass/fail from static analysis alone.
-
-***
-
 ## External Skill Source
 
-This project uses external skills from [`mattpocock/skills`](https://github.com/mattpocock/skills).
+This project uses external skills from [`mattpocock/skills`](https://github.com/mattpocock/skills)
+and project-local skills in `skills/project/`. See `AGENTS.md` for the full skill table.
 
-### Correct skill paths
-
-Skills live at `skills/engineering/<skill-name>/SKILL.md` in the `mattpocock/skills` repo.
-Always fetch via the GitHub MCP tool before executing a skill.
-
-Skills currently referenced by this project's workflow:
-
-| Invocation name | Path in mattpocock/skills |
-|---|---|
-| `grill-with-docs` | `skills/engineering/grill-with-docs/SKILL.md` |
-| `to-prd` | `skills/engineering/to-prd/SKILL.md` |
-| `to-issues` | `skills/engineering/to-issues/SKILL.md` |
-| `tdd` | `skills/engineering/tdd/SKILL.md` |
-
-### New feature workflow
-
-When the user expresses intent to add, change, or build a feature, execute this skill
-chain in order: **grill-with-docs → to-prd → to-issues → tdd**
-
-**Interaction rule (mandatory):** Run each skill **one question at a time**. Ask a
-single question per message, wait for the user's answer, then ask the next. Do not
-batch multiple questions in one message. Do not advance to the next skill until the
-current one is complete. After `to-issues`, pause and show the user the created issues
-before starting `tdd`.
-
-If a question can be answered by reading the codebase, read the codebase instead of
-asking the user.
+Always fetch the relevant `SKILL.md` via the GitHub MCP tool before executing any skill.
