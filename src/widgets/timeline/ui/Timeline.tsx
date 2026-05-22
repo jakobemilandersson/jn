@@ -46,9 +46,9 @@ function PopoverCard({
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === 'Escape') onClose();
     }
-    // Use 'click' (not 'mousedown') so that clicks on other timeline buttons
-    // complete their own click handler before this outside-click fires. The card
-    // itself stops propagation so clicks inside never reach this handler.
+    // Use 'click' so the button's own onClick fires and completes before this
+    // outside-click handler runs. Timeline buttons stop propagation so their
+    // clicks never reach this handler.
     function handleClickOutside(e: MouseEvent) {
       if (ref.current && !ref.current.contains(e.target as Node)) onClose();
     }
@@ -64,8 +64,6 @@ function PopoverCard({
     <div
       ref={ref}
       role="tooltip"
-      // Stop propagation so clicks inside the card don't bubble up to the
-      // document click handler above and immediately close the card.
       onClick={(e) => e.stopPropagation()}
       className="mt-3 rounded-lg border border-white/10 bg-white/5 dark:bg-black/40 backdrop-blur-sm p-4 space-y-3"
     >
@@ -113,10 +111,17 @@ function TimelineNode({
 
   const handleMouseEnter = useCallback(() => onActivate(), [onActivate]);
   const handleMouseLeave = useCallback(() => onDeactivate(), [onDeactivate]);
-  const handleClick = useCallback(() => {
-    if (isActive) onDeactivate();
-    else onActivate();
-  }, [isActive, onActivate, onDeactivate]);
+  const handleClick = useCallback(
+    (e: React.MouseEvent) => {
+      // Prevent this click from bubbling to the document 'click' handler
+      // registered by any currently open PopoverCard, which would immediately
+      // close the entry we just opened.
+      e.stopPropagation();
+      if (isActive) onDeactivate();
+      else onActivate();
+    },
+    [isActive, onActivate, onDeactivate],
+  );
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
       if (e.key === 'Enter' || e.key === ' ') {
