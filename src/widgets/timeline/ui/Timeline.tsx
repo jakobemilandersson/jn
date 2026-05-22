@@ -46,14 +46,17 @@ function PopoverCard({
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === 'Escape') onClose();
     }
+    // Use 'click' so the button's own onClick fires and completes before this
+    // outside-click handler runs. Timeline buttons stop propagation so their
+    // clicks never reach this handler.
     function handleClickOutside(e: MouseEvent) {
       if (ref.current && !ref.current.contains(e.target as Node)) onClose();
     }
     document.addEventListener('keydown', handleKeyDown);
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('click', handleClickOutside);
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('click', handleClickOutside);
     };
   }, [onClose]);
 
@@ -61,6 +64,7 @@ function PopoverCard({
     <div
       ref={ref}
       role="tooltip"
+      onClick={(e) => e.stopPropagation()}
       className="mt-3 rounded-lg border border-white/10 bg-white/5 dark:bg-black/40 backdrop-blur-sm p-4 space-y-3"
     >
       <p className="text-sm text-white/90 leading-relaxed">{event.detail}</p>
@@ -107,10 +111,17 @@ function TimelineNode({
 
   const handleMouseEnter = useCallback(() => onActivate(), [onActivate]);
   const handleMouseLeave = useCallback(() => onDeactivate(), [onDeactivate]);
-  const handleClick = useCallback(() => {
-    if (isActive) onDeactivate();
-    else onActivate();
-  }, [isActive, onActivate, onDeactivate]);
+  const handleClick = useCallback(
+    (e: React.MouseEvent) => {
+      // Prevent this click from bubbling to the document 'click' handler
+      // registered by any currently open PopoverCard, which would immediately
+      // close the entry we just opened.
+      e.stopPropagation();
+      if (isActive) onDeactivate();
+      else onActivate();
+    },
+    [isActive, onActivate, onDeactivate],
+  );
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
       if (e.key === 'Enter' || e.key === ' ') {
@@ -124,6 +135,8 @@ function TimelineNode({
 
   return (
     <div className="space-y-1">
+      {/* The button wraps the dot, title, subtitle, and date so the entire
+          row is a single large click target. */}
       <button
         type="button"
         aria-label={`${event.title} — ${formatPeriod(event.start, event.end)}`}
@@ -132,22 +145,24 @@ function TimelineNode({
         onKeyDown={handleKeyDown}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className="group flex items-center gap-2 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 rounded"
+        className="group w-full text-left flex flex-col gap-0.5 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 rounded"
       >
-        <span
-          className={[
-            'block w-3 h-3 rounded-full ring-4 transition-transform duration-150 group-hover:scale-125',
-            styles.dot,
-          ].join(' ')}
-          aria-hidden="true"
-        />
-        <span className="text-sm font-semibold text-white/90">{event.title}</span>
-      </button>
+        <span className="flex items-center gap-2">
+          <span
+            className={[
+              'block w-3 h-3 rounded-full ring-4 transition-transform duration-150 group-hover:scale-125 shrink-0',
+              styles.dot,
+            ].join(' ')}
+            aria-hidden="true"
+          />
+          <span className="text-sm font-semibold text-white/90">{event.title}</span>
+        </span>
 
-      {event.subtitle && (
-        <p className={`text-xs pl-5 ${styles.label}`}>{event.subtitle}</p>
-      )}
-      <p className="text-xs pl-5 text-white/40">{formatPeriod(event.start, event.end)}</p>
+        {event.subtitle && (
+          <span className={`text-xs pl-5 ${styles.label}`}>{event.subtitle}</span>
+        )}
+        <span className="text-xs pl-5 text-white/40">{formatPeriod(event.start, event.end)}</span>
+      </button>
 
       {isActive && (
         <div className="pl-5">
