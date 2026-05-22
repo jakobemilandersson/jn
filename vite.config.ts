@@ -1,9 +1,19 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { viteStaticCopy } from 'vite-plugin-static-copy'
 import path from 'node:path'
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    viteStaticCopy({
+      targets: [
+        { src: 'dist/index.html', dest: '', rename: '404.html' },
+      ],
+      // Run after bundle is written so index.html exists
+      hook: 'writeBundle',
+    }),
+  ],
   // Production uses '/' (custom domain jakob.now).
   // PR preview builds set VITE_BASE_PATH=/jn/pull/<pr-number>/ so that
   // all asset URLs resolve correctly under the gh-pages subdirectory.
