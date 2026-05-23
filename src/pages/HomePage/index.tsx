@@ -4,8 +4,8 @@ import { AboutSection } from "@widgets/about-section";
 
 export default function HomePage() {
   return (
-    <div>
-      <section id="hero">
+    <div className="relative z-10 flex flex-col gap-32 pb-32">
+      <section id="hero" className="min-h-screen flex items-center">
         <HeroSection />
       </section>
       <section id="featured-work">
@@ -14,7 +14,6 @@ export default function HomePage() {
       <section id="about">
         <AboutSection />
       </section>
-      <section id="contact" />
     </div>
   );
 }
