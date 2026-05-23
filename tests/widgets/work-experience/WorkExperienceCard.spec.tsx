@@ -6,6 +6,7 @@ import type { WorkExperience, YearMonth } from "@entities/resume";
 
 const experience: WorkExperience = {
   id: "1",
+  kind: "work",
   role: "Frontend Dev",
   company: "Acme",
   stackType: "frontend",
@@ -17,6 +18,7 @@ const experience: WorkExperience = {
   ],
   description: {
     title: "Built and maintained frontend systems",
+    summary: "Built and maintained frontend systems for Acme.",
     fulltext: "Worked extensively with React and TypeScript.",
   },
 };
