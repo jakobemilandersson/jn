@@ -67,7 +67,7 @@ describe('Timeline', () => {
     render(<Timeline />);
     const withTags = TIMELINE.find((e) => e.tags && e.tags.length > 0)!;
     fireEvent.click(screen.getByRole('button', { name: new RegExp(withTags.title) }));
-    expect(screen.getByText(withTags.tags![0])).toBeInTheDocument();
+    expect(screen.getByText(withTags.tags![0].label)).toBeInTheDocument();
   });
 
   it('url link is visible when a popover is open for a project with a url', () => {
