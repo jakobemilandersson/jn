@@ -71,6 +71,10 @@ interface NavbarProps {
   activeHref: string;
 }
 
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: "instant" });
+}
+
 export function Navbar({ activeHref }: NavbarProps) {
   const scrolled = useScrolled();
 
@@ -97,6 +101,7 @@ export function Navbar({ activeHref }: NavbarProps) {
             <a
               key={href}
               href={href}
+              onClick={scrollToTop}
               aria-current={active ? "page" : undefined}
               className={`relative px-3 py-1.5 text-sm font-medium rounded-full transition-colors ${
                 active ? "text-white" : "text-white/40 hover:text-white/70"
@@ -122,6 +127,7 @@ export function Navbar({ activeHref }: NavbarProps) {
             <a
               key={href}
               href={href}
+              onClick={scrollToTop}
               aria-current={active ? "page" : undefined}
               className="relative flex flex-col items-center justify-center flex-1 min-h-[56px] py-2 gap-1 transition-colors"
             >
