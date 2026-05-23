@@ -28,8 +28,12 @@ Update this file only for:
 
 ## Project
 
-React + TypeScript + Vite SPA. Filter-driven resume explorer. Deployed on GitHub Pages at jakob.now.
-Mini-FSD (Feature-Sliced Design) architecture.
+React + TypeScript + Vite SPA. Portfolio site with a filter-driven resume explorer.
+Deployed on GitHub Pages at jakob.now. Mini-FSD (Feature-Sliced Design) architecture.
+
+The default route (`#/`) is the portfolio `HomePage`. The resume explorer is at
+`#/resume`. The about page is at `#/about`. See `CONTEXT.md → Pages` for the
+full route table and widget composition.
 
 ***
 
@@ -48,19 +52,34 @@ must not reimplement them.
 
 ### Decorative App Shell Elements
 
-Purely decorative visual elements (e.g. canvas-based animated backgrounds) may
-be mounted at the application root. They must:
-- Live in `src/app/`
-- Not depend on entities, features, or widgets
-- Not affect layout flow or business logic
-- Be non-interactive and accessibility-neutral
+Purely decorative visual elements are mounted at the application root and live in
+`src/app/`. They must not depend on entities, features, or widgets, must not
+affect layout flow or business logic, and must be non-interactive and
+accessibility-neutral.
+
+Currently implemented:
+- **`SpaceBackground.tsx`** — canvas-based animated star field rendered behind all
+  page content. Mounts the `requestAnimationFrame` loop and wires the comet.
+- **`comet.ts`** — pure comet logic: `Comet` type, `spawnComet`, `tickComet`,
+  `drawComet`. Only one comet is ever visible at a time. After exiting the screen
+  a new comet spawns after a 4–12 second random delay. Spawns from any of the
+  four screen edges. Suppressed when `prefers-reduced-motion` is active.
 
 ***
 
 ## Routing
 
-The app currently uses **hash-based routing** via a `useHashRoute` hook in
-`src/app/main.tsx`. Routes: `#/` → `ResumePage`, `#/about` → `AboutPage`.
+The app uses **hash-based routing** via a `useHashRoute` hook in `src/app/main.tsx`.
+Active nav state is reactive — `main.tsx` re-renders on `hashchange` via `useHashRoute`
+and passes the current hash as `activeHref` to `Navbar`.
+
+Current routes:
+
+| Hash | Page |
+|---|---|
+| `#/` | `HomePage` |
+| `#/resume` | `ResumePage` |
+| `#/about` | `AboutPage` |
 
 This is a **temporary approach** — see `docs/adr/ADR-004-hash-routing.md`.
 Migration to React Router v6 + `404.html` is tracked in issue #50.
@@ -87,6 +106,8 @@ When #50 is delivered:
 - `features` must **not** import from `widgets`
 - `pages` must **not** access feature stores directly or reimplement feature semantics
 - `shared` UI must **not** depend on `entities` or `features` — consumes view models only
+- `entities/timeline` imports `YearMonth` from `@entities/resume` — the only intentional
+  cross-entity dependency. All others are forbidden.
 
 ***
 
@@ -127,7 +148,9 @@ These rules are enforced by ESLint (`eslint-plugin-boundaries`) and will fail CI
 ## Domain Types
 
 See `CONTEXT.md` for the canonical domain language glossary. The TypeScript type
-definitions live in `src/entities/resume/types.ts`.
+definitions live in:
+- `src/entities/resume/types.ts` — `WorkExperience`, `ResumeProfile`, `Resume`, `YearMonth`, `SkillChipVariant`
+- `src/entities/timeline/types.ts` — `TimelineEvent`, `TimelineEventKind`, `TimelineTag`
 
 ***
 
@@ -279,3 +302,5 @@ This project uses external skills from [`mattpocock/skills`](https://github.com/
 and project-local skills in `skills/project/`. See `AGENTS.md` for the full skill table.
 
 Always fetch the relevant `SKILL.md` via the GitHub MCP tool before executing any skill.
+
+External skills in use: `grill-with-docs`, `to-prd`, `to-issues`, `tdd`.
