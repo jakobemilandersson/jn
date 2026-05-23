@@ -4,6 +4,7 @@ import type { WorkExperience, YearMonth } from '@entities/resume/types'
 
 const experience: WorkExperience = {
   id: '1',
+  kind: 'work',
   role: 'Frontend Dev',
   company: 'Acme',
   stackType: 'frontend',
