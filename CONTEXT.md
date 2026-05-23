@@ -5,7 +5,7 @@ by stack type, skills, and date range to surface the most relevant parts of a
 resume for a given role or audience.
 
 > **Scope:** domain language, UI presentation rules, and bounded context only.
-> Architectural constraints, layer ownership, import rules, and the Zustand store
+> Architectural constraints, layer rules, import rules, and the Zustand store
 > shape live in `.chatgpt/project-context.md`. Cross-reference, don't duplicate.
 
 ## Domain language
@@ -25,6 +25,7 @@ resume for a given role or audience.
 | `BottomSheet` | The shared UI component at `src/shared/ui/BottomSheet.tsx`. A slide-up overlay used to show full `WorkExperienceDescription.fulltext` and skill chips. Accepts `isOpen`, `onClose`, `title`, and `children`. Domain-agnostic. |
 | Active filter chip | A dismissible chip in the filter bar representing one active filter value. Grouped by category (Stack type / Skills) with `aria-labelledby` on each group. |
 | `OptionGroup` | View model type defined in `src/shared/ui/SearchableMultiSelect.tsx` and exported via `src/shared/ui/index.ts`. Used to group skill filter options by `stackType`. |
+| `Navbar` | The app-level navigation component at `src/widgets/navbar/Navbar.tsx`. Accepts `activeHref: string` and derives active state from it. Renders a scroll-aware sticky header on desktop and a fixed bottom tab bar on mobile. Domain-agnostic. |
 
 ## Bounded context
 
@@ -44,6 +45,7 @@ with real work experience entries (IT Consultant, Plick, Ductus).
 - `BottomSheet` must not import from `entities` or `features` — it is domain-agnostic.
 - `getGroupedSkillOptions` is the only place skill-to-group mapping occurs; no other layer may reimplement this grouping.
 - `RESUME` is the single canonical source for all personal and professional data. `RESUME.profile` is the only source for identity and contact information — no other file may duplicate these values.
+- `Navbar` must not import from `entities` or `features` — it is domain-agnostic. Active state is always derived from the `activeHref` prop, never from `window.location` directly.
 
 ## UI presentation rules
 
@@ -52,6 +54,7 @@ with real work experience entries (IT Consultant, Plick, Ductus).
 - Skill chips are shown inside the `BottomSheet`, not directly on the card.
 - Cards with no description show "View skills →"; cards with a description show "Read more →".
 - Active filters are grouped by category (Stack type / Skills) with an `aria-labelledby` label on each group.
+- `Navbar` uses two layout branches inside a single `<nav aria-label="Main">` landmark: a sticky header (`hidden md:flex`) on desktop and a fixed bottom tab bar (`flex md:hidden`) on mobile. Both branches render the same three destinations (Home, Resume, About). The active destination carries `aria-current="page"` in both branches.
 
 ## Dark mode
 
