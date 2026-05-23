@@ -4,12 +4,22 @@ export const TIMELINE: TimelineEvent[] = [
   {
     id: 'edu-bsc',
     kind: 'education',
-    title: "Bachelor's in Computer Science",
-    subtitle: 'University',
-    start: '2016-08' as YearMonth,
+    title: "Bachelor's in Civil Engineering IT",
+    subtitle: 'Uppsala University',
+    start: '2014-08' as YearMonth,
+    end: '2017-06' as YearMonth,
+    detail:
+      'Studied Civil Engineering IT at Uppsala University, covering software development, algorithms, data structures, and engineering fundamentals.',
+  },
+  {
+    id: 'edu-msc',
+    kind: 'education',
+    title: "Master's in Civil Engineering IT",
+    subtitle: 'Uppsala University',
+    start: '2017-08' as YearMonth,
     end: '2019-06' as YearMonth,
     detail:
-      'Studied computer science with a focus on algorithms, data structures, and software engineering. Graduated with a thesis on automated data extraction.',
+      'Completed a Master\'s degree in Civil Engineering IT at Uppsala University. Concluded with a thesis on automated data extraction at Ductus.',
   },
   {
     id: 'work-ductus-thesis',
