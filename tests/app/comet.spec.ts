@@ -15,9 +15,11 @@ describe("travelDistance", () => {
   });
 
   it("returns the shorter of two exit distances for a diagonal ray", () => {
-    // From (0,0) going at 45° — exits whichever boundary is closer first
-    const dist = travelDistance(0, 0, 1, 1, W, H);
-    expect(dist).toBeCloseTo(H); // H=800 < W=1280
+    // From (0,0) with vx=vy=1, speed=√2, unit vector=(1/√2, 1/√2)
+    // Distance to bottom edge = H / (1/√2) = H√2 ≈ 1131
+    // Distance to right edge  = W / (1/√2) = W√2 ≈ 1810
+    // Bottom is closer, so result = H√2
+    expect(travelDistance(0, 0, 1, 1, W, H)).toBeCloseTo(H * Math.SQRT2);
   });
 
   it("returns 0 for zero velocity", () => {
@@ -25,7 +27,6 @@ describe("travelDistance", () => {
   });
 
   it("handles a corner spawn aimed diagonally inward", () => {
-    // From top-left corner (0,0) going right+down — should travel H before exiting
     const dist = travelDistance(0, 0, 600, 600, W, H);
     expect(dist).toBeGreaterThan(0);
   });
@@ -62,7 +63,7 @@ describe("spawnComet", () => {
     const origRandom = Math.random;
     Math.random = () => {
       calls++;
-      if (calls === 1) return 0; // → index 0 → top
+      if (calls === 1) return 0;
       return 0.5;
     };
     try {
@@ -79,7 +80,7 @@ describe("spawnComet", () => {
     const origRandom = Math.random;
     Math.random = () => {
       calls++;
-      if (calls === 1) return 1 / 4 + 0.01; // → index 1 → right
+      if (calls === 1) return 1 / 4 + 0.01;
       return 0.5;
     };
     try {
@@ -96,7 +97,7 @@ describe("spawnComet", () => {
     const origRandom = Math.random;
     Math.random = () => {
       calls++;
-      if (calls === 1) return 2 / 4 + 0.01; // → index 2 → bottom
+      if (calls === 1) return 2 / 4 + 0.01;
       return 0.5;
     };
     try {
@@ -113,7 +114,7 @@ describe("spawnComet", () => {
     const origRandom = Math.random;
     Math.random = () => {
       calls++;
-      if (calls === 1) return 3 / 4 + 0.01; // → index 3 → left
+      if (calls === 1) return 3 / 4 + 0.01;
       return 0.5;
     };
     try {
