@@ -22,9 +22,10 @@ describe("FeaturedWorkSection", () => {
     expect(screen.getByText(/jakob\.now/i)).toBeInTheDocument();
   });
 
-  it("renders a stack for each project", () => {
+  it("renders stack chips for each project", () => {
     render(<FeaturedWorkSection />);
-    expect(screen.getByText(/React, TypeScript, Node\.js, PostgreSQL/i)).toBeInTheDocument();
-    expect(screen.getByText(/React, TypeScript, Vite, Zustand, TailwindCSS/i)).toBeInTheDocument();
+    expect(screen.getByText("React")).toBeInTheDocument();
+    expect(screen.getByText("PostgreSQL")).toBeInTheDocument();
+    expect(screen.getByText("Zustand")).toBeInTheDocument();
   });
 });
