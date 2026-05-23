@@ -42,6 +42,32 @@ describe('Timeline', () => {
     expect(screen.queryByText(first.detail)).not.toBeInTheDocument();
   });
 
+  it('dot has scale-125 class when entry is active', () => {
+    render(<Timeline />);
+    const first = TIMELINE[0];
+    const btn = screen.getByRole('button', { name: new RegExp(first.title) });
+    fireEvent.click(btn);
+    const dot = btn.querySelector('[aria-hidden="true"]');
+    expect(dot?.classList.contains('scale-125')).toBe(true);
+    expect(dot?.classList.contains('scale-100')).toBe(false);
+  });
+
+  it('dot returns to scale-100 after deselecting, regardless of hover state', () => {
+    render(<Timeline />);
+    const first = TIMELINE[0];
+    const btn = screen.getByRole('button', { name: new RegExp(first.title) });
+    // Activate
+    fireEvent.click(btn);
+    expect(btn).toHaveAttribute('aria-expanded', 'true');
+    const dot = btn.querySelector('[aria-hidden="true"]');
+    expect(dot?.classList.contains('scale-125')).toBe(true);
+    // Deselect — cursor/touch still on button (simulate by not firing mouseLeave)
+    fireEvent.click(btn);
+    expect(btn).toHaveAttribute('aria-expanded', 'false');
+    expect(dot?.classList.contains('scale-125')).toBe(false);
+    expect(dot?.classList.contains('scale-100')).toBe(true);
+  });
+
   it('pressing Escape closes the open popover', () => {
     render(<Timeline />);
     const first = TIMELINE[0];

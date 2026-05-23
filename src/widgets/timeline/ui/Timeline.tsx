@@ -133,9 +133,13 @@ function TimelineNode({
         className="group w-full text-left flex flex-col gap-0.5 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 rounded"
       >
         <span className="flex items-center gap-2">
+          {/* Scale is driven solely by isActive. group-hover was intentionally
+              removed: on touch devices browsers retain :hover after a tap,
+              causing the dot to stay enlarged even after deselection. */}
           <span
             className={[
-              'block w-3 h-3 rounded-full ring-4 transition-transform duration-150 group-hover:scale-125 shrink-0',
+              'block w-3 h-3 rounded-full ring-4 transition-transform duration-150 shrink-0',
+              isActive ? 'scale-125' : 'scale-100',
               styles.dot,
             ].join(' ')}
             aria-hidden="true"
