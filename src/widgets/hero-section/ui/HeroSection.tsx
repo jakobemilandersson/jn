@@ -4,7 +4,10 @@ export function HeroSection() {
       <p className="text-white/40 text-sm font-medium tracking-widest uppercase mb-4">
         Full-stack developer
       </p>
-      <h1 className="text-6xl sm:text-7xl lg:text-8xl font-bold text-white leading-none tracking-tight mb-6">
+      <h1
+        aria-label="Jakob Andersson"
+        className="text-6xl sm:text-7xl lg:text-8xl font-bold text-white leading-none tracking-tight mb-6"
+      >
         Jakob
         <br />
         Andersson
