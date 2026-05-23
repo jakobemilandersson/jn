@@ -1,10 +1,26 @@
-const PROJECTS = [
+import { SkillChip, SkillChipVariant } from "@shared/ui";
+
+type Project = {
+  title: string;
+  context: string;
+  role: string;
+  stack: { label: string; variant: SkillChipVariant }[];
+  outcome: string;
+  link: string | null;
+};
+
+const PROJECTS: Project[] = [
   {
     title: "Internal Operations Platform",
     context:
       "A mid-sized company managed workflows across spreadsheets and email with no centralised tool.",
     role: "Sole developer — architecture, design, and delivery over 2 years.",
-    stack: ["React", "TypeScript", "Node.js", "PostgreSQL"],
+    stack: [
+      { label: "React", variant: "frontend" },
+      { label: "TypeScript", variant: "frontend" },
+      { label: "Node.js", variant: "backend" },
+      { label: "PostgreSQL", variant: "backend" },
+    ],
     outcome: "Replaced manual processes for a team of 40+, still in active use.",
     link: null,
   },
@@ -12,7 +28,13 @@ const PROJECTS = [
     title: "jakob.now — Resume Explorer",
     context: "Wanted a smarter way to present a resume than a static PDF.",
     role: "Solo — product, design, and engineering.",
-    stack: ["React", "TypeScript", "Vite", "Zustand", "TailwindCSS"],
+    stack: [
+      { label: "React", variant: "frontend" },
+      { label: "TypeScript", variant: "frontend" },
+      { label: "Vite", variant: "frontend" },
+      { label: "Zustand", variant: "fullstack" },
+      { label: "TailwindCSS", variant: "frontend" },
+    ],
     outcome: "Live and actively developed.",
     link: "https://github.com/jakobemilandersson/jn",
   },
@@ -47,12 +69,7 @@ export function FeaturedWorkSection() {
             <p className="text-white/40 text-sm">{project.role}</p>
             <div className="flex flex-wrap gap-2 mt-2">
               {project.stack.map((tech) => (
-                <span
-                  key={tech}
-                  className="px-3 py-1 rounded-full bg-white/10 text-white/70 text-xs font-medium"
-                >
-                  {tech}
-                </span>
+                <SkillChip key={tech.label} label={tech.label} variant={tech.variant} />
               ))}
             </div>
             <p className="text-white/50 text-sm italic">{project.outcome}</p>
