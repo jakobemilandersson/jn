@@ -17,6 +17,17 @@ function useHashRoute() {
   return hash;
 }
 
+function useScrolled(threshold = 16) {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const handler = () => setScrolled(window.scrollY > threshold);
+    handler();
+    window.addEventListener("scroll", handler, { passive: true });
+    return () => window.removeEventListener("scroll", handler);
+  }, [threshold]);
+  return scrolled;
+}
+
 const NAV_LINKS = [
   { label: "Home", href: "#/" },
   { label: "Resume", href: "#/resume" },
@@ -25,11 +36,16 @@ const NAV_LINKS = [
 
 function App() {
   const hash = useHashRoute();
+  const scrolled = useScrolled();
+
+  const isHome = hash === "" || hash === "#/" || hash === "#";
+  const isResume = hash === "#/resume";
+  const isAbout = hash === "#/about";
 
   let page;
-  if (hash === "#/resume") {
+  if (isResume) {
     page = <ResumePage />;
-  } else if (hash === "#/about") {
+  } else if (isAbout) {
     page = <AboutPage />;
   } else {
     page = <HomePage />;
@@ -39,23 +55,37 @@ function App() {
     <React.StrictMode>
       <SpaceBackground />
 
-      <nav className="relative z-10 flex gap-6 px-6 pt-6">
-        {NAV_LINKS.map(({ label, href }) => (
-          <a
-            key={href}
-            href={href}
-            className={`text-sm font-medium transition-colors ${
-              window.location.hash === href
-                ? "text-white"
-                : "text-white/40 hover:text-white/70"
-            }`}
-          >
-            {label}
-          </a>
-        ))}
+      <nav
+        className={`fixed top-0 left-0 right-0 z-20 flex gap-6 px-6 pt-6 pb-4 transition-all duration-300 ${
+          scrolled
+            ? "bg-black/60 backdrop-blur-md border-b border-white/10 pt-4 pb-3"
+            : ""
+        }`}
+      >
+        {NAV_LINKS.map(({ label, href }) => {
+          const isActive =
+            href === "#/"
+              ? isHome
+              : href === "#/resume"
+              ? isResume
+              : isAbout;
+          return (
+            <a
+              key={href}
+              href={href}
+              className={`text-sm font-medium transition-colors ${
+                isActive
+                  ? "text-white"
+                  : "text-white/40 hover:text-white/70"
+              }`}
+            >
+              {label}
+            </a>
+          );
+        })}
       </nav>
 
-      <main className="min-h-screen px-4 relative z-0">
+      <main className="min-h-screen px-4 relative z-10 pt-16">
         {page}
         <Footer />
       </main>

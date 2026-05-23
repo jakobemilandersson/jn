@@ -4,7 +4,7 @@ import { AboutSection } from "@widgets/about-section";
 
 export default function HomePage() {
   return (
-    <div>
+    <div className="relative z-10 flex flex-col gap-12 pt-6">
       <section id="hero">
         <HeroSection />
       </section>
@@ -14,7 +14,6 @@ export default function HomePage() {
       <section id="about">
         <AboutSection />
       </section>
-      <section id="contact" />
     </div>
   );
 }
