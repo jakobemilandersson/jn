@@ -44,7 +44,7 @@ const PROJECTS: Project[] = [
 export function FeaturedWorkSection() {
   return (
     <div className="max-w-3xl mx-auto px-6 w-full">
-      <h2 className="text-white/40 text-sm font-medium tracking-widest uppercase mb-12">
+      <h2 className="text-white/40 text-sm font-medium tracking-widest uppercase mb-6">
         Featured work
       </h2>
       <div className="flex flex-col gap-6">

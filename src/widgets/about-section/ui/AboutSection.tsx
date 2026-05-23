@@ -1,7 +1,7 @@
 export function AboutSection() {
   return (
     <div className="max-w-3xl mx-auto px-6 w-full">
-      <h2 className="text-white/40 text-sm font-medium tracking-widest uppercase mb-12">
+      <h2 className="text-white/40 text-sm font-medium tracking-widest uppercase mb-6">
         About
       </h2>
       <p className="text-white/70 text-lg sm:text-xl leading-relaxed max-w-2xl">
