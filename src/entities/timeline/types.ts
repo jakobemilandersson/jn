@@ -1,7 +1,14 @@
+import type { SkillChipVariant } from '@shared/ui';
+
 /** A month+year string in "YYYY-MM" format, e.g. "2024-03". */
 export type YearMonth = string & { readonly __brand: 'YearMonth' };
 
 export type TimelineEventKind = 'work' | 'education' | 'project';
+
+export type TimelineTag = {
+  label: string;
+  stackType: SkillChipVariant;
+};
 
 export type TimelineEvent = {
   id: string;
@@ -12,5 +19,5 @@ export type TimelineEvent = {
   end?: YearMonth;
   detail: string;
   url?: string;
-  tags?: string[];
+  tags?: TimelineTag[];
 };

@@ -1,22 +1,20 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { TIMELINE } from '@entities/timeline';
 import type { TimelineEvent, TimelineEventKind } from '@entities/timeline';
+import { SkillChip } from '@shared/ui';
 
-const KIND_STYLES: Record<TimelineEventKind, { dot: string; label: string; tag: string }> = {
+const KIND_STYLES: Record<TimelineEventKind, { dot: string; label: string }> = {
   work: {
     dot: 'bg-teal-500 dark:bg-teal-400 ring-teal-500/30 dark:ring-teal-400/30',
     label: 'text-teal-700 dark:text-teal-400',
-    tag: 'bg-teal-500/10 text-teal-700 dark:text-teal-300',
   },
   education: {
     dot: 'bg-purple-500 dark:bg-purple-400 ring-purple-500/30 dark:ring-purple-400/30',
     label: 'text-purple-700 dark:text-purple-400',
-    tag: 'bg-purple-500/10 text-purple-700 dark:text-purple-300',
   },
   project: {
     dot: 'bg-orange-500 dark:bg-orange-400 ring-orange-500/30 dark:ring-orange-400/30',
     label: 'text-orange-700 dark:text-orange-400',
-    tag: 'bg-orange-500/10 text-orange-700 dark:text-orange-300',
   },
 };
 
@@ -34,11 +32,9 @@ function formatPeriod(start: string, end?: string): string {
 function PopoverCard({
   event,
   onClose,
-  styles,
 }: {
   event: TimelineEvent;
   onClose: () => void;
-  styles: (typeof KIND_STYLES)[TimelineEventKind];
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -46,9 +42,6 @@ function PopoverCard({
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === 'Escape') onClose();
     }
-    // Use 'click' so the button's own onClick fires and completes before this
-    // outside-click handler runs. Timeline buttons stop propagation so their
-    // clicks never reach this handler.
     function handleClickOutside(e: MouseEvent) {
       if (ref.current && !ref.current.contains(e.target as Node)) onClose();
     }
@@ -72,11 +65,8 @@ function PopoverCard({
       {event.tags && event.tags.length > 0 && (
         <ul className="flex flex-wrap gap-1.5" aria-label="Technologies">
           {event.tags.map((tag) => (
-            <li
-              key={tag}
-              className={`px-2 py-0.5 rounded-full text-xs font-medium ${styles.tag}`}
-            >
-              {tag}
+            <li key={tag.label}>
+              <SkillChip label={tag.label} variant={tag.stackType} />
             </li>
           ))}
         </ul>
@@ -113,9 +103,6 @@ function TimelineNode({
   const handleMouseLeave = useCallback(() => onDeactivate(), [onDeactivate]);
   const handleClick = useCallback(
     (e: React.MouseEvent) => {
-      // Prevent this click from bubbling to the document 'click' handler
-      // registered by any currently open PopoverCard, which would immediately
-      // close the entry we just opened.
       e.stopPropagation();
       if (isActive) onDeactivate();
       else onActivate();
@@ -135,8 +122,6 @@ function TimelineNode({
 
   return (
     <div className="space-y-1">
-      {/* The button wraps the dot, title, subtitle, and date so the entire
-          row is a single large click target. */}
       <button
         type="button"
         aria-label={`${event.title} — ${formatPeriod(event.start, event.end)}`}
@@ -166,7 +151,7 @@ function TimelineNode({
 
       {isActive && (
         <div className="pl-5">
-          <PopoverCard event={event} onClose={onDeactivate} styles={styles} />
+          <PopoverCard event={event} onClose={onDeactivate} />
         </div>
       )}
     </div>
