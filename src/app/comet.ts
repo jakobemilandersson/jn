@@ -24,9 +24,8 @@ export type Comet = {
   waitRemaining: number;
 };
 
-// DEBUG: aggressive spawn rate — revert to 4000/12000 before merge
-const MIN_WAIT = 100;  // ms
-const MAX_WAIT = 500;  // ms
+const MIN_WAIT = 4000; // ms
+const MAX_WAIT = 12000; // ms
 const MIN_TRAVEL = 400; // px
 
 // --- Presets ---
