@@ -24,8 +24,9 @@ export type Comet = {
   waitRemaining: number;
 };
 
-const MIN_WAIT = 4000; // ms
-const MAX_WAIT = 12000; // ms
+// DEBUG: aggressive spawn rate — revert to 4000/12000 before merge
+const MIN_WAIT = 100;  // ms
+const MAX_WAIT = 500;  // ms
 const MIN_TRAVEL = 400; // px
 
 // --- Presets ---
@@ -136,8 +137,6 @@ export function spawnComet(width: number, height: number): Comet {
       break;
   }
 
-  // Nudge angle toward straight-across until MIN_TRAVEL is satisfied.
-  // Uses per-spawn speedPreset so the guarantee holds at all speeds.
   let jitter = angleJitter;
   let angle  = baseAngle + jitter;
   const maxIterations = 16;
