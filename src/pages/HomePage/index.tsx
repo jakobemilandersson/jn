@@ -1,5 +1,6 @@
 import { HeroSection } from "@widgets/hero-section";
 import { FeaturedWorkSection } from "@widgets/featured-work-section";
+import { AboutSection } from "@widgets/about-section";
 
 export default function HomePage() {
   return (
@@ -10,7 +11,9 @@ export default function HomePage() {
       <section id="featured-work">
         <FeaturedWorkSection />
       </section>
-      <section id="about" />
+      <section id="about">
+        <AboutSection />
+      </section>
       <section id="contact" />
     </div>
   );
