@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { type Comet, spawnComet, tickComet, drawComet } from "./comet";
 
 type Star = {
   x: number;
@@ -26,6 +27,10 @@ export function SpaceBackground() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
     const dpr = window.devicePixelRatio || 1;
     const width = document.documentElement.clientWidth;
     const height = document.documentElement.clientHeight;
@@ -50,15 +55,14 @@ export function SpaceBackground() {
           ? 1.4
           : 2.1;
 
-
       return {
         x: Math.random() * width,
         y: Math.random() * height,
         r,
         baseOpacity: 1.0,
-        cycle: 4000 + Math.random() * 6000, // 4–10s
-        off: 300 + Math.random() * 400,     // fully dark duration
-        fade: 250 + Math.random() * 250,    // fade in/out duration
+        cycle: 4000 + Math.random() * 6000,
+        off: 300 + Math.random() * 400,
+        fade: 250 + Math.random() * 250,
         offset: Math.random() * 10000,
         color: STAR_COLORS[Math.random() < 0.75 ? 0 : 1],
       };
@@ -81,9 +85,14 @@ export function SpaceBackground() {
       ctx.fillRect(0, 0, width, height);
     };
 
+    let comet: Comet | null = reducedMotion ? null : spawnComet(width, height);
+    let prevTime: number | null = null;
     let rafId = 0;
 
     const animate = (time: number) => {
+      const delta = prevTime !== null ? time - prevTime : 0;
+      prevTime = time;
+
       ctx.fillStyle = BASE_COLOR;
       ctx.fillRect(0, 0, width, height);
 
@@ -99,14 +108,11 @@ export function SpaceBackground() {
         let opacity = s.baseOpacity;
 
         if (t > visibleEnd && t <= fadeOutEnd) {
-          // fade out
           const p = (t - visibleEnd) / s.fade;
           opacity = s.baseOpacity * (1 - p);
         } else if (t > fadeOutEnd && t <= darkEnd) {
-          // fully dark
           opacity = 0;
         } else if (t > darkEnd) {
-          // fade in
           const p = (t - darkEnd) / s.fade;
           opacity = s.baseOpacity * p;
         }
@@ -119,6 +125,12 @@ export function SpaceBackground() {
       }
 
       ctx.globalAlpha = 1;
+
+      if (comet !== null) {
+        comet = tickComet(comet, delta, width, height);
+        drawComet(ctx, comet);
+      }
+
       rafId = requestAnimationFrame(animate);
     };
 
