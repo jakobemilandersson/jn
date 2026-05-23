@@ -20,7 +20,12 @@ export const TIMELINE: TimelineEvent[] = [
     end: '2019-06' as YearMonth,
     detail:
       'Developed and evaluated algorithms for automated extraction and validation of numerical data from complex documents. Documented findings and presented improvement proposals for production use.',
-    tags: ['algorithms', 'data extraction', 'constraint programming', 'technical documentation'],
+    tags: [
+      { label: 'algorithms', stackType: 'backend' },
+      { label: 'data extraction', stackType: 'backend' },
+      { label: 'constraint programming', stackType: 'backend' },
+      { label: 'technical documentation', stackType: 'neutral' },
+    ],
   },
   {
     id: 'work-ductus',
@@ -31,7 +36,13 @@ export const TIMELINE: TimelineEvent[] = [
     end: '2022-08' as YearMonth,
     detail:
       'Built and maintained a business-critical IPAM system for a major telecom client. Full-stack development, REST API design, database migrations, and production operations. Mentored a junior developer.',
-    tags: ['Python (Flask)', 'React', 'PostgreSQL', 'REST API', 'Linux'],
+    tags: [
+      { label: 'Python (Flask)', stackType: 'backend' },
+      { label: 'React', stackType: 'frontend' },
+      { label: 'PostgreSQL', stackType: 'backend' },
+      { label: 'REST API', stackType: 'backend' },
+      { label: 'Linux', stackType: 'backend' },
+    ],
   },
   {
     id: 'work-plick',
@@ -42,7 +53,15 @@ export const TIMELINE: TimelineEvent[] = [
     end: '2025-12' as YearMonth,
     detail:
       'Built scalable backend and frontend solutions for a high-traffic e-commerce platform. Designed integration flows, optimised PostgreSQL schemas, contributed to CI/CD pipelines, and built app and web interfaces.',
-    tags: ['Ruby on Rails', 'Flutter', 'React', 'PostgreSQL', 'GraphQL', 'Docker', 'GitHub Actions'],
+    tags: [
+      { label: 'Ruby on Rails', stackType: 'backend' },
+      { label: 'Flutter', stackType: 'frontend' },
+      { label: 'React', stackType: 'frontend' },
+      { label: 'PostgreSQL', stackType: 'backend' },
+      { label: 'GraphQL', stackType: 'fullstack' },
+      { label: 'Docker', stackType: 'backend' },
+      { label: 'GitHub Actions', stackType: 'neutral' },
+    ],
   },
   {
     id: 'project-jn',
@@ -53,7 +72,14 @@ export const TIMELINE: TimelineEvent[] = [
     detail:
       'Built a filter-driven resume explorer SPA using React, TypeScript, Vite, Zustand, and TailwindCSS. Mini-FSD architecture with strict layer boundaries, full CI, and TDD throughout.',
     url: 'https://github.com/jakobemilandersson/jn',
-    tags: ['React', 'TypeScript', 'Vite', 'Zustand', 'TailwindCSS', 'Vitest'],
+    tags: [
+      { label: 'React', stackType: 'frontend' },
+      { label: 'TypeScript', stackType: 'fullstack' },
+      { label: 'Vite', stackType: 'frontend' },
+      { label: 'Zustand', stackType: 'frontend' },
+      { label: 'TailwindCSS', stackType: 'frontend' },
+      { label: 'Vitest', stackType: 'neutral' },
+    ],
   },
   {
     id: 'work-consultant',
@@ -63,6 +89,12 @@ export const TIMELINE: TimelineEvent[] = [
     start: '2025-01' as YearMonth,
     detail:
       'Founded and run an independent consultancy. Built a social mobile game from scratch for a client — covering architecture, real-time data modelling, UI, and international launch. Responsible for the full delivery chain.',
-    tags: ['React Native', 'Flutter', 'Firestore', 'system design', 'project management'],
+    tags: [
+      { label: 'React Native', stackType: 'frontend' },
+      { label: 'Flutter', stackType: 'frontend' },
+      { label: 'Firestore', stackType: 'backend' },
+      { label: 'system design', stackType: 'fullstack' },
+      { label: 'project management', stackType: 'neutral' },
+    ],
   },
 ];
