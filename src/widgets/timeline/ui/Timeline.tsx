@@ -32,9 +32,11 @@ function formatPeriod(start: string, end?: string): string {
 function PopoverCard({
   event,
   onClose,
+  side,
 }: {
   event: TimelineEvent;
   onClose: () => void;
+  side: 'left' | 'right';
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -58,12 +60,21 @@ function PopoverCard({
       ref={ref}
       role="tooltip"
       onClick={(e) => e.stopPropagation()}
-      className="mt-3 rounded-lg border border-white/10 bg-white/5 dark:bg-black/40 backdrop-blur-sm p-4 space-y-3"
+      className={[
+        'mt-3 rounded-lg border border-white/10 bg-white/5 dark:bg-black/40 backdrop-blur-sm p-4 space-y-3',
+        side === 'left' ? 'md:text-right' : 'md:text-left',
+      ].join(' ')}
     >
       <p className="text-sm text-white/90 leading-relaxed">{event.detail}</p>
 
       {event.tags && event.tags.length > 0 && (
-        <ul className="flex flex-wrap gap-1.5" aria-label="Technologies">
+        <ul
+          className={[
+            'flex flex-wrap gap-1.5',
+            side === 'left' ? 'md:justify-end' : 'md:justify-start',
+          ].join(' ')}
+          aria-label="Technologies"
+        >
           {event.tags.map((tag) => (
             <li key={tag.label}>
               <SkillChip label={tag.label} variant={tag.stackType} />
@@ -91,11 +102,15 @@ function TimelineNode({
   isActive,
   onActivate,
   onDeactivate,
+  // On desktop: 'left' nodes sit in the left column, 'right' in the right column.
+  // On mobile this prop has no effect — all nodes follow the single-column layout.
+  side,
 }: {
   event: TimelineEvent;
   isActive: boolean;
   onActivate: () => void;
   onDeactivate: () => void;
+  side: 'left' | 'right';
 }) {
   const styles = KIND_STYLES[event.kind];
 
@@ -121,7 +136,12 @@ function TimelineNode({
   );
 
   return (
-    <div className="space-y-1">
+    <div
+      className={[
+        'space-y-1',
+        side === 'left' ? 'md:text-right' : 'md:text-left',
+      ].join(' ')}
+    >
       <button
         type="button"
         aria-label={`${event.title} — ${formatPeriod(event.start, event.end)}`}
@@ -130,9 +150,18 @@ function TimelineNode({
         onKeyDown={handleKeyDown}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className="group w-full text-left flex flex-col gap-0.5 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 rounded"
+        className={[
+          'group w-full text-left flex flex-col gap-0.5 cursor-pointer',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 rounded',
+          side === 'left' ? 'md:items-end' : 'md:items-start',
+        ].join(' ')}
       >
-        <span className="flex items-center gap-2">
+        <span
+          className={[
+            'flex items-center gap-2',
+            side === 'left' ? 'md:flex-row-reverse' : '',
+          ].join(' ')}
+        >
           {/* Scale is driven solely by isActive. group-hover was intentionally
               removed: on touch devices browsers retain :hover after a tap,
               causing the dot to stay enlarged even after deselection. */}
@@ -148,14 +177,29 @@ function TimelineNode({
         </span>
 
         {event.subtitle && (
-          <span className={`text-xs pl-5 ${styles.label}`}>{event.subtitle}</span>
+          <span
+            className={[
+              `text-xs ${styles.label}`,
+              'pl-5 md:pl-0',
+            ].join(' ')}
+          >
+            {event.subtitle}
+          </span>
         )}
-        <span className="text-xs pl-5 text-white/40">{formatPeriod(event.start, event.end)}</span>
+        <span
+          className={[
+            'text-xs text-white/40',
+            'pl-5 md:pl-0',
+          ].join(' ')}
+        >
+          {formatPeriod(event.start, event.end)}
+        </span>
       </button>
 
       {isActive && (
-        <div className="pl-5">
-          <PopoverCard event={event} onClose={onDeactivate} />
+        // Both sides: indent past dot on mobile, flush on desktop.
+        <div className="pl-5 md:pl-0">
+          <PopoverCard event={event} onClose={onDeactivate} side={side} />
         </div>
       )}
     </div>
@@ -168,21 +212,60 @@ export function Timeline() {
 
   return (
     <section aria-label="Career and project timeline" className="relative w-full py-4">
+      {/*
+        Mobile: single left rail — line at left-3, all nodes to the right.
+        Desktop (md+): center line — line at 50%, nodes alternate left / right.
+      */}
       <div
         aria-hidden="true"
-        className="absolute left-3 top-0 bottom-0 w-px bg-white/10"
+        className="absolute left-3 md:left-1/2 md:-translate-x-px top-0 bottom-0 w-px bg-white/10"
       />
-      <ol className="space-y-8 pl-2">
-        {sorted.map((event) => (
-          <li key={event.id}>
-            <TimelineNode
-              event={event}
-              isActive={activeId === event.id}
-              onActivate={() => setActiveId(event.id)}
-              onDeactivate={() => setActiveId(null)}
-            />
-          </li>
-        ))}
+
+      <ol className="space-y-8 pl-2 md:pl-0">
+        {sorted.map((event, index) => {
+          // Even-indexed items go to the right column, odd to the left.
+          // On mobile the `side` prop has no layout effect.
+          const side: 'left' | 'right' = index % 2 === 0 ? 'right' : 'left';
+
+          return (
+            <li
+              key={event.id}
+              className="md:grid md:grid-cols-2 md:gap-x-8"
+            >
+              {side === 'left' ? (
+                <>
+                  {/* Left column: the node content */}
+                  <div>
+                    <TimelineNode
+                      event={event}
+                      isActive={activeId === event.id}
+                      onActivate={() => setActiveId(event.id)}
+                      onDeactivate={() => setActiveId(null)}
+                      side={side}
+                    />
+                  </div>
+                  {/* Right column: empty spacer */}
+                  <div aria-hidden="true" />
+                </>
+              ) : (
+                <>
+                  {/* Left column: empty spacer */}
+                  <div aria-hidden="true" />
+                  {/* Right column: the node content */}
+                  <div>
+                    <TimelineNode
+                      event={event}
+                      isActive={activeId === event.id}
+                      onActivate={() => setActiveId(event.id)}
+                      onDeactivate={() => setActiveId(null)}
+                      side={side}
+                    />
+                  </div>
+                </>
+              )}
+            </li>
+          );
+        })}
       </ol>
     </section>
   );
