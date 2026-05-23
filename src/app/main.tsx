@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import { Footer } from "@shared/ui";
+import HomePage from "@pages/HomePage";
 import ResumePage from "@pages/ResumePage";
 import AboutPage from "@pages/AboutPage";
 import { SpaceBackground } from "./SpaceBackground";
@@ -17,13 +18,22 @@ function useHashRoute() {
 }
 
 const NAV_LINKS = [
-  { label: "Resume", href: "#/" },
+  { label: "Home", href: "#/" },
+  { label: "Resume", href: "#/resume" },
   { label: "About", href: "#/about" },
 ];
 
 function App() {
   const hash = useHashRoute();
-  const isAbout = hash === "#/about";
+
+  let page;
+  if (hash === "#/resume") {
+    page = <ResumePage />;
+  } else if (hash === "#/about") {
+    page = <AboutPage />;
+  } else {
+    page = <HomePage />;
+  }
 
   return (
     <React.StrictMode>
@@ -35,7 +45,7 @@ function App() {
             key={href}
             href={href}
             className={`text-sm font-medium transition-colors ${
-              (href === "#/about" ? isAbout : !isAbout)
+              window.location.hash === href
                 ? "text-white"
                 : "text-white/40 hover:text-white/70"
             }`}
@@ -46,7 +56,7 @@ function App() {
       </nav>
 
       <main className="min-h-screen px-4 relative z-0">
-        {isAbout ? <AboutPage /> : <ResumePage />}
+        {page}
         <Footer />
       </main>
     </React.StrictMode>
