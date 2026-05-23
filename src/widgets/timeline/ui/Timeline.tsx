@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { TIMELINE } from '@entities/timeline';
-import type { TimelineEvent, TimelineEventKind } from '@entities/timeline';
+import { RESUME } from '@entities/resume';
+import type { ExperienceKind } from '@entities/resume';
+import { toTimelineViewModels } from '../lib';
+import type { TimelineViewModel } from '../lib';
 import { SkillChip } from '@shared/ui';
 
-const KIND_STYLES: Record<TimelineEventKind, { dot: string; label: string }> = {
+const KIND_STYLES: Record<ExperienceKind, { dot: string; label: string }> = {
   work: {
     dot: 'bg-teal-500 dark:bg-teal-400 ring-teal-500/30 dark:ring-teal-400/30',
     label: 'text-teal-700 dark:text-teal-400',
@@ -26,7 +28,7 @@ function formatPeriod(start: string, end?: string): string {
       month: 'short',
     });
   };
-  return end ? `${fmt(start)} – ${fmt(end)}` : `${fmt(start)} – present`;
+  return end ? `${fmt(start)} \u2013 ${fmt(end)}` : `${fmt(start)} \u2013 present`;
 }
 
 function PopoverCard({
@@ -34,7 +36,7 @@ function PopoverCard({
   onClose,
   side,
 }: {
-  event: TimelineEvent;
+  event: TimelineViewModel;
   onClose: () => void;
   side: 'left' | 'right';
 }) {
@@ -90,7 +92,7 @@ function PopoverCard({
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1 text-xs text-white/50 hover:text-white/90 transition-colors"
         >
-          View project →
+          View project \u2192
         </a>
       )}
     </div>
@@ -102,11 +104,9 @@ function TimelineNode({
   isActive,
   onActivate,
   onDeactivate,
-  // On desktop: 'left' nodes sit in the left column, 'right' in the right column.
-  // On mobile this prop has no effect — all nodes follow the single-column layout.
   side,
 }: {
-  event: TimelineEvent;
+  event: TimelineViewModel;
   isActive: boolean;
   onActivate: () => void;
   onDeactivate: () => void;
@@ -144,7 +144,7 @@ function TimelineNode({
     >
       <button
         type="button"
-        aria-label={`${event.title} — ${formatPeriod(event.start, event.end)}`}
+        aria-label={`${event.title} \u2014 ${formatPeriod(event.start, event.end)}`}
         aria-expanded={isActive}
         onClick={handleClick}
         onKeyDown={handleKeyDown}
@@ -162,9 +162,6 @@ function TimelineNode({
             side === 'left' ? 'md:flex-row-reverse' : '',
           ].join(' ')}
         >
-          {/* Scale is driven solely by isActive. group-hover was intentionally
-              removed: on touch devices browsers retain :hover after a tap,
-              causing the dot to stay enlarged even after deselection. */}
           <span
             className={[
               'block w-3 h-3 rounded-full ring-4 transition-transform duration-150 shrink-0',
@@ -197,7 +194,6 @@ function TimelineNode({
       </button>
 
       {isActive && (
-        // Both sides: indent past dot on mobile, flush on desktop.
         <div className="pl-5 md:pl-0">
           <PopoverCard event={event} onClose={onDeactivate} side={side} />
         </div>
@@ -208,14 +204,12 @@ function TimelineNode({
 
 export function Timeline() {
   const [activeId, setActiveId] = useState<string | null>(null);
-  const sorted = [...TIMELINE].sort((a, b) => (a.start < b.start ? -1 : 1));
+  const sorted = toTimelineViewModels(RESUME.experiences).sort(
+    (a, b) => (a.start < b.start ? -1 : 1),
+  );
 
   return (
     <section aria-label="Career and project timeline" className="relative w-full py-4">
-      {/*
-        Mobile: single left rail — line at left-3, all nodes to the right.
-        Desktop (md+): center line — line at 50%, nodes alternate left / right.
-      */}
       <div
         aria-hidden="true"
         className="absolute left-3 md:left-1/2 md:-translate-x-px top-0 bottom-0 w-px bg-white/10"
@@ -223,8 +217,6 @@ export function Timeline() {
 
       <ol className="space-y-8 pl-2 md:pl-0">
         {sorted.map((event, index) => {
-          // Even-indexed items go to the right column, odd to the left.
-          // On mobile the `side` prop has no layout effect.
           const side: 'left' | 'right' = index % 2 === 0 ? 'right' : 'left';
 
           return (
@@ -234,7 +226,6 @@ export function Timeline() {
             >
               {side === 'left' ? (
                 <>
-                  {/* Left column: the node content */}
                   <div>
                     <TimelineNode
                       event={event}
@@ -244,14 +235,11 @@ export function Timeline() {
                       side={side}
                     />
                   </div>
-                  {/* Right column: empty spacer */}
                   <div aria-hidden="true" />
                 </>
               ) : (
                 <>
-                  {/* Left column: empty spacer */}
                   <div aria-hidden="true" />
-                  {/* Right column: the node content */}
                   <div>
                     <TimelineNode
                       event={event}
