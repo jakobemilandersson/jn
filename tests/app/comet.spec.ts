@@ -1,8 +1,35 @@
 import { describe, it, expect } from "vitest";
-import { spawnComet, tickComet } from "../../src/app/comet";
+import { spawnComet, tickComet, travelDistance } from "../../src/app/comet";
 
 const W = 1280;
 const H = 800;
+
+describe("travelDistance", () => {
+  it("returns the distance to the right edge for a rightward ray from the left", () => {
+    // From (0, 400) going right at speed 1 → exits at x=1280, distance=1280
+    expect(travelDistance(0, 400, 1, 0, W, H)).toBeCloseTo(W);
+  });
+
+  it("returns the distance to the bottom edge for a downward ray from the top", () => {
+    expect(travelDistance(640, 0, 0, 1, W, H)).toBeCloseTo(H);
+  });
+
+  it("returns the shorter of two exit distances for a diagonal ray", () => {
+    // From (0,0) going at 45° — exits whichever boundary is closer first
+    const dist = travelDistance(0, 0, 1, 1, W, H);
+    expect(dist).toBeCloseTo(H); // H=800 < W=1280
+  });
+
+  it("returns 0 for zero velocity", () => {
+    expect(travelDistance(640, 400, 0, 0, W, H)).toBe(0);
+  });
+
+  it("handles a corner spawn aimed diagonally inward", () => {
+    // From top-left corner (0,0) going right+down — should travel H before exiting
+    const dist = travelDistance(0, 0, 600, 600, W, H);
+    expect(dist).toBeGreaterThan(0);
+  });
+});
 
 describe("spawnComet", () => {
   it("returns a comet with status 'flying'", () => {
@@ -10,34 +37,32 @@ describe("spawnComet", () => {
     expect(comet.status).toBe("flying");
   });
 
-  it("spawns with x on the canvas width range or at an edge", () => {
-    // Run many times to exercise all edges
+  it("always travels at least 400px before exiting the canvas", () => {
+    for (let i = 0; i < 500; i++) {
+      const comet = spawnComet(W, H);
+      const dist = travelDistance(comet.x, comet.y, comet.vx, comet.vy, W, H);
+      expect(dist).toBeGreaterThanOrEqual(400);
+    }
+  });
+
+  it("spawns with head on one of the four canvas edges", () => {
     for (let i = 0; i < 200; i++) {
       const comet = spawnComet(W, H);
-      const onHorizontalEdge = comet.x >= 0 && comet.x <= W;
-      const onVerticalEdge = comet.y >= 0 && comet.y <= H;
-      const atLeft = comet.x === 0;
-      const atRight = comet.x === W;
-      const atTop = comet.y === 0;
-      const atBottom = comet.y === H;
-      expect(
-        atLeft || atRight || atTop || atBottom ||
-        (onHorizontalEdge && (atTop || atBottom)) ||
-        (onVerticalEdge && (atLeft || atRight))
-      ).toBe(true);
+      const onEdge =
+        comet.x === 0 ||
+        comet.x === W ||
+        comet.y === 0 ||
+        comet.y === H;
+      expect(onEdge).toBe(true);
     }
   });
 
   it("velocity is directed away from the top edge when spawned there", () => {
-    // Force top-edge spawn by mocking Math.random deterministically
-    // We test the contract: when y===0, vy must be positive (downward)
     let calls = 0;
     const origRandom = Math.random;
     Math.random = () => {
       calls++;
-      // First call selects edge index: 0 → top
-      if (calls === 1) return 0;
-      // Remaining calls: midpoint values
+      if (calls === 1) return 0; // → index 0 → top
       return 0.5;
     };
     try {
@@ -104,13 +129,12 @@ describe("spawnComet", () => {
 describe("tickComet", () => {
   it("advances position by velocity × delta", () => {
     const comet = { x: 100, y: 200, vx: 600, vy: 300, tailLength: 150, status: "flying" as const, waitRemaining: 0 };
-    const next = tickComet(comet, 100, W, H); // 100ms delta
+    const next = tickComet(comet, 100, W, H);
     expect(next.x).toBeCloseTo(100 + 600 * 0.1);
     expect(next.y).toBeCloseTo(200 + 300 * 0.1);
   });
 
   it("transitions to 'waiting' when head exits canvas bounds", () => {
-    // Place comet just off the right edge
     const comet = { x: W + 200, y: H / 2, vx: 600, vy: 0, tailLength: 150, status: "flying" as const, waitRemaining: 0 };
     const next = tickComet(comet, 16, W, H);
     expect(next.status).toBe("waiting");
