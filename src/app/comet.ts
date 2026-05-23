@@ -16,6 +16,7 @@ export type Comet = {
   y: number;
   vx: number;
   vy: number;
+  /** Preset metadata — not used at runtime; vx/vy already encode speed */
   speed: number;
   tailLength: number;
   headRadius: number;
@@ -67,7 +68,7 @@ function pickRandom<T>(arr: readonly T[]): T {
 }
 
 type Edge = "top" | "right" | "bottom" | "left";
-const EDGES: Edge[] = ["top", "right", "bottom", "left"];
+const EDGES = ["top", "right", "bottom", "left"] as const satisfies readonly Edge[];
 
 /**
  * Returns the distance (in px) the comet will travel from (x, y) in direction

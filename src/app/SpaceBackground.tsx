@@ -27,6 +27,7 @@ export function SpaceBackground() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    // Sampled once at mount — SpaceBackground remounts on resize via key prop
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
@@ -90,6 +91,7 @@ export function SpaceBackground() {
     let rafId = 0;
 
     const animate = (time: number) => {
+      // First frame: prevTime is null so delta is 0 — position advance is skipped
       const delta = prevTime !== null ? time - prevTime : 0;
       prevTime = time;
 
