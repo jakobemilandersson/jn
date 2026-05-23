@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { RESUME } from '@entities/resume';
 import type { ExperienceKind } from '@entities/resume';
-import { toTimelineViewModels } from '@widgets/timeline/lib';
-import type { TimelineViewModel } from '@widgets/timeline/lib';
+import { toTimelineViewModels } from '../lib';
+import type { TimelineViewModel } from '../lib';
 import { SkillChip } from '@shared/ui';
 
 const KIND_STYLES: Record<ExperienceKind, { dot: string; label: string }> = {
