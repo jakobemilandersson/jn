@@ -12,7 +12,7 @@ export function HeroSection() {
         >
           Download CV
         </a>
-        <a href="#contact">Contact me</a>
+        <a href="#/about">Contact me</a>
       </div>
     </div>
   );
