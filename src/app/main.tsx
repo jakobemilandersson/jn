@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
-import { Footer } from "@shared/ui";
 import HomePage from "@pages/HomePage";
 import ResumePage from "@pages/ResumePage";
 import AboutPage from "@pages/AboutPage";
@@ -39,9 +38,8 @@ function App() {
 
       <Navbar activeHref={hash} />
 
-      <main className="min-h-screen px-4 relative z-10 pt-16 pb-20 md:pb-0">
+      <main className="min-h-screen px-4 relative z-10 pt-0 md:pt-16 pb-20 md:pb-0">
         {page}
-        <Footer />
       </main>
     </React.StrictMode>
   );
