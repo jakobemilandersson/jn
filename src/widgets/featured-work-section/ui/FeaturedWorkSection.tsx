@@ -1,4 +1,5 @@
-import { SkillChip, SkillChipVariant } from "@shared/ui";
+import { SkillChip } from "@shared/ui";
+import type { SkillChipVariant } from "@shared/ui";
 
 type Project = {
   title: string;
