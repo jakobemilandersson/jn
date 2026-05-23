@@ -21,7 +21,6 @@ function useHashRoute() {
 function App() {
   const hash = useHashRoute();
 
-  const isHome = hash === "" || hash === "#/" || hash === "#";
   const isResume = hash === "#/resume";
   const isAbout = hash === "#/about";
 
@@ -40,7 +39,7 @@ function App() {
 
       <Navbar activeHref={hash} />
 
-      <main className="min-h-screen px-4 relative z-10 pt-16">
+      <main className="min-h-screen px-4 relative z-10 pt-16 pb-20 md:pb-0">
         {page}
         <Footer />
       </main>
