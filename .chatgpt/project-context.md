@@ -106,8 +106,7 @@ When #50 is delivered:
 - `features` must **not** import from `widgets`
 - `pages` must **not** access feature stores directly or reimplement feature semantics
 - `shared` UI must **not** depend on `entities` or `features` — consumes view models only
-- `entities/timeline` imports `YearMonth` from `@entities/resume` — the only intentional
-  cross-entity dependency. All others are forbidden.
+- Cross-entity imports are forbidden. All entities are independent.
 
 ***
 
@@ -149,8 +148,10 @@ These rules are enforced by ESLint (`eslint-plugin-boundaries`) and will fail CI
 
 See `CONTEXT.md` for the canonical domain language glossary. The TypeScript type
 definitions live in:
-- `src/entities/resume/types.ts` — `WorkExperience`, `ResumeProfile`, `Resume`, `YearMonth`, `SkillChipVariant`
-- `src/entities/timeline/types.ts` — `TimelineEvent`, `TimelineEventKind`, `TimelineTag`
+- `src/entities/resume/types.ts` — `WorkExperience`, `ResumeProfile`, `Resume`, `YearMonth`, `SkillChipVariant`, `ExperienceKind`
+
+Timeline view models (`TimelineViewModel`, `TimelineTag`) live in
+`src/widgets/timeline/lib` — they are presentation types, not domain types.
 
 ***
 
@@ -171,6 +172,9 @@ convert domain entities into UI-ready view models. These helpers:
 - Contain no React or rendering logic
 - Are the **only** place domain → presentation mapping occurs
 - Keep shared UI components free from domain entity dependencies
+
+Widgets may also define presentation-mapping helpers in `widgets/*/lib` for
+widget-local view models that are not shared across the app.
 
 Shared UI components must consume view models only, never domain entities directly.
 
