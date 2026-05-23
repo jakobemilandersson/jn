@@ -135,7 +135,8 @@ function TimelineNode({
         <span className="flex items-center gap-2">
           <span
             className={[
-              'block w-3 h-3 rounded-full ring-4 transition-transform duration-150 group-hover:scale-125 shrink-0',
+              'block w-3 h-3 rounded-full ring-4 transition-transform duration-150 shrink-0',
+              isActive ? 'scale-125' : 'group-hover:scale-125',
               styles.dot,
             ].join(' ')}
             aria-hidden="true"
