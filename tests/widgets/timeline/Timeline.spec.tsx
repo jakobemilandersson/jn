@@ -42,6 +42,19 @@ describe('Timeline', () => {
     expect(screen.queryByText(first.detail)).not.toBeInTheDocument();
   });
 
+  it('dot does not have active scale class after deselecting without activating another entry', () => {
+    render(<Timeline />);
+    const first = TIMELINE[0];
+    const btn = screen.getByRole('button', { name: new RegExp(first.title) });
+    fireEvent.click(btn);
+    expect(btn).toHaveAttribute('aria-expanded', 'true');
+    const dot = btn.querySelector('[aria-hidden="true"]');
+    expect(dot?.classList.contains('scale-125')).toBe(true);
+    fireEvent.click(btn);
+    expect(btn).toHaveAttribute('aria-expanded', 'false');
+    expect(dot?.classList.contains('scale-125')).toBe(false);
+  });
+
   it('pressing Escape closes the open popover', () => {
     render(<Timeline />);
     const first = TIMELINE[0];
