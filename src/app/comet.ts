@@ -1,3 +1,5 @@
+import type { SpaceSettings } from './spaceSettingsStore'
+
 export type CometStatus = "flying" | "waiting";
 
 export type CometColor = {
@@ -29,16 +31,6 @@ const MIN_WAIT = 4000; // ms
 const MAX_WAIT = 12000; // ms
 const MIN_TRAVEL = 400; // px
 
-// --- Presets ---
-
-const SPEED_PRESETS = [350, 600, 950] as const; // px/s: slow, normal, fast
-
-const SIZE_PRESETS = [
-  { tailMin: 80,  tailMax: 100, headRadius: 1.2 }, // small
-  { tailMin: 120, tailMax: 180, headRadius: 1.8 }, // normal
-  { tailMin: 220, tailMax: 280, headRadius: 2.6 }, // large
-] as const;
-
 const COLOR_PRESETS: CometColor[] = [
   // Ice blue (default)
   {
@@ -65,6 +57,11 @@ const COLOR_PRESETS: CometColor[] = [
 
 function pickRandom<T>(arr: readonly T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function randomBetween(min: number, max: number): number {
+  if (min === max) return min;
+  return min + Math.random() * (max - min);
 }
 
 type Edge = "top" | "right" | "bottom" | "left";
@@ -100,10 +97,16 @@ export function travelDistance(
   return Math.min(...positiveTs);
 }
 
-export function spawnComet(width: number, height: number): Comet {
+export function spawnComet(width: number, height: number, settings: SpaceSettings): Comet {
   const edge = pickRandom(EDGES);
-  const speedPreset = pickRandom(SPEED_PRESETS);
-  const sizePreset  = pickRandom(SIZE_PRESETS);
+  const speed = randomBetween(settings.cometSpeedMin, settings.cometSpeedMax);
+  const tailLength = randomBetween(settings.cometSizeMin, settings.cometSizeMax);
+  // Head radius scales proportionally within a 1.2–2.6 range based on tail size
+  const sizeRange = settings.cometSizeMax - settings.cometSizeMin;
+  const sizeFraction = sizeRange > 0
+    ? (tailLength - settings.cometSizeMin) / sizeRange
+    : 0.5;
+  const headRadius = 1.2 + sizeFraction * (2.6 - 1.2);
   const colorPreset = pickRandom(COLOR_PRESETS);
 
   const angleSpread = Math.PI / 4;
@@ -142,25 +145,21 @@ export function spawnComet(width: number, height: number): Comet {
   const maxIterations = 16;
 
   for (let i = 0; i < maxIterations; i++) {
-    const vx = Math.cos(angle) * speedPreset;
-    const vy = Math.sin(angle) * speedPreset;
+    const vx = Math.cos(angle) * speed;
+    const vy = Math.sin(angle) * speed;
     if (travelDistance(x, y, vx, vy, width, height) >= MIN_TRAVEL) break;
     jitter *= 0.5;
     angle   = baseAngle + jitter;
   }
 
-  const tailLength =
-    sizePreset.tailMin +
-    Math.random() * (sizePreset.tailMax - sizePreset.tailMin);
-
   return {
     x,
     y,
-    vx: Math.cos(angle) * speedPreset,
-    vy: Math.sin(angle) * speedPreset,
-    speed: speedPreset,
+    vx: Math.cos(angle) * speed,
+    vy: Math.sin(angle) * speed,
+    speed,
     tailLength,
-    headRadius: sizePreset.headRadius,
+    headRadius,
     color: colorPreset,
     status: "flying",
     waitRemaining: 0,
@@ -171,11 +170,12 @@ export function tickComet(
   comet: Comet,
   deltaMs: number,
   width: number,
-  height: number
+  height: number,
+  settings: SpaceSettings
 ): Comet {
   if (comet.status === "waiting") {
     const next = comet.waitRemaining - deltaMs;
-    if (next <= 0) return spawnComet(width, height);
+    if (next <= 0) return spawnComet(width, height, settings);
     return { ...comet, waitRemaining: next };
   }
 
