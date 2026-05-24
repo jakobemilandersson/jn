@@ -37,7 +37,7 @@ type SpaceSettingsState = SpaceSettings & {
   reset: () => void
 }
 
-export const useSpaceSettingsStore = create<SpaceSettingsState>((set, get) => ({
+export const useSpaceSettingsStore = create<SpaceSettingsState>((set) => ({
   ...SPACE_SETTINGS_DEFAULTS,
   setCometSpeedMin: (v) => set((s) => ({ cometSpeedMin: Math.min(v, s.cometSpeedMax) })),
   setCometSpeedMax: (v) => set((s) => ({ cometSpeedMax: Math.max(v, s.cometSpeedMin) })),
