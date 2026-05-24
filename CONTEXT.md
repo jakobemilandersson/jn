@@ -16,22 +16,21 @@ relevant parts of a resume for a given role or audience.
 |---|---|
 | `Resume` | The top-level domain object: `{ profile: ResumeProfile, experiences: WorkExperience[] }`. The canonical instance is exported as `RESUME` from `src/entities/resume/data.ts`. |
 | `ResumeProfile` | Identity and contact information for the person behind the resume: `name`, `title`, `bio`, and `contact` (`email`, `linkedin`, `github`). Not filterable. Used by the About page and the hero section on HomePage. |
-| `WorkExperience` | A single job or engagement: role, company, stack type, skills, date range, optional description |
+| `WorkExperience` | A single career entry (job, education, or project): role, company, `kind`, stack type, skills, date range, optional description. The `kind` field drives timeline dot colour and label. |
+| `ExperienceKind` | One of `'work' \| 'education' \| 'project'` — classifies a `WorkExperience` entry. Defined in `src/entities/resume/types.ts`. |
 | `Skill` | A named technology or capability, tagged with a `stackType` |
 | `StackType` | One of `frontend`, `backend`, `fullstack` — classifies an experience or skill |
 | `SkillChipVariant` | The shared display contract for `SkillChip`: `'frontend' \| 'backend' \| 'fullstack' \| 'neutral'`. Defined in `src/shared/ui` and exported via `src/shared/ui/index.ts`. Used by both the resume filter and timeline tags. |
-| `YearMonth` | A `"YYYY-MM"` branded string (e.g. `"2024-03"`). Used for `start` and `end` on `WorkExperience` and `TimelineEvent`. Open-ended (ongoing) roles omit `end`. |
+| `YearMonth` | A `"YYYY-MM"` branded string (e.g. `"2024-03"`). Used for `start` and `end` on `WorkExperience`. Open-ended (ongoing) roles omit `end`. |
 | Filter | A set of active `stackTypes`, `skills`, a `strictSkillsMatch` flag, `dateFrom`, and `dateTo` |
 | Strict match | When true, a `WorkExperience` must contain **all** selected skills to appear in results |
 | Date interval filter | An optional `dateFrom`/`dateTo` range (both `YearMonth \| null`). Overlap logic: a role is included if its tenure overlaps the filter range. Open-ended roles use a `"9999-12"` sentinel for the upper bound. |
-| `WorkExperienceDescription` | An optional object with `title: string` and `fulltext: string` attached to a `WorkExperience` |
+| `WorkExperienceDescription` | An optional object with `title: string`, `summary: string`, and `fulltext: string` attached to a `WorkExperience`. `summary` is used by the timeline widget; `fulltext` is rendered in the `BottomSheet`. |
 | `BottomSheet` | The shared UI component at `src/shared/ui/BottomSheet.tsx`. A slide-up overlay used to show full `WorkExperienceDescription.fulltext` and skill chips. Accepts `isOpen`, `onClose`, `title`, and `children`. Domain-agnostic. Only one sheet can be open at a time — active sheet state is owned by `ResumePage`. |
 | Active filter chip | A dismissible chip in the filter bar representing one active filter value. Grouped by category (Stack type / Skills) with `aria-labelledby` on each group. |
 | `OptionGroup` | View model type defined in `src/shared/ui/SearchableMultiSelect.tsx` and exported via `src/shared/ui/index.ts`. Used to group skill filter options by `stackType`. |
-| `TimelineEvent` | A single entry in the career/education timeline: `{ id, title, subtitle?, period: { start: YearMonth, end?: YearMonth }, detail: string, kind: TimelineEventKind, tags?: TimelineTag[], url?: string }`. |
-| `TimelineEventKind` | One of `'work' \| 'education' \| 'project'` — drives the dot colour and label in the timeline widget. |
-| `TimelineTag` | `{ label: string; stackType: SkillChipVariant }` — a tag on a `TimelineEvent`. Uses `SkillChipVariant` as its display contract so no runtime mapping is needed. |
-| `TIMELINE` | The canonical static array of `TimelineEvent` entries, exported from `src/entities/timeline/data.ts`. Contains both work and education entries. |
+| `TimelineViewModel` | Widget-local presentation type produced by `toTimelineViewModels` in `src/widgets/timeline/lib`. Consumed only by `Timeline.tsx`. Not a domain type — not exported from `@entities/resume`. Shape: `{ id, kind: ExperienceKind, title, subtitle?, start, end?, detail, url?, tags?: TimelineTag[] }`. |
+| `TimelineTag` | `{ label: string; stackType: SkillChipVariant }` — a tag on a `TimelineViewModel`, derived from `WorkExperience.skills`. Defined in `src/widgets/timeline/lib/timelineAdapter.ts`. |
 | `Navbar` | The app-level navigation component at `src/widgets/navbar/Navbar.tsx`. Accepts `activeHref: string` and derives active state from it. Renders a scroll-aware sticky header on desktop and a fixed bottom tab bar on mobile. Domain-agnostic. |
 
 ## Pages
@@ -55,14 +54,14 @@ relevant parts of a resume for a given role or audience.
 This is a single-page, read-only presentation of resume and portfolio data. There
 is no backend, no authentication, and no mutable state beyond UI filter selections.
 The canonical data source is the static `RESUME` object in
-`src/entities/resume/data.ts` and the `TIMELINE` array in
-`src/entities/timeline/data.ts`, both populated with real content.
+`src/entities/resume/data.ts`, populated with real content. `RESUME.experiences`
+is the single source of truth for all career, education, and project entries.
 
 ## Key invariants
 
 - `skillIndex.ts` invariant: see `.chatgpt/project-context.md`.
 - Filter state and Zustand store shape: see `.chatgpt/project-context.md`.
-- Domain → UI mapping happens only in `features/*/lib` presentation helpers.
+- Domain → UI mapping happens only in `features/*/lib` presentation helpers or widget-local `widgets/*/lib` adapters.
 - `shared/` UI components consume view models, never domain entities directly.
 - `WorkExperience.end` is optional — omitting it signals an ongoing role.
 - `applyFilters` date-interval logic uses `"9999-12"` as a sentinel for open-ended roles; this must not be changed without updating tests.
@@ -70,7 +69,7 @@ The canonical data source is the static `RESUME` object in
 - `getGroupedSkillOptions` is the only place skill-to-group mapping occurs; no other layer may reimplement this grouping.
 - `RESUME` is the single canonical source for all personal and professional data. `RESUME.profile` is the only source for identity and contact information — no other file may duplicate these values.
 - `Navbar` must not import from `entities` or `features` — it is domain-agnostic. Active state is always derived from the `activeHref` prop, never from `window.location` directly.
-- `entities/timeline` imports `YearMonth` from `@entities/resume` — this is the only intentional cross-entity dependency in the project.
+- `toTimelineViewModels` is the only place `WorkExperience` → `TimelineViewModel` mapping occurs; it lives in `src/widgets/timeline/lib`.
 
 ## UI presentation rules
 
