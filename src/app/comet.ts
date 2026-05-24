@@ -1,7 +1,5 @@
 import type { SpaceSettings } from './spaceSettingsStore'
 
-export type CometStatus = "flying" | "waiting";
-
 export type CometColor = {
   /** Tail fade-in rgba string (fully transparent end) */
   tailFade: string;
@@ -23,12 +21,8 @@ export type Comet = {
   tailLength: number;
   headRadius: number;
   color: CometColor;
-  status: CometStatus;
-  waitRemaining: number;
 };
 
-const MIN_WAIT = 4000; // ms
-const MAX_WAIT = 12000; // ms
 const MIN_TRAVEL = 400; // px
 
 const COLOR_PRESETS: CometColor[] = [
@@ -97,6 +91,14 @@ export function travelDistance(
   return Math.min(...positiveTs);
 }
 
+/**
+ * Samples a new spawn interval (in ms) uniformly from [cometSpawnMin, cometSpawnMax].
+ * Pure function.
+ */
+export function sampleSpawnInterval(settings: SpaceSettings): number {
+  return randomBetween(settings.cometSpawnMin, settings.cometSpawnMax) * 1000;
+}
+
 export function spawnComet(width: number, height: number, settings: SpaceSettings): Comet {
   const edge = pickRandom(EDGES);
   const speed = randomBetween(settings.cometSpeedMin, settings.cometSpeedMax);
@@ -161,24 +163,21 @@ export function spawnComet(width: number, height: number, settings: SpaceSetting
     tailLength,
     headRadius,
     color: colorPreset,
-    status: "flying",
-    waitRemaining: 0,
   };
 }
 
+/**
+ * Advances a comet by deltaMs milliseconds.
+ * Returns the updated Comet, or null if the comet has exited the canvas.
+ * The caller (SpaceBackground) is responsible for removing null comets and
+ * managing the spawn countdown separately.
+ */
 export function tickComet(
   comet: Comet,
   deltaMs: number,
   width: number,
   height: number,
-  settings: SpaceSettings
-): Comet {
-  if (comet.status === "waiting") {
-    const next = comet.waitRemaining - deltaMs;
-    if (next <= 0) return spawnComet(width, height, settings);
-    return { ...comet, waitRemaining: next };
-  }
-
+): Comet | null {
   const deltaS = deltaMs / 1000;
   const nx = comet.x + comet.vx * deltaS;
   const ny = comet.y + comet.vy * deltaS;
@@ -190,15 +189,7 @@ export function tickComet(
     ny < -margin ||
     ny > height + margin;
 
-  if (exited) {
-    return {
-      ...comet,
-      x: nx,
-      y: ny,
-      status: "waiting",
-      waitRemaining: MIN_WAIT + Math.random() * (MAX_WAIT - MIN_WAIT),
-    };
-  }
+  if (exited) return null;
 
   return { ...comet, x: nx, y: ny };
 }
@@ -207,8 +198,6 @@ export function drawComet(
   ctx: CanvasRenderingContext2D,
   comet: Comet
 ): void {
-  if (comet.status === "waiting") return;
-
   const { x, y, vx, vy, tailLength, headRadius, color } = comet;
 
   const speed = Math.sqrt(vx * vx + vy * vy);
