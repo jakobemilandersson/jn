@@ -1,4 +1,4 @@
-import { useSpaceSettingsStore, SPACE_SETTINGS_DEFAULTS } from './spaceSettingsStore'
+import { useSpaceSettingsStore } from './spaceSettingsStore'
 
 type SliderRowProps = {
   label: string

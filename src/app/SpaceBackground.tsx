@@ -19,14 +19,12 @@ const STAR_COLORS = ["#e8eef7", "#cfd8e6"];
 
 export function SpaceBackground() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const settings = useSpaceSettingsStore();
 
-  // Keep a live ref so the animation loop always reads the latest settings
-  // without needing to restart the effect (which would reset the comet array).
+  // Subscribe to the full store so this component re-renders on any settings
+  // change, which keeps settingsRef current for all fields including comet ones.
+  const settings = useSpaceSettingsStore();
   const settingsRef = useRef<SpaceSettings>(settings);
-  useEffect(() => {
-    settingsRef.current = settings;
-  });
+  settingsRef.current = settings;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -71,12 +69,8 @@ export function SpaceBackground() {
 
     const drawBackground = () => {
       const gradient = ctx.createRadialGradient(
-        width / 2,
-        height / 2,
-        0,
-        width / 2,
-        height / 2,
-        Math.max(width, height)
+        width / 2, height / 2, 0,
+        width / 2, height / 2, Math.max(width, height)
       );
       gradient.addColorStop(0, "#0b1220");
       gradient.addColorStop(1, "#05080f");
@@ -89,8 +83,6 @@ export function SpaceBackground() {
       ? Infinity
       : sampleSpawnInterval(settingsRef.current);
 
-    // Track star-seeding deps so we can reseed inside the loop when they change
-    // without restarting the effect.
     let prevStarCount = settingsRef.current.starCount;
     let prevStarSizeMin = settingsRef.current.starSizeMin;
     let prevStarSizeMax = settingsRef.current.starSizeMax;
@@ -103,7 +95,6 @@ export function SpaceBackground() {
       const delta = prevTime !== null ? time - prevTime : 0;
       prevTime = time;
 
-      // Reseed stars if star-related settings changed
       if (
         s.starCount !== prevStarCount ||
         s.starSizeMin !== prevStarSizeMin ||
@@ -117,7 +108,6 @@ export function SpaceBackground() {
 
       ctx.fillStyle = BASE_COLOR;
       ctx.fillRect(0, 0, width, height);
-
       drawBackground();
 
       for (const star of stars) {
@@ -168,10 +158,7 @@ export function SpaceBackground() {
 
     rafId = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(rafId);
-  // Effect only restarts on canvas resize (no deps) — star/comet settings are
-  // handled reactively via settingsRef inside the loop.
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, []); // empty deps intentional: effect mounts once; settings read via settingsRef
 
   return (
     <canvas
