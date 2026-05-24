@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { type Comet, spawnComet, tickComet, drawComet } from "./comet";
+import { type Comet, spawnComet, tickComet, drawComet, sampleSpawnInterval } from "./comet";
 import { useSpaceSettingsStore } from "./spaceSettingsStore";
 
 type Star = {
@@ -16,7 +16,6 @@ type Star = {
 
 const BASE_COLOR = "#070b14";
 const STAR_COLORS = ["#e8eef7", "#cfd8e6"];
-const DENSITY = 0.00012;
 
 export function SpaceBackground() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -44,9 +43,7 @@ export function SpaceBackground() {
 
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    const starCount = Math.floor(width * height * DENSITY);
-
-    const stars: Star[] = Array.from({ length: starCount }, () => {
+    const stars: Star[] = Array.from({ length: settings.starCount }, () => {
       const r =
         settings.starSizeMin +
         Math.random() * (settings.starSizeMax - settings.starSizeMin);
@@ -81,7 +78,13 @@ export function SpaceBackground() {
       ctx.fillRect(0, 0, width, height);
     };
 
-    let comet: Comet | null = reducedMotion ? null : spawnComet(width, height, settings);
+    // Parallel comet scheduler: spawn countdown starts when a comet is created,
+    // not when it exits the screen. Multiple comets may be alive simultaneously.
+    let comets: Comet[] = [];
+    // Start the first countdown at a random interval so the first comet doesn't
+    // always appear at t=0.
+    let spawnCountdown = reducedMotion ? Infinity : sampleSpawnInterval(settings);
+
     let prevTime: number | null = null;
     let rafId = 0;
 
@@ -122,9 +125,25 @@ export function SpaceBackground() {
 
       ctx.globalAlpha = 1;
 
-      if (comet !== null) {
-        comet = tickComet(comet, delta, width, height, settings);
-        drawComet(ctx, comet);
+      if (!reducedMotion) {
+        // Tick countdown and spawn when it fires
+        spawnCountdown -= delta;
+        if (spawnCountdown <= 0) {
+          comets.push(spawnComet(width, height, settings));
+          spawnCountdown = sampleSpawnInterval(settings);
+        }
+
+        // Tick all live comets, discard ones that exited
+        const next: Comet[] = [];
+        for (const c of comets) {
+          const ticked = tickComet(c, delta, width, height);
+          if (ticked !== null) next.push(ticked);
+        }
+        comets = next;
+
+        for (const c of comets) {
+          drawComet(ctx, c);
+        }
       }
 
       rafId = requestAnimationFrame(animate);
@@ -135,11 +154,14 @@ export function SpaceBackground() {
     return () => {
       cancelAnimationFrame(rafId);
     };
-  // Re-run when settings change so star sizes are regenerated
+  // Re-run when star-related settings change so count/sizes are regenerated.
+  // Comet settings (speed, size, spawn interval) are read live from `settings`
+  // inside the animation loop and take effect on the next spawn naturally.
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     settings.starSizeMin,
     settings.starSizeMax,
+    settings.starCount,
   ]);
 
   return (
