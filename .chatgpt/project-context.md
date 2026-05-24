@@ -53,17 +53,34 @@ must not reimplement them.
 ### Decorative App Shell Elements
 
 Purely decorative visual elements are mounted at the application root and live in
-`src/app/`. They must not depend on entities, features, or widgets, must not
+`src/app/`. They must not depend on entities or features, must not
 affect layout flow or business logic, and must be non-interactive and
 accessibility-neutral.
 
 Currently implemented:
 - **`SpaceBackground.tsx`** — canvas-based animated star field rendered behind all
   page content. Mounts the `requestAnimationFrame` loop and wires the comet.
-- **`comet.ts`** — pure comet logic: `Comet` type, `spawnComet`, `tickComet`,
-  `drawComet`. Only one comet is ever visible at a time. After exiting the screen
-  a new comet spawns after a 4–12 second random delay. Spawns from any of the
-  four screen edges. Suppressed when `prefers-reduced-motion` is active.
+  Reads `useSpaceSettingsStore` for star radius bounds and passes `SpaceSettings`
+  to `spawnComet`/`tickComet`. Re-seeds stars when star size bounds change.
+- **`comet.ts`** — pure comet logic: `Comet` type, `spawnComet(w, h, settings)`,
+  `tickComet(comet, delta, w, h, settings)`, `drawComet`. `spawnComet` samples
+  speed and tail length uniformly from the configured ranges in `SpaceSettings`.
+  Only one comet is ever visible at a time. After exiting the screen a new comet
+  spawns after a 4–12 second random delay. Spawns from any of the four screen
+  edges. Suppressed when `prefers-reduced-motion` is active.
+- **`spaceSettingsStore.ts`** — Zustand store owning the six configurable space
+  background values. See *Zustand Space Settings Store Shape* below.
+- **`SpaceSettingsPanel.tsx`** — slide-in drawer UI for editing space settings.
+  Opened via the hamburger button in `Navbar`. This file lives in `src/app/` and
+  is imported by `src/widgets/navbar/Navbar.tsx` via the `@app` alias.
+
+### widgets → app import exception
+
+`Navbar` (`src/widgets/navbar/`) imports `SpaceSettingsPanel` from `@app/SpaceSettingsPanel`.
+This is an intentional, bounded exception: `app` is the shell layer above `widgets`,
+and `SpaceSettingsPanel` is the trigger surface co-located with its trigger button.
+No other widget may import from `@app`. This exception must not be extended without
+an ADR.
 
 ***
 
@@ -100,13 +117,14 @@ When #50 is delivered:
 | `widgets` | UI composition, presentation interpretation, interaction wiring |
 | `shared` | Domain-agnostic UI primitives and layout components |
 | `pages` | Composition only — no logic |
-| `app` | App shell, routing, global styles, decorative root elements |
+| `app` | App shell, routing, global styles, decorative root elements, app-level settings stores |
 
 **Critical constraints:**
 - `features` must **not** import from `widgets`
 - `pages` must **not** access feature stores directly or reimplement feature semantics
 - `shared` UI must **not** depend on `entities` or `features` — consumes view models only
 - Cross-entity imports are forbidden. All entities are independent.
+- `widgets` must **not** import from `app` except for the bounded `Navbar → SpaceSettingsPanel` exception (see above)
 
 ***
 
@@ -236,6 +254,36 @@ the entities layer.
   clear(): void;
 }
 ```
+
+***
+
+## Zustand Space Settings Store Shape
+
+```ts
+// src/app/spaceSettingsStore.ts
+{
+  // State
+  cometSpeedMin: number;   // px/s — default 350
+  cometSpeedMax: number;   // px/s — default 950
+  cometSizeMin:  number;   // tail length px — default 80
+  cometSizeMax:  number;   // tail length px — default 280
+  starSizeMin:   number;   // radius px — default 0.6
+  starSizeMax:   number;   // radius px — default 2.1
+  // Actions
+  setCometSpeedMin(v: number): void;
+  setCometSpeedMax(v: number): void;
+  setCometSizeMin(v: number): void;
+  setCometSizeMax(v: number): void;
+  setStarSizeMin(v: number): void;
+  setStarSizeMax(v: number): void;
+  reset(): void;
+}
+```
+
+Defaults are exported as `SPACE_SETTINGS_DEFAULTS` and used to seed the store
+and reset it. `spawnComet` accepts a `SpaceSettings` snapshot; values take
+effect on the next comet respawn. Star sizes take effect on the next canvas
+reinit (triggered by the `useEffect` dependency on `starSizeMin`/`starSizeMax`).
 
 ***
 
