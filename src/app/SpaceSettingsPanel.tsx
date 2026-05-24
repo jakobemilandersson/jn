@@ -125,7 +125,7 @@ export function SpaceSettingsPanel({ open, onClose }: SpaceSettingsPanelProps) {
               id={sliderId('comet-speed', 'min')}
               label="Min speed"
               value={store.cometSpeedMin}
-              min={50} max={store.cometSpeedMax} step={10}
+              min={50} max={store.cometSpeedMax - 10} step={10}
               onChange={store.setCometSpeedMin}
               unit=" px/s"
             />
@@ -144,7 +144,7 @@ export function SpaceSettingsPanel({ open, onClose }: SpaceSettingsPanelProps) {
               id={sliderId('comet-size', 'min')}
               label="Min tail"
               value={store.cometSizeMin}
-              min={20} max={store.cometSizeMax} step={5}
+              min={20} max={store.cometSizeMax - 5} step={5}
               onChange={store.setCometSizeMin}
               unit=" px"
             />
@@ -163,7 +163,7 @@ export function SpaceSettingsPanel({ open, onClose }: SpaceSettingsPanelProps) {
               id={sliderId('comet-spawn', 'min')}
               label="Min interval"
               value={store.cometSpawnMin}
-              min={0.5} max={store.cometSpawnMax} step={0.5}
+              min={0.5} max={store.cometSpawnMax - 0.5} step={0.5}
               onChange={store.setCometSpawnMin}
               unit="s"
               decimals={1}
@@ -184,7 +184,7 @@ export function SpaceSettingsPanel({ open, onClose }: SpaceSettingsPanelProps) {
               id={sliderId('star-size', 'min')}
               label="Min radius"
               value={store.starSizeMin}
-              min={0.2} max={store.starSizeMax} step={0.1}
+              min={0.2} max={store.starSizeMax - 0.1} step={0.1}
               onChange={store.setStarSizeMin}
               unit=" px"
             />
