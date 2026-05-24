@@ -3,7 +3,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { Navbar } from ".";
 
 beforeEach(() => {
-  window.scrollTo = vi.fn();
+  window.scrollTo = vi.fn() as unknown as typeof window.scrollTo;
 });
 
 describe("Navbar", () => {
@@ -103,7 +103,6 @@ describe("Navbar", () => {
     const openBtn = screen.getAllByRole("button", { name: "Open background settings" })[0];
     fireEvent.click(openBtn);
     fireEvent.click(screen.getByRole("button", { name: "Close settings" }));
-    // Panel remains mounted but translated off-screen (translate-x-full)
     const dialog = screen.getByRole("dialog", { name: "Space settings" });
     expect(dialog.className).toContain("translate-x-full");
   });
