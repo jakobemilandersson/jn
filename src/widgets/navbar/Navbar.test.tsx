@@ -95,7 +95,6 @@ describe("Navbar", () => {
     render(<Navbar activeHref="#/" />);
     const buttons = screen.getAllByRole("button", { name: "Open background settings" });
     fireEvent.click(buttons[0]);
-    // Panel is open — accessible in the a11y tree
     expect(screen.getByRole("dialog", { name: "Space settings" })).toBeDefined();
   });
 
@@ -104,9 +103,14 @@ describe("Navbar", () => {
     const openBtn = screen.getAllByRole("button", { name: "Open background settings" })[0];
     fireEvent.click(openBtn);
     fireEvent.click(screen.getByRole("button", { name: "Close settings" }));
-    // Panel is now aria-hidden — use { hidden: true } to reach it in the tree
-    const dialog = screen.getByRole("dialog", { name: "Space settings", hidden: true });
-    expect(dialog.getAttribute("aria-hidden")).toBe("true");
-    expect(dialog.className).toContain("translate-x-full");
+    // aria-hidden="true" removes the element from the accessible name computation,
+    // so { name } matching fails. Query by role + hidden only, then assert attributes.
+    const dialogs = screen.getAllByRole("dialog", { hidden: true });
+    const dialog = dialogs.find(
+      (el) => el.getAttribute("aria-label") === "Space settings"
+    );
+    expect(dialog).toBeDefined();
+    expect(dialog!.getAttribute("aria-hidden")).toBe("true");
+    expect(dialog!.className).toContain("translate-x-full");
   });
 });
