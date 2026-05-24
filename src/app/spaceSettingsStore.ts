@@ -37,16 +37,16 @@ type SpaceSettingsState = SpaceSettings & {
   reset: () => void
 }
 
-export const useSpaceSettingsStore = create<SpaceSettingsState>((set) => ({
+export const useSpaceSettingsStore = create<SpaceSettingsState>((set, get) => ({
   ...SPACE_SETTINGS_DEFAULTS,
-  setCometSpeedMin: (cometSpeedMin) => set({ cometSpeedMin }),
-  setCometSpeedMax: (cometSpeedMax) => set({ cometSpeedMax }),
-  setCometSizeMin: (cometSizeMin) => set({ cometSizeMin }),
-  setCometSizeMax: (cometSizeMax) => set({ cometSizeMax }),
-  setCometSpawnMin: (cometSpawnMin) => set({ cometSpawnMin }),
-  setCometSpawnMax: (cometSpawnMax) => set({ cometSpawnMax }),
-  setStarSizeMin: (starSizeMin) => set({ starSizeMin }),
-  setStarSizeMax: (starSizeMax) => set({ starSizeMax }),
+  setCometSpeedMin: (v) => set((s) => ({ cometSpeedMin: Math.min(v, s.cometSpeedMax) })),
+  setCometSpeedMax: (v) => set((s) => ({ cometSpeedMax: Math.max(v, s.cometSpeedMin) })),
+  setCometSizeMin: (v) => set((s) => ({ cometSizeMin: Math.min(v, s.cometSizeMax) })),
+  setCometSizeMax: (v) => set((s) => ({ cometSizeMax: Math.max(v, s.cometSizeMin) })),
+  setCometSpawnMin: (v) => set((s) => ({ cometSpawnMin: Math.min(v, s.cometSpawnMax) })),
+  setCometSpawnMax: (v) => set((s) => ({ cometSpawnMax: Math.max(v, s.cometSpawnMin) })),
+  setStarSizeMin: (v) => set((s) => ({ starSizeMin: Math.min(v, s.starSizeMax) })),
+  setStarSizeMax: (v) => set((s) => ({ starSizeMax: Math.max(v, s.starSizeMin) })),
   setStarCount: (starCount) => set({ starCount }),
   reset: () => set({ ...SPACE_SETTINGS_DEFAULTS }),
 }))

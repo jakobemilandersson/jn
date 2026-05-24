@@ -108,4 +108,79 @@ describe('useSpaceSettingsStore', () => {
     expect(state.starSizeMax).toBe(SPACE_SETTINGS_DEFAULTS.starSizeMax)
     expect(state.starCount).toBe(SPACE_SETTINGS_DEFAULTS.starCount)
   })
+
+  // --- Clamping invariant: min <= max must always hold ---
+
+  describe('setCometSpeedMin clamping', () => {
+    it('clamps to current max when value exceeds it', () => {
+      useSpaceSettingsStore.getState().setCometSpeedMin(9999)
+      const state = useSpaceSettingsStore.getState()
+      expect(state.cometSpeedMin).toBe(SPACE_SETTINGS_DEFAULTS.cometSpeedMax)
+      expect(state.cometSpeedMin).toBeLessThanOrEqual(state.cometSpeedMax)
+    })
+
+    it('clamps to current max when value equals it', () => {
+      useSpaceSettingsStore.getState().setCometSpeedMin(SPACE_SETTINGS_DEFAULTS.cometSpeedMax)
+      const state = useSpaceSettingsStore.getState()
+      expect(state.cometSpeedMin).toBe(SPACE_SETTINGS_DEFAULTS.cometSpeedMax)
+      expect(state.cometSpeedMin).toBeLessThanOrEqual(state.cometSpeedMax)
+    })
+  })
+
+  describe('setCometSpeedMax clamping', () => {
+    it('clamps to current min when value falls below it', () => {
+      useSpaceSettingsStore.getState().setCometSpeedMax(1)
+      const state = useSpaceSettingsStore.getState()
+      expect(state.cometSpeedMax).toBe(SPACE_SETTINGS_DEFAULTS.cometSpeedMin)
+      expect(state.cometSpeedMax).toBeGreaterThanOrEqual(state.cometSpeedMin)
+    })
+  })
+
+  describe('setCometSizeMin clamping', () => {
+    it('clamps to current max when value exceeds it', () => {
+      useSpaceSettingsStore.getState().setCometSizeMin(9999)
+      const state = useSpaceSettingsStore.getState()
+      expect(state.cometSizeMin).toBeLessThanOrEqual(state.cometSizeMax)
+    })
+  })
+
+  describe('setCometSizeMax clamping', () => {
+    it('clamps to current min when value falls below it', () => {
+      useSpaceSettingsStore.getState().setCometSizeMax(1)
+      const state = useSpaceSettingsStore.getState()
+      expect(state.cometSizeMax).toBeGreaterThanOrEqual(state.cometSizeMin)
+    })
+  })
+
+  describe('setCometSpawnMin clamping', () => {
+    it('clamps to current max when value exceeds it', () => {
+      useSpaceSettingsStore.getState().setCometSpawnMin(9999)
+      const state = useSpaceSettingsStore.getState()
+      expect(state.cometSpawnMin).toBeLessThanOrEqual(state.cometSpawnMax)
+    })
+  })
+
+  describe('setCometSpawnMax clamping', () => {
+    it('clamps to current min when value falls below it', () => {
+      useSpaceSettingsStore.getState().setCometSpawnMax(0)
+      const state = useSpaceSettingsStore.getState()
+      expect(state.cometSpawnMax).toBeGreaterThanOrEqual(state.cometSpawnMin)
+    })
+  })
+
+  describe('setStarSizeMin clamping', () => {
+    it('clamps to current max when value exceeds it', () => {
+      useSpaceSettingsStore.getState().setStarSizeMin(9999)
+      const state = useSpaceSettingsStore.getState()
+      expect(state.starSizeMin).toBeLessThanOrEqual(state.starSizeMax)
+    })
+  })
+
+  describe('setStarSizeMax clamping', () => {
+    it('clamps to current min when value falls below it', () => {
+      useSpaceSettingsStore.getState().setStarSizeMax(0)
+      const state = useSpaceSettingsStore.getState()
+      expect(state.starSizeMax).toBeGreaterThanOrEqual(state.starSizeMin)
+    })
+  })
 })
