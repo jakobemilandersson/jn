@@ -158,8 +158,7 @@ export function SpaceBackground() {
 
     rafId = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(rafId);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, []); // empty deps intentional: effect mounts once; settings read via settingsRef
 
   return (
     <canvas
