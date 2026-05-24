@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { type Comet, spawnComet, tickComet, drawComet } from "./comet";
+import { useSpaceSettingsStore } from "./spaceSettingsStore";
 
 type Star = {
   x: number;
@@ -19,6 +20,7 @@ const DENSITY = 0.00012;
 
 export function SpaceBackground() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const settings = useSpaceSettingsStore();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -27,7 +29,6 @@ export function SpaceBackground() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Sampled once at mount — SpaceBackground remounts on resize via key prop
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
@@ -46,15 +47,9 @@ export function SpaceBackground() {
     const starCount = Math.floor(width * height * DENSITY);
 
     const stars: Star[] = Array.from({ length: starCount }, () => {
-      const sizeRoll = Math.random();
       const r =
-        sizeRoll < 0.45
-          ? 0.6
-          : sizeRoll < 0.8
-          ? 1.0
-          : sizeRoll < 0.95
-          ? 1.4
-          : 2.1;
+        settings.starSizeMin +
+        Math.random() * (settings.starSizeMax - settings.starSizeMin);
 
       return {
         x: Math.random() * width,
@@ -86,12 +81,11 @@ export function SpaceBackground() {
       ctx.fillRect(0, 0, width, height);
     };
 
-    let comet: Comet | null = reducedMotion ? null : spawnComet(width, height);
+    let comet: Comet | null = reducedMotion ? null : spawnComet(width, height, settings);
     let prevTime: number | null = null;
     let rafId = 0;
 
     const animate = (time: number) => {
-      // First frame: prevTime is null so delta is 0 — position advance is skipped
       const delta = prevTime !== null ? time - prevTime : 0;
       prevTime = time;
 
@@ -129,7 +123,7 @@ export function SpaceBackground() {
       ctx.globalAlpha = 1;
 
       if (comet !== null) {
-        comet = tickComet(comet, delta, width, height);
+        comet = tickComet(comet, delta, width, height, settings);
         drawComet(ctx, comet);
       }
 
@@ -141,7 +135,12 @@ export function SpaceBackground() {
     return () => {
       cancelAnimationFrame(rafId);
     };
-  }, []);
+  // Re-run when settings change so star sizes are regenerated
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    settings.starSizeMin,
+    settings.starSizeMax,
+  ]);
 
   return (
     <canvas
