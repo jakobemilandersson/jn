@@ -8,10 +8,16 @@ type SliderRowProps = {
   step: number
   onChange: (v: number) => void
   unit?: string
+  decimals?: number
 }
 
-function SliderRow({ label, value, min, max, step, onChange, unit = '' }: SliderRowProps) {
+function SliderRow({ label, value, min, max, step, onChange, unit = '', decimals }: SliderRowProps) {
   const id = label.toLowerCase().replace(/\s+/g, '-')
+  const display = decimals !== undefined
+    ? value.toFixed(decimals)
+    : Number.isInteger(step)
+      ? Math.round(value)
+      : value.toFixed(2)
   return (
     <div className="flex flex-col gap-1">
       <div className="flex justify-between items-baseline">
@@ -19,7 +25,7 @@ function SliderRow({ label, value, min, max, step, onChange, unit = '' }: Slider
           {label}
         </label>
         <span className="text-xs text-white/40 tabular-nums">
-          {Number.isInteger(step) ? Math.round(value) : value.toFixed(2)}{unit}
+          {display}{unit}
         </span>
       </div>
       <input
@@ -142,6 +148,25 @@ export function SpaceSettingsPanel({ open, onClose }: SpaceSettingsPanelProps) {
             />
           </Section>
 
+          <Section title="Comets — spawn interval">
+            <SliderRow
+              label="Min interval"
+              value={store.cometSpawnMin}
+              min={0.5} max={60} step={0.5}
+              onChange={store.setCometSpawnMin}
+              unit="s"
+              decimals={1}
+            />
+            <SliderRow
+              label="Max interval"
+              value={store.cometSpawnMax}
+              min={0.5} max={60} step={0.5}
+              onChange={store.setCometSpawnMax}
+              unit="s"
+              decimals={1}
+            />
+          </Section>
+
           <Section title="Stars — size">
             <SliderRow
               label="Min radius"
@@ -156,6 +181,15 @@ export function SpaceSettingsPanel({ open, onClose }: SpaceSettingsPanelProps) {
               min={0.2} max={5} step={0.1}
               onChange={store.setStarSizeMax}
               unit=" px"
+            />
+          </Section>
+
+          <Section title="Stars — count">
+            <SliderRow
+              label="Star count"
+              value={store.starCount}
+              min={20} max={600} step={10}
+              onChange={store.setStarCount}
             />
           </Section>
         </div>
