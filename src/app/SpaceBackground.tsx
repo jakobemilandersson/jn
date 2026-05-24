@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { type Comet, spawnComet, tickComet, drawComet, sampleSpawnInterval } from "./comet";
-import { useSpaceSettingsStore } from "./spaceSettingsStore";
+import { useSpaceSettingsStore, type SpaceSettings } from "./spaceSettingsStore";
 
 type Star = {
   x: number;
@@ -20,6 +20,13 @@ const STAR_COLORS = ["#e8eef7", "#cfd8e6"];
 export function SpaceBackground() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const settings = useSpaceSettingsStore();
+
+  // Keep a live ref so the animation loop always reads the latest settings
+  // without needing to restart the effect (which would reset the comet array).
+  const settingsRef = useRef<SpaceSettings>(settings);
+  useEffect(() => {
+    settingsRef.current = settings;
+  });
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -43,23 +50,24 @@ export function SpaceBackground() {
 
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    const stars: Star[] = Array.from({ length: settings.starCount }, () => {
-      const r =
-        settings.starSizeMin +
-        Math.random() * (settings.starSizeMax - settings.starSizeMin);
+    const buildStars = (): Star[] =>
+      Array.from({ length: settingsRef.current.starCount }, () => {
+        const s = settingsRef.current;
+        const r = s.starSizeMin + Math.random() * (s.starSizeMax - s.starSizeMin);
+        return {
+          x: Math.random() * width,
+          y: Math.random() * height,
+          r,
+          baseOpacity: 1.0,
+          cycle: 4000 + Math.random() * 6000,
+          off: 300 + Math.random() * 400,
+          fade: 250 + Math.random() * 250,
+          offset: Math.random() * 10000,
+          color: STAR_COLORS[Math.random() < 0.75 ? 0 : 1],
+        };
+      });
 
-      return {
-        x: Math.random() * width,
-        y: Math.random() * height,
-        r,
-        baseOpacity: 1.0,
-        cycle: 4000 + Math.random() * 6000,
-        off: 300 + Math.random() * 400,
-        fade: 250 + Math.random() * 250,
-        offset: Math.random() * 10000,
-        color: STAR_COLORS[Math.random() < 0.75 ? 0 : 1],
-      };
-    });
+    let stars: Star[] = buildStars();
 
     const drawBackground = () => {
       const gradient = ctx.createRadialGradient(
@@ -70,70 +78,79 @@ export function SpaceBackground() {
         height / 2,
         Math.max(width, height)
       );
-
       gradient.addColorStop(0, "#0b1220");
       gradient.addColorStop(1, "#05080f");
-
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, width, height);
     };
 
-    // Parallel comet scheduler: spawn countdown starts when a comet is created,
-    // not when it exits the screen. Multiple comets may be alive simultaneously.
     let comets: Comet[] = [];
-    // Start the first countdown at a random interval so the first comet doesn't
-    // always appear at t=0.
-    let spawnCountdown = reducedMotion ? Infinity : sampleSpawnInterval(settings);
+    let spawnCountdown = reducedMotion
+      ? Infinity
+      : sampleSpawnInterval(settingsRef.current);
+
+    // Track star-seeding deps so we can reseed inside the loop when they change
+    // without restarting the effect.
+    let prevStarCount = settingsRef.current.starCount;
+    let prevStarSizeMin = settingsRef.current.starSizeMin;
+    let prevStarSizeMax = settingsRef.current.starSizeMax;
 
     let prevTime: number | null = null;
     let rafId = 0;
 
     const animate = (time: number) => {
+      const s = settingsRef.current;
       const delta = prevTime !== null ? time - prevTime : 0;
       prevTime = time;
+
+      // Reseed stars if star-related settings changed
+      if (
+        s.starCount !== prevStarCount ||
+        s.starSizeMin !== prevStarSizeMin ||
+        s.starSizeMax !== prevStarSizeMax
+      ) {
+        stars = buildStars();
+        prevStarCount = s.starCount;
+        prevStarSizeMin = s.starSizeMin;
+        prevStarSizeMax = s.starSizeMax;
+      }
 
       ctx.fillStyle = BASE_COLOR;
       ctx.fillRect(0, 0, width, height);
 
       drawBackground();
 
-      for (const s of stars) {
-        const t = (time + s.offset) % s.cycle;
+      for (const star of stars) {
+        const t = (time + star.offset) % star.cycle;
+        const visibleEnd = star.cycle - (star.off + star.fade * 2);
+        const fadeOutEnd = visibleEnd + star.fade;
+        const darkEnd = fadeOutEnd + star.off;
 
-        const visibleEnd = s.cycle - (s.off + s.fade * 2);
-        const fadeOutEnd = visibleEnd + s.fade;
-        const darkEnd = fadeOutEnd + s.off;
-
-        let opacity = s.baseOpacity;
-
+        let opacity = star.baseOpacity;
         if (t > visibleEnd && t <= fadeOutEnd) {
-          const p = (t - visibleEnd) / s.fade;
-          opacity = s.baseOpacity * (1 - p);
+          opacity = star.baseOpacity * (1 - (t - visibleEnd) / star.fade);
         } else if (t > fadeOutEnd && t <= darkEnd) {
           opacity = 0;
         } else if (t > darkEnd) {
-          const p = (t - darkEnd) / s.fade;
-          opacity = s.baseOpacity * p;
+          opacity = star.baseOpacity * ((t - darkEnd) / star.fade);
         }
 
         ctx.globalAlpha = opacity;
-        ctx.fillStyle = s.color;
+        ctx.fillStyle = star.color;
         ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
         ctx.fill();
       }
 
       ctx.globalAlpha = 1;
 
       if (!reducedMotion) {
-        // Tick countdown and spawn when it fires
         spawnCountdown -= delta;
         if (spawnCountdown <= 0) {
-          comets.push(spawnComet(width, height, settings));
-          spawnCountdown = sampleSpawnInterval(settings);
+          comets.push(spawnComet(width, height, s));
+          spawnCountdown = sampleSpawnInterval(s);
         }
 
-        // Tick all live comets, discard ones that exited
         const next: Comet[] = [];
         for (const c of comets) {
           const ticked = tickComet(c, delta, width, height);
@@ -150,19 +167,11 @@ export function SpaceBackground() {
     };
 
     rafId = requestAnimationFrame(animate);
-
-    return () => {
-      cancelAnimationFrame(rafId);
-    };
-  // Re-run when star-related settings change so count/sizes are regenerated.
-  // Comet settings (speed, size, spawn interval) are read live from `settings`
-  // inside the animation loop and take effect on the next spawn naturally.
+    return () => cancelAnimationFrame(rafId);
+  // Effect only restarts on canvas resize (no deps) — star/comet settings are
+  // handled reactively via settingsRef inside the loop.
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    settings.starSizeMin,
-    settings.starSizeMax,
-    settings.starCount,
-  ]);
+  }, []);
 
   return (
     <canvas
