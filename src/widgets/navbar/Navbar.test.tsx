@@ -95,6 +95,7 @@ describe("Navbar", () => {
     render(<Navbar activeHref="#/" />);
     const buttons = screen.getAllByRole("button", { name: "Open background settings" });
     fireEvent.click(buttons[0]);
+    // Panel is open — accessible in the a11y tree
     expect(screen.getByRole("dialog", { name: "Space settings" })).toBeDefined();
   });
 
@@ -103,7 +104,9 @@ describe("Navbar", () => {
     const openBtn = screen.getAllByRole("button", { name: "Open background settings" })[0];
     fireEvent.click(openBtn);
     fireEvent.click(screen.getByRole("button", { name: "Close settings" }));
-    const dialog = screen.getByRole("dialog", { name: "Space settings" });
+    // Panel is now aria-hidden — use { hidden: true } to reach it in the tree
+    const dialog = screen.getByRole("dialog", { name: "Space settings", hidden: true });
+    expect(dialog.getAttribute("aria-hidden")).toBe("true");
     expect(dialog.className).toContain("translate-x-full");
   });
 });
