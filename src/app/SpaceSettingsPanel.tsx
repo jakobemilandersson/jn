@@ -1,6 +1,7 @@
 import { useSpaceSettingsStore } from './spaceSettingsStore'
 
 type SliderRowProps = {
+  id: string
   label: string
   value: number
   min: number
@@ -11,8 +12,7 @@ type SliderRowProps = {
   decimals?: number
 }
 
-function SliderRow({ label, value, min, max, step, onChange, unit = '', decimals }: SliderRowProps) {
-  const id = label.toLowerCase().replace(/\s+/g, '-')
+function SliderRow({ id, label, value, min, max, step, onChange, unit = '', decimals }: SliderRowProps) {
   const display = decimals !== undefined
     ? value.toFixed(decimals)
     : Number.isInteger(step)
@@ -68,6 +68,11 @@ function Section({ title, children }: SectionProps) {
   )
 }
 
+/** Builds a collision-safe DOM id from a section title and label. */
+function sliderId(section: string, label: string): string {
+  return `${section}-${label}`.toLowerCase().replace(/\s+/g, '-')
+}
+
 type SpaceSettingsPanelProps = {
   open: boolean
   onClose: () => void
@@ -92,6 +97,7 @@ export function SpaceSettingsPanel({ open, onClose }: SpaceSettingsPanelProps) {
         role="dialog"
         aria-modal="true"
         aria-label="Space settings"
+        aria-hidden={!open}
         className={`fixed top-0 right-0 bottom-0 z-40 w-72 flex flex-col
           bg-black/80 backdrop-blur-xl border-l border-white/10
           transition-transform duration-300 ease-in-out
@@ -116,16 +122,18 @@ export function SpaceSettingsPanel({ open, onClose }: SpaceSettingsPanelProps) {
         <div className="flex-1 overflow-y-auto px-5 py-5 flex flex-col gap-6">
           <Section title="Comets — speed">
             <SliderRow
+              id={sliderId('comet-speed', 'min')}
               label="Min speed"
               value={store.cometSpeedMin}
-              min={50} max={2000} step={10}
+              min={50} max={store.cometSpeedMax} step={10}
               onChange={store.setCometSpeedMin}
               unit=" px/s"
             />
             <SliderRow
+              id={sliderId('comet-speed', 'max')}
               label="Max speed"
               value={store.cometSpeedMax}
-              min={50} max={2000} step={10}
+              min={store.cometSpeedMin} max={2000} step={10}
               onChange={store.setCometSpeedMax}
               unit=" px/s"
             />
@@ -133,16 +141,18 @@ export function SpaceSettingsPanel({ open, onClose }: SpaceSettingsPanelProps) {
 
           <Section title="Comets — size">
             <SliderRow
+              id={sliderId('comet-size', 'min')}
               label="Min tail"
               value={store.cometSizeMin}
-              min={20} max={600} step={5}
+              min={20} max={store.cometSizeMax} step={5}
               onChange={store.setCometSizeMin}
               unit=" px"
             />
             <SliderRow
+              id={sliderId('comet-size', 'max')}
               label="Max tail"
               value={store.cometSizeMax}
-              min={20} max={600} step={5}
+              min={store.cometSizeMin} max={600} step={5}
               onChange={store.setCometSizeMax}
               unit=" px"
             />
@@ -150,17 +160,19 @@ export function SpaceSettingsPanel({ open, onClose }: SpaceSettingsPanelProps) {
 
           <Section title="Comets — spawn interval">
             <SliderRow
+              id={sliderId('comet-spawn', 'min')}
               label="Min interval"
               value={store.cometSpawnMin}
-              min={0.5} max={60} step={0.5}
+              min={0.5} max={store.cometSpawnMax} step={0.5}
               onChange={store.setCometSpawnMin}
               unit="s"
               decimals={1}
             />
             <SliderRow
+              id={sliderId('comet-spawn', 'max')}
               label="Max interval"
               value={store.cometSpawnMax}
-              min={0.5} max={60} step={0.5}
+              min={store.cometSpawnMin} max={60} step={0.5}
               onChange={store.setCometSpawnMax}
               unit="s"
               decimals={1}
@@ -169,16 +181,18 @@ export function SpaceSettingsPanel({ open, onClose }: SpaceSettingsPanelProps) {
 
           <Section title="Stars — size">
             <SliderRow
+              id={sliderId('star-size', 'min')}
               label="Min radius"
               value={store.starSizeMin}
-              min={0.2} max={5} step={0.1}
+              min={0.2} max={store.starSizeMax} step={0.1}
               onChange={store.setStarSizeMin}
               unit=" px"
             />
             <SliderRow
+              id={sliderId('star-size', 'max')}
               label="Max radius"
               value={store.starSizeMax}
-              min={0.2} max={5} step={0.1}
+              min={store.starSizeMin} max={5} step={0.1}
               onChange={store.setStarSizeMax}
               unit=" px"
             />
@@ -186,6 +200,7 @@ export function SpaceSettingsPanel({ open, onClose }: SpaceSettingsPanelProps) {
 
           <Section title="Stars — count">
             <SliderRow
+              id={sliderId('star-count', 'count')}
               label="Star count"
               value={store.starCount}
               min={20} max={600} step={10}

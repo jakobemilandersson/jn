@@ -68,7 +68,7 @@ Currently implemented:
   Only one comet is ever visible at a time. After exiting the screen a new comet
   spawns after a 4–12 second random delay. Spawns from any of the four screen
   edges. Suppressed when `prefers-reduced-motion` is active.
-- **`spaceSettingsStore.ts`** — Zustand store owning the six configurable space
+- **`spaceSettingsStore.ts`** — Zustand store owning the nine configurable space
   background values. See *Zustand Space Settings Store Shape* below.
 - **`SpaceSettingsPanel.tsx`** — slide-in drawer UI for editing space settings.
   Opened via the hamburger button in `Navbar`. This file lives in `src/app/` and
@@ -263,27 +263,36 @@ the entities layer.
 // src/app/spaceSettingsStore.ts
 {
   // State
-  cometSpeedMin: number;   // px/s — default 350
-  cometSpeedMax: number;   // px/s — default 950
-  cometSizeMin:  number;   // tail length px — default 80
-  cometSizeMax:  number;   // tail length px — default 280
-  starSizeMin:   number;   // radius px — default 0.6
-  starSizeMax:   number;   // radius px — default 2.1
+  cometSpeedMin:  number;  // px/s — default 350
+  cometSpeedMax:  number;  // px/s — default 950
+  cometSizeMin:   number;  // tail length px — default 80
+  cometSizeMax:   number;  // tail length px — default 280
+  cometSpawnMin:  number;  // spawn interval seconds — default 4
+  cometSpawnMax:  number;  // spawn interval seconds — default 12
+  starSizeMin:    number;  // radius px — default 0.6
+  starSizeMax:    number;  // radius px — default 2.1
+  starCount:      number;  // number of stars — default 140
   // Actions
   setCometSpeedMin(v: number): void;
   setCometSpeedMax(v: number): void;
   setCometSizeMin(v: number): void;
   setCometSizeMax(v: number): void;
+  setCometSpawnMin(v: number): void;
+  setCometSpawnMax(v: number): void;
   setStarSizeMin(v: number): void;
   setStarSizeMax(v: number): void;
+  setStarCount(v: number): void;
   reset(): void;
 }
 ```
 
 Defaults are exported as `SPACE_SETTINGS_DEFAULTS` and used to seed the store
 and reset it. `spawnComet` accepts a `SpaceSettings` snapshot; values take
-effect on the next comet respawn. Star sizes take effect on the next canvas
-reinit (triggered by the `useEffect` dependency on `starSizeMin`/`starSizeMax`).
+effect on the next comet respawn. Star sizes and star count take effect on the
+next animation frame (detected via change comparison inside the RAF loop).
+
+The UI constrains min sliders to `max={currentMax}` and max sliders to
+`min={currentMin}` so that min > max is structurally impossible from the UI.
 
 ***
 
