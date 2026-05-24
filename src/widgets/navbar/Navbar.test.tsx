@@ -1,6 +1,10 @@
-import { render, screen } from "@testing-library/react";
-import { describe, it, expect } from "vitest";
+import { render, screen, fireEvent } from "@testing-library/react";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { Navbar } from ".";
+
+beforeEach(() => {
+  window.scrollTo = vi.fn();
+});
 
 describe("Navbar", () => {
   it("renders a <nav> with aria-label Main", () => {
@@ -10,7 +14,6 @@ describe("Navbar", () => {
 
   it("renders all three nav links", () => {
     render(<Navbar activeHref="#/" />);
-    // getAllByRole because each link appears in both desktop and mobile layouts
     expect(screen.getAllByRole("link", { name: "Home" }).length).toBeGreaterThan(0);
     expect(screen.getAllByRole("link", { name: "Resume" }).length).toBeGreaterThan(0);
     expect(screen.getAllByRole("link", { name: "About" }).length).toBeGreaterThan(0);
@@ -80,5 +83,28 @@ describe("Navbar", () => {
     screen
       .getAllByRole("link", { name: "About" })
       .forEach((link) => expect(link.getAttribute("href")).toBe("#/about"));
+  });
+
+  it("clicking a nav link calls window.scrollTo", () => {
+    render(<Navbar activeHref="#/" />);
+    fireEvent.click(screen.getAllByRole("link", { name: "Home" })[0]);
+    expect(window.scrollTo).toHaveBeenCalledWith({ top: 0, behavior: "instant" });
+  });
+
+  it("clicking a hamburger button opens the settings panel", () => {
+    render(<Navbar activeHref="#/" />);
+    const buttons = screen.getAllByRole("button", { name: "Open background settings" });
+    fireEvent.click(buttons[0]);
+    expect(screen.getByRole("dialog", { name: "Space settings" })).toBeDefined();
+  });
+
+  it("closing the settings panel hides it", () => {
+    render(<Navbar activeHref="#/" />);
+    const openBtn = screen.getAllByRole("button", { name: "Open background settings" })[0];
+    fireEvent.click(openBtn);
+    fireEvent.click(screen.getByRole("button", { name: "Close settings" }));
+    // Panel remains mounted but translated off-screen (translate-x-full)
+    const dialog = screen.getByRole("dialog", { name: "Space settings" });
+    expect(dialog.className).toContain("translate-x-full");
   });
 });
