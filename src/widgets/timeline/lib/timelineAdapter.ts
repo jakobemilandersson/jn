@@ -19,15 +19,18 @@ export type TimelineViewModel = {
   tags?: TimelineTag[];
 };
 
+function buildTitle(exp: WorkExperience): string {
+  if (exp.kind === 'project') return exp.role;
+  return exp.company ? `${exp.role} \u2014 ${exp.company}` : exp.role;
+}
+
 export function toTimelineViewModels(
   experiences: WorkExperience[],
 ): TimelineViewModel[] {
   return experiences.map((exp) => ({
     id: exp.id,
     kind: exp.kind,
-    title: exp.company
-      ? `${exp.role} — ${exp.company}`
-      : exp.role,
+    title: buildTitle(exp),
     subtitle: exp.subtitle,
     start: exp.start,
     end: exp.end,

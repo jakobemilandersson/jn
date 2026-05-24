@@ -117,7 +117,7 @@ Mentored a junior developer in backend practices, system architecture, and code 
       stackType: 'fullstack',
       skills: [
         { presentation: 'Ruby on Rails', stackType: 'backend' },
-      { presentation: 'Python', stackType: 'backend' },
+        { presentation: 'Python', stackType: 'backend' },
         { presentation: 'Flutter', stackType: 'frontend' },
         { presentation: 'React', stackType: 'frontend' },
         { presentation: 'PostgreSQL', stackType: 'backend' },
