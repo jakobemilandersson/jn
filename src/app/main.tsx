@@ -8,6 +8,8 @@ import { Navbar } from "@widgets/navbar";
 import { SpaceBackground } from "./SpaceBackground";
 import "./styles.css";
 
+const basename = import.meta.env.BASE_URL ?? "/";
+
 function AppShell() {
   const { pathname } = useLocation();
 
@@ -29,7 +31,7 @@ function AppShell() {
 function App() {
   return (
     <React.StrictMode>
-      <BrowserRouter>
+      <BrowserRouter basename={basename}>
         <AppShell />
       </BrowserRouter>
     </React.StrictMode>
