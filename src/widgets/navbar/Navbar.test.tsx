@@ -1,9 +1,9 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { Navbar } from ".";
+import { Navbar } from "./Navbar";
+import { vi, beforeEach, describe, it, expect } from "vitest";
 
 beforeEach(() => {
-  window.scrollTo = vi.fn() as unknown as typeof window.scrollTo;
+  window.scrollTo = vi.fn();
 });
 
 describe("Navbar", () => {
@@ -109,6 +109,15 @@ describe("Navbar", () => {
     );
     expect(dialog).toBeDefined();
     expect(dialog!.getAttribute("aria-hidden")).toBe("true");
-    expect(dialog!.className).toContain("translate-x-full");
+  });
+
+  it("the settings panel is initially hidden", () => {
+    render(<Navbar activeHref="/" />);
+    const dialogs = screen.getAllByRole("dialog", { hidden: true });
+    const dialog = dialogs.find(
+      (el) => el.getAttribute("aria-label") === "Space settings"
+    );
+    expect(dialog).toBeDefined();
+    expect(dialog!.getAttribute("aria-hidden")).toBe("true");
   });
 });

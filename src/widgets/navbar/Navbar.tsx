@@ -82,10 +82,15 @@ function IconHamburger({ size = 20 }: { size?: number }) {
   );
 }
 
+// Strip trailing slash so concatenation with route paths is always clean.
+// e.g. base="/pull/53/" + "/resume" → "/pull/53/resume"
+//      base="/"          + "/resume" → "/resume"
+const base = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "");
+
 const NAV_LINKS = [
-  { label: "Home", href: "/", Icon: IconHome },
-  { label: "Resume", href: "/resume", Icon: IconFileText },
-  { label: "About", href: "/about", Icon: IconUser },
+  { label: "Home", href: `${base}/`, Icon: IconHome },
+  { label: "Resume", href: `${base}/resume`, Icon: IconFileText },
+  { label: "About", href: `${base}/about`, Icon: IconUser },
 ];
 
 interface NavbarProps {
@@ -101,10 +106,11 @@ export function Navbar({ activeHref }: NavbarProps) {
   const [settingsOpen, setSettingsOpen] = useState(false);
 
   function isActive(href: string): boolean {
-    if (href === "/") {
+    if (href === `${base}/`) {
       return activeHref === "/" || activeHref === "";
     }
-    return activeHref === href;
+    // Compare only the pathname portion, ignoring the base prefix.
+    return activeHref === href.slice(base.length);
   }
 
   return (
