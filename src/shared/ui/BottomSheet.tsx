@@ -97,8 +97,8 @@ export function BottomSheet({ isOpen, onClose, title, children }: Props) {
           fixed z-50 flex flex-col
           bg-gray-900 text-white shadow-xl
           transition-transform duration-300 ease-in-out
-          bottom-0 left-0 right-0 max-h-[85dvh] rounded-t-2xl
-          md:inset-y-0 md:right-0 md:left-auto md:w-[480px] md:max-h-none md:rounded-none md:rounded-l-2xl
+          bottom-14 left-0 right-0 max-h-[calc(85dvh-56px)] rounded-t-2xl
+          md:inset-y-0 md:bottom-0 md:right-0 md:left-auto md:w-[480px] md:max-h-none md:rounded-none md:rounded-l-2xl
           ${
             isVisible
               ? "translate-y-0 md:translate-x-0"

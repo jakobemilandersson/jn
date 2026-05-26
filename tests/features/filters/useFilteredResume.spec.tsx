@@ -15,6 +15,7 @@ const resetStore = () =>
 
 const fe: WorkExperience = {
   id: "1",
+  kind: "work",
   role: "Frontend Dev",
   company: "Acme",
   stackType: "frontend",
@@ -24,6 +25,7 @@ const fe: WorkExperience = {
 
 const be: WorkExperience = {
   id: "2",
+  kind: "work",
   role: "Backend Dev",
   company: "Acme",
   stackType: "backend",

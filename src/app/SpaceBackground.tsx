@@ -1,4 +1,6 @@
 import { useEffect, useRef } from "react";
+import { type Comet, spawnComet, tickComet, drawComet, sampleSpawnInterval } from "./comet";
+import { useSpaceSettingsStore, type SpaceSettings } from "./spaceSettingsStore";
 
 type Star = {
   x: number;
@@ -14,10 +16,15 @@ type Star = {
 
 const BASE_COLOR = "#070b14";
 const STAR_COLORS = ["#e8eef7", "#cfd8e6"];
-const DENSITY = 0.00012;
 
 export function SpaceBackground() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  // Subscribe to the full store so this component re-renders on any settings
+  // change, which keeps settingsRef current for all fields including comet ones.
+  const settings = useSpaceSettingsStore();
+  const settingsRef = useRef<SpaceSettings>(settings);
+  settingsRef.current = settings;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -25,6 +32,10 @@ export function SpaceBackground() {
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
+
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
 
     const dpr = window.devicePixelRatio || 1;
     const width = document.documentElement.clientWidth;
@@ -37,97 +48,117 @@ export function SpaceBackground() {
 
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    const starCount = Math.floor(width * height * DENSITY);
+    const buildStars = (): Star[] =>
+      Array.from({ length: settingsRef.current.starCount }, () => {
+        const s = settingsRef.current;
+        const r = s.starSizeMin + Math.random() * (s.starSizeMax - s.starSizeMin);
+        return {
+          x: Math.random() * width,
+          y: Math.random() * height,
+          r,
+          baseOpacity: 1.0,
+          cycle: 4000 + Math.random() * 6000,
+          off: 300 + Math.random() * 400,
+          fade: 250 + Math.random() * 250,
+          offset: Math.random() * 10000,
+          color: STAR_COLORS[Math.random() < 0.75 ? 0 : 1],
+        };
+      });
 
-    const stars: Star[] = Array.from({ length: starCount }, () => {
-      const sizeRoll = Math.random();
-      const r =
-        sizeRoll < 0.45
-          ? 0.6
-          : sizeRoll < 0.8
-          ? 1.0
-          : sizeRoll < 0.95
-          ? 1.4
-          : 2.1;
-
-
-      return {
-        x: Math.random() * width,
-        y: Math.random() * height,
-        r,
-        baseOpacity: 1.0,
-        cycle: 4000 + Math.random() * 6000, // 4–10s
-        off: 300 + Math.random() * 400,     // fully dark duration
-        fade: 250 + Math.random() * 250,    // fade in/out duration
-        offset: Math.random() * 10000,
-        color: STAR_COLORS[Math.random() < 0.75 ? 0 : 1],
-      };
-    });
+    let stars: Star[] = buildStars();
 
     const drawBackground = () => {
       const gradient = ctx.createRadialGradient(
-        width / 2,
-        height / 2,
-        0,
-        width / 2,
-        height / 2,
-        Math.max(width, height)
+        width / 2, height / 2, 0,
+        width / 2, height / 2, Math.max(width, height)
       );
-
       gradient.addColorStop(0, "#0b1220");
       gradient.addColorStop(1, "#05080f");
-
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, width, height);
     };
 
+    let comets: Comet[] = [];
+    let spawnCountdown = reducedMotion
+      ? Infinity
+      : sampleSpawnInterval(settingsRef.current);
+
+    let prevStarCount = settingsRef.current.starCount;
+    let prevStarSizeMin = settingsRef.current.starSizeMin;
+    let prevStarSizeMax = settingsRef.current.starSizeMax;
+
+    let prevTime: number | null = null;
     let rafId = 0;
 
     const animate = (time: number) => {
+      const s = settingsRef.current;
+      const delta = prevTime !== null ? time - prevTime : 0;
+      prevTime = time;
+
+      if (
+        s.starCount !== prevStarCount ||
+        s.starSizeMin !== prevStarSizeMin ||
+        s.starSizeMax !== prevStarSizeMax
+      ) {
+        stars = buildStars();
+        prevStarCount = s.starCount;
+        prevStarSizeMin = s.starSizeMin;
+        prevStarSizeMax = s.starSizeMax;
+      }
+
       ctx.fillStyle = BASE_COLOR;
       ctx.fillRect(0, 0, width, height);
-
       drawBackground();
 
-      for (const s of stars) {
-        const t = (time + s.offset) % s.cycle;
+      for (const star of stars) {
+        const t = (time + star.offset) % star.cycle;
+        const visibleEnd = star.cycle - (star.off + star.fade * 2);
+        const fadeOutEnd = visibleEnd + star.fade;
+        const darkEnd = fadeOutEnd + star.off;
 
-        const visibleEnd = s.cycle - (s.off + s.fade * 2);
-        const fadeOutEnd = visibleEnd + s.fade;
-        const darkEnd = fadeOutEnd + s.off;
-
-        let opacity = s.baseOpacity;
-
+        let opacity = star.baseOpacity;
         if (t > visibleEnd && t <= fadeOutEnd) {
-          // fade out
-          const p = (t - visibleEnd) / s.fade;
-          opacity = s.baseOpacity * (1 - p);
+          opacity = star.baseOpacity * (1 - (t - visibleEnd) / star.fade);
         } else if (t > fadeOutEnd && t <= darkEnd) {
-          // fully dark
           opacity = 0;
         } else if (t > darkEnd) {
-          // fade in
-          const p = (t - darkEnd) / s.fade;
-          opacity = s.baseOpacity * p;
+          opacity = star.baseOpacity * ((t - darkEnd) / star.fade);
         }
 
         ctx.globalAlpha = opacity;
-        ctx.fillStyle = s.color;
+        ctx.fillStyle = star.color;
         ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
         ctx.fill();
       }
 
       ctx.globalAlpha = 1;
+
+      if (!reducedMotion) {
+        spawnCountdown -= delta;
+        if (spawnCountdown <= 0) {
+          comets.push(spawnComet(width, height, s));
+          spawnCountdown = sampleSpawnInterval(s);
+        }
+
+        const next: Comet[] = [];
+        for (const c of comets) {
+          const ticked = tickComet(c, delta, width, height);
+          if (ticked !== null) next.push(ticked);
+        }
+        comets = next;
+
+        for (const c of comets) {
+          drawComet(ctx, c);
+        }
+      }
+
       rafId = requestAnimationFrame(animate);
     };
 
     rafId = requestAnimationFrame(animate);
-
-    return () => {
-      cancelAnimationFrame(rafId);
-    };
-  }, []);
+    return () => cancelAnimationFrame(rafId);
+  }, []); // empty deps intentional: effect mounts once; settings read via settingsRef
 
   return (
     <canvas

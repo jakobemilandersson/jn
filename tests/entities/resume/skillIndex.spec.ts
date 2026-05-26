@@ -13,6 +13,7 @@ const skill = (presentation: string, stackType: StackType = "backend"): Skill =>
 
 const exp = (overrides: Partial<WorkExperience>): WorkExperience => ({
   id: "id",
+  kind: "work",
   role: "Dev",
   company: "Corp",
   description: null,

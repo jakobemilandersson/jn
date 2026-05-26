@@ -1,0 +1,61 @@
+name: Docs audit
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  docs-audit:
+    name: Docs audit (feat/refactor)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get PR title
+        id: pr
+        run: echo "title=${{ github.event.pull_request.title }}" >> $GITHUB_OUTPUT
+
+      - name: Check docs touched on feat/refactor PRs
+        run: |
+          TITLE="${{ steps.pr.outputs.title }}"
+
+          # Only enforce on feat and refactor PRs
+          if [[ "$TITLE" != feat* ]] && [[ "$TITLE" != refactor* ]]; then
+            echo "PR type is not feat or refactor — skipping docs audit check."
+            exit 0
+          fi
+
+          echo "PR is feat/refactor — checking that at least one doc file was updated..."
+
+          # Get list of files changed in this PR
+          CHANGED=$(git diff --name-only origin/main...HEAD)
+          echo "Changed files:"
+          echo "$CHANGED"
+
+          # Check if any src/ files were touched (i.e. real code changed)
+          SRC_TOUCHED=$(echo "$CHANGED" | grep -c '^src/' || true)
+
+          if [ "$SRC_TOUCHED" -eq 0 ]; then
+            echo "No src/ files changed — docs audit not required."
+            exit 0
+          fi
+
+          # Check if any doc files were touched
+          DOCS_TOUCHED=$(echo "$CHANGED" | grep -E '^(CONTEXT\.md|\.chatgpt/project-context\.md|docs/adr/)' | wc -l)
+
+          if [ "$DOCS_TOUCHED" -eq 0 ]; then
+            echo ""
+            echo "ERROR: This is a feat/refactor PR that touches src/ but no documentation files were updated."
+            echo ""
+            echo "At least one of the following must be updated (or explicitly confirmed not needed in the PR body):"
+            echo "  - CONTEXT.md"
+            echo "  - .chatgpt/project-context.md"
+            echo "  - docs/adr/"
+            echo ""
+            echo "See the Docs audit checklist in the PR template."
+            exit 1
+          fi
+
+          echo "Docs audit passed — $DOCS_TOUCHED doc file(s) updated."

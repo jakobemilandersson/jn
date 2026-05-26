@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { FiltersPanel, useFilteredResume, useFilterStore } from "@features/filters";
 import { WorkExperienceSkillBinder } from "@widgets/work-experience";
 import { ActiveFilters } from "@widgets/filters";
@@ -7,6 +8,8 @@ export default function ResumePage() {
   const results = useFilteredResume(RESUME.experiences);
   const skills = useFilterStore((s) => s.skills);
   const stackTypes = useFilterStore((s) => s.stackTypes);
+
+  const [activeSheetId, setActiveSheetId] = useState<string | null>(null);
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6 text-white">
@@ -24,6 +27,9 @@ export default function ResumePage() {
               experience={r}
               selectedSkills={skills}
               selectedStackTypes={stackTypes}
+              isOpen={activeSheetId === r.id}
+              onOpen={() => setActiveSheetId(r.id)}
+              onClose={() => setActiveSheetId(null)}
             />
           ))}
         </div>

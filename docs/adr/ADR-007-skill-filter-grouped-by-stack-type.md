@@ -1,7 +1,11 @@
-# ADR-004: Skill Filter Options Grouped by Stack Type
+# ADR-007: Skill Filter Options Grouped by Stack Type
 
 **Date:** 2026-05-19
 **Status:** Accepted
+
+> **Note:** This ADR was originally filed as `ADR-004-skill-filter-grouped-by-stack-type.md`
+> in error (colliding with `ADR-004-hash-routing.md`). Renumbered to ADR-007 in the
+> docs audit of 2026-05-23.
 
 ## Context
 

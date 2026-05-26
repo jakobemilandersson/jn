@@ -27,6 +27,7 @@ describe("WorkExperienceSkillBinder", () => {
 
     const experience: WorkExperience = {
         id: "1",
+        kind: "work",
         role: "Frontend Developer",
         company: "ACME",
         stackType: "frontend",
@@ -39,13 +40,14 @@ describe("WorkExperienceSkillBinder", () => {
         const user = userEvent.setup();
 
         render(
-            <WorkExperienceSkillBinder experience={experience} selectedSkills={[]} selectedStackTypes={[]} />
+            <WorkExperienceSkillBinder
+                experience={experience}
+                selectedSkills={[]}
+                selectedStackTypes={[]}
+                isOpen={true}
+            />
         );
 
-        // Open the sheet to reveal skill chips
-        await user.click(screen.getByRole("button", { name: /Frontend Developer/i }));
-
-        // Skill label must be visible
         const chip = screen.getByText("React");
 
         await user.click(chip);

@@ -16,19 +16,24 @@ Update this file only for:
 
 - `CONTEXT.md` — domain language, UI presentation rules, bounded context
 - `docs/adr/` — architectural decision records
-- `AGENTS.md` — skill entry point (issue tracker, triage labels, domain doc layout)
+- `AGENTS.md` — skill entry point (issue tracker, triage labels, domain doc layout, project skills)
 
 > **Content split:** this file owns architectural constraints, layer rules, import
-> rules, testing rules, git/PR conventions, the Zustand store shape, and AI workflow
-> instructions. `CONTEXT.md` owns domain language and UI presentation rules.
+> rules, testing rules, git/PR conventions, and the Zustand store shape.
+> Agent workflow procedures live in `skills/project/` — see `AGENTS.md`.
+> `CONTEXT.md` owns domain language and UI presentation rules.
 > Never duplicate content across these files — cross-reference instead.
 
 ***
 
 ## Project
 
-React + TypeScript + Vite SPA. Filter-driven resume explorer. Deployed on GitHub Pages at jakob.now.
-Mini-FSD (Feature-Sliced Design) architecture.
+React + TypeScript + Vite SPA. Portfolio site with a filter-driven resume explorer.
+Deployed on GitHub Pages at jakob.now. Mini-FSD (Feature-Sliced Design) architecture.
+
+The default route (`#/`) is the portfolio `HomePage`. The resume explorer is at
+`#/resume`. The about page is at `#/about`. See `CONTEXT.md → Pages` for the
+full route table and widget composition.
 
 ***
 
@@ -47,19 +52,51 @@ must not reimplement them.
 
 ### Decorative App Shell Elements
 
-Purely decorative visual elements (e.g. canvas-based animated backgrounds) may
-be mounted at the application root. They must:
-- Live in `src/app/`
-- Not depend on entities, features, or widgets
-- Not affect layout flow or business logic
-- Be non-interactive and accessibility-neutral
+Purely decorative visual elements are mounted at the application root and live in
+`src/app/`. They must not depend on entities or features, must not
+affect layout flow or business logic, and must be non-interactive and
+accessibility-neutral.
+
+Currently implemented:
+- **`SpaceBackground.tsx`** — canvas-based animated star field rendered behind all
+  page content. Mounts the `requestAnimationFrame` loop and wires the comet.
+  Reads `useSpaceSettingsStore` for star radius bounds and passes `SpaceSettings`
+  to `spawnComet`/`tickComet`. Re-seeds stars when star size bounds change.
+- **`comet.ts`** — pure comet logic: `Comet` type, `spawnComet(w, h, settings)`,
+  `tickComet(comet, delta, w, h, settings)`, `drawComet`. `spawnComet` samples
+  speed and tail length uniformly from the configured ranges in `SpaceSettings`.
+  Only one comet is ever visible at a time. After exiting the screen a new comet
+  spawns after a 4–12 second random delay. Spawns from any of the four screen
+  edges. Suppressed when `prefers-reduced-motion` is active.
+- **`spaceSettingsStore.ts`** — Zustand store owning the nine configurable space
+  background values. See *Zustand Space Settings Store Shape* below.
+- **`SpaceSettingsPanel.tsx`** — slide-in drawer UI for editing space settings.
+  Opened via the hamburger button in `Navbar`. This file lives in `src/app/` and
+  is imported by `src/widgets/navbar/Navbar.tsx` via the `@app` alias.
+
+### widgets → app import exception
+
+`Navbar` (`src/widgets/navbar/`) imports `SpaceSettingsPanel` from `@app/SpaceSettingsPanel`.
+This is an intentional, bounded exception: `app` is the shell layer above `widgets`,
+and `SpaceSettingsPanel` is the trigger surface co-located with its trigger button.
+No other widget may import from `@app`. This exception must not be extended without
+an ADR.
 
 ***
 
 ## Routing
 
-The app currently uses **hash-based routing** via a `useHashRoute` hook in
-`src/app/main.tsx`. Routes: `#/` → `ResumePage`, `#/about` → `AboutPage`.
+The app uses **hash-based routing** via a `useHashRoute` hook in `src/app/main.tsx`.
+Active nav state is reactive — `main.tsx` re-renders on `hashchange` via `useHashRoute`
+and passes the current hash as `activeHref` to `Navbar`.
+
+Current routes:
+
+| Hash | Page |
+|---|---|
+| `#/` | `HomePage` |
+| `#/resume` | `ResumePage` |
+| `#/about` | `AboutPage` |
 
 This is a **temporary approach** — see `docs/adr/ADR-004-hash-routing.md`.
 Migration to React Router v6 + `404.html` is tracked in issue #50.
@@ -80,12 +117,14 @@ When #50 is delivered:
 | `widgets` | UI composition, presentation interpretation, interaction wiring |
 | `shared` | Domain-agnostic UI primitives and layout components |
 | `pages` | Composition only — no logic |
-| `app` | App shell, routing, global styles, decorative root elements |
+| `app` | App shell, routing, global styles, decorative root elements, app-level settings stores |
 
 **Critical constraints:**
 - `features` must **not** import from `widgets`
 - `pages` must **not** access feature stores directly or reimplement feature semantics
 - `shared` UI must **not** depend on `entities` or `features` — consumes view models only
+- Cross-entity imports are forbidden. All entities are independent.
+- `widgets` must **not** import from `app` except for the bounded `Navbar → SpaceSettingsPanel` exception (see above)
 
 ***
 
@@ -126,7 +165,11 @@ These rules are enforced by ESLint (`eslint-plugin-boundaries`) and will fail CI
 ## Domain Types
 
 See `CONTEXT.md` for the canonical domain language glossary. The TypeScript type
-definitions live in `src/entities/resume/types.ts`.
+definitions live in:
+- `src/entities/resume/types.ts` — `WorkExperience`, `ResumeProfile`, `Resume`, `YearMonth`, `SkillChipVariant`, `ExperienceKind`
+
+Timeline view models (`TimelineViewModel`, `TimelineTag`) live in
+`src/widgets/timeline/lib` — they are presentation types, not domain types.
 
 ***
 
@@ -147,6 +190,9 @@ convert domain entities into UI-ready view models. These helpers:
 - Contain no React or rendering logic
 - Are the **only** place domain → presentation mapping occurs
 - Keep shared UI components free from domain entity dependencies
+
+Widgets may also define presentation-mapping helpers in `widgets/*/lib` for
+widget-local view models that are not shared across the app.
 
 Shared UI components must consume view models only, never domain entities directly.
 
@@ -211,6 +257,45 @@ the entities layer.
 
 ***
 
+## Zustand Space Settings Store Shape
+
+```ts
+// src/app/spaceSettingsStore.ts
+{
+  // State
+  cometSpeedMin:  number;  // px/s — default 350
+  cometSpeedMax:  number;  // px/s — default 950
+  cometSizeMin:   number;  // tail length px — default 80
+  cometSizeMax:   number;  // tail length px — default 280
+  cometSpawnMin:  number;  // spawn interval seconds — default 4
+  cometSpawnMax:  number;  // spawn interval seconds — default 12
+  starSizeMin:    number;  // radius px — default 0.6
+  starSizeMax:    number;  // radius px — default 2.1
+  starCount:      number;  // number of stars — default 140
+  // Actions
+  setCometSpeedMin(v: number): void;
+  setCometSpeedMax(v: number): void;
+  setCometSizeMin(v: number): void;
+  setCometSizeMax(v: number): void;
+  setCometSpawnMin(v: number): void;
+  setCometSpawnMax(v: number): void;
+  setStarSizeMin(v: number): void;
+  setStarSizeMax(v: number): void;
+  setStarCount(v: number): void;
+  reset(): void;
+}
+```
+
+Defaults are exported as `SPACE_SETTINGS_DEFAULTS` and used to seed the store
+and reset it. `spawnComet` accepts a `SpaceSettings` snapshot; values take
+effect on the next comet respawn. Star sizes and star count take effect on the
+next animation frame (detected via change comparison inside the RAF loop).
+
+The UI constrains min sliders to `max={currentMax}` and max sliders to
+`min={currentMin}` so that min > max is structurally impossible from the UI.
+
+***
+
 ## Definition of Done (feat / refactor PRs)
 
 Before a `feat` or `refactor` PR is considered ready to merge, the following
@@ -226,7 +311,7 @@ an omission is not.
       existing ADR)
 - [ ] Space instructions are up to date if any agent workflow rule changed
 
-This checklist is part of the PR Review Formula `feat` checklist below.
+This checklist is part of the PR Review Formula — see `skills/project/pr-review/SKILL.md`.
 
 ***
 
@@ -272,107 +357,11 @@ Examples:
 
 ***
 
-## PR Review Formula
+## External Skill Source
 
-When asked to review a pull request, use this structure:
+This project uses external skills from [`mattpocock/skills`](https://github.com/mattpocock/skills)
+and project-local skills in `skills/project/`. See `AGENTS.md` for the full skill table.
 
-```
-## Summary
-One sentence describing what the change does.
+Always fetch the relevant `SKILL.md` via the GitHub MCP tool before executing any skill.
 
-## Verified
-<type-specific checklist — only items relevant to this PR type>
-
-## Action items
-- Blocker: <specific violation — must fix before merge>
-- Minor: <non-blocking improvement>
-(omit section entirely if none)
-
-## Verdict
-<"No blockers — safe to merge" or "Blockers present — do not merge">
-
----
-*Reviewed by AI pair-programmer (Perplexity)*
-```
-
-The review should be done on the GitHub pull request with review type 'COMMENT'.
-
-### Blocker definition
-
-Anything violating rules defined in:
-- `project-context.md` (architectural constraints, layer ownership, import rules, testing rules)
-- `README.md` (git conventions)
-- Space Instructions (tech stack, architectural enforcement)
-
-Everything else is Minor at most.
-
-### Type-specific checklists
-
-**`feat`**
-- Correct layer ownership — logic in right slice
-- Cross-slice imports use aliases, no deep imports
-- New exports exposed via `index.ts`
-- Tests exist and follow testing rules (no RESUME coupling, ordering asserted where relevant)
-- No violations of project-context.md constraints
-- Docs audit complete — CONTEXT.md, project-context.md, ADRs checked (or explicitly confirmed not needed)
-
-**`fix`**
-- Root cause addressed, not just symptom
-- Regression test covers the fixed case
-- No unintended behavior changes in adjacent logic
-- No violations of project-context.md constraints
-
-**`refactor`**
-- Behavior unchanged
-- No layer boundary crossings introduced
-- No deep imports introduced
-- No violations of project-context.md constraints
-- Docs audit complete — CONTEXT.md, project-context.md, ADRs checked (or explicitly confirmed not needed)
-
-**`test`**
-- No direct RESUME imports — explicit mock data used
-- Module-level constants tested via `vi.mock()` + `vi.resetModules()` + dynamic `import()`
-- Ordering asserted where filter behavior is tested
-- No violations of project-context.md constraints
-
-**`docs`**
-- Content accurate against current source
-- No stale markers or outdated descriptions
-- Formatting consistent
-
-**`chore`**
-- CI still passes
-- Linting enforcement intact
-- No architectural rules inadvertently weakened
-
-***
-
-## Agent Workflow: "Take action on the latest review"
-
-When instructed with something similar to "take action on the latest review for PR #X",
-follow these steps in order:
-
-1. **Read the review** — fetch the most recent `COMMENT`-type pull request review for PR #X.
-2. **Analyse action items** — identify all items listed under the `## Action items` section
-   of that review. Decide which ones to fix: fix all `Blocker` items unconditionally;
-   fix `Minor` items unless there is a clear reason not to (e.g. out of scope, conflicts
-   with architectural rules, or requires clarification from the user).
-3. **Implement the fixes** — make the necessary code changes on the PR branch, respecting
-   all layer ownership, import alias, and testing rules defined in this document.
-4. **Commit and push** — push the changes to the PR branch in a single commit. Use the
-   conventional commit format: `fix(<scope>): <description of what was fixed>`.
-
-***
-
-## Agent Workflow: Skills with CI feedback loops
-
-Skills like `tdd`, `diagnose`, and `improve-codebase-architecture` assume the agent
-can run commands and observe output locally. In this environment (chatbot + GitHub
-connector), the agent cannot execute code directly.
-
-When running these skills:
-1. Write the code change and push it to the PR branch.
-2. **Pause and ask the user to run CI** (or `pnpm test` locally) and share the output.
-3. Resume the skill loop once the user reports the result.
-
-Do not attempt to infer test pass/fail from static analysis alone.
+External skills in use: `grill-with-docs`, `to-prd`, `to-issues`, `tdd`.
