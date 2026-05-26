@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted (merged in #49). Superseded by #50 when delivered.
+Superseded by ADR-005 (merged in #53).
 
 ## Context
 
@@ -37,5 +37,5 @@ Hash routing was chosen for the initial implementation.
   **not fully satisfied** by this approach.
 - A follow-up (#50) tracks the migration to React Router v6 + `404.html` to
   close US4 properly.
-- The `useHashRoute` hook and inline nav in `main.tsx` must be replaced when #50
-  is delivered — update this ADR's status to Superseded at that point.
+- Superseded by ADR-005 when #50 was delivered — `useHashRoute` removed,
+  `BrowserRouter` adopted, `404.html` emitted via `postbuild` script.

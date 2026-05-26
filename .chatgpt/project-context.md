@@ -31,8 +31,8 @@ Update this file only for:
 React + TypeScript + Vite SPA. Portfolio site with a filter-driven resume explorer.
 Deployed on GitHub Pages at jakob.now. Mini-FSD (Feature-Sliced Design) architecture.
 
-The default route (`#/`) is the portfolio `HomePage`. The resume explorer is at
-`#/resume`. The about page is at `#/about`. See `CONTEXT.md → Pages` for the
+The default route (`/`) is the portfolio `HomePage`. The resume explorer is at
+`/resume`. The about page is at `/about`. See `CONTEXT.md → Pages` for the
 full route table and widget composition.
 
 ***
@@ -86,25 +86,24 @@ an ADR.
 
 ## Routing
 
-The app uses **hash-based routing** via a `useHashRoute` hook in `src/app/main.tsx`.
-Active nav state is reactive — `main.tsx` re-renders on `hashchange` via `useHashRoute`
-and passes the current hash as `activeHref` to `Navbar`.
+The app uses **React Router v6** (`react-router-dom`) with `BrowserRouter`.
+`src/app/main.tsx` wraps the app in `BrowserRouter` and defines all routes via
+`<Routes>` / `<Route>`. An `AppShell` component uses `useLocation()` to pass
+the current `pathname` as `activeHref` to `Navbar`.
+
+GitHub Pages SPA fallback is handled by a `postbuild` script in `package.json`
+that copies `dist/index.html` → `dist/404.html` after every build.
 
 Current routes:
 
-| Hash | Page |
+| Path | Page |
 |---|---|
-| `#/` | `HomePage` |
-| `#/resume` | `ResumePage` |
-| `#/about` | `AboutPage` |
+| `/` | `HomePage` |
+| `/resume` | `ResumePage` |
+| `/about` | `AboutPage` |
 
-This is a **temporary approach** — see `docs/adr/ADR-004-hash-routing.md`.
-Migration to React Router v6 + `404.html` is tracked in issue #50.
-
-When #50 is delivered:
-- Replace `useHashRoute` with `BrowserRouter` + `<Route>` definitions in `main.tsx`
-- Extract the inline nav into `src/app/Nav.tsx` using `<NavLink>`
-- Update ADR-004 status to Superseded and remove this note
+See `docs/adr/ADR-004-hash-routing.md` (Superseded) and `docs/adr/ADR-005-react-router.md`
+for the decision history.
 
 ***
 
