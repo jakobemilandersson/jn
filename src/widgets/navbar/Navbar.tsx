@@ -83,9 +83,9 @@ function IconHamburger({ size = 20 }: { size?: number }) {
 }
 
 const NAV_LINKS = [
-  { label: "Home", href: "#/", Icon: IconHome },
-  { label: "Resume", href: "#/resume", Icon: IconFileText },
-  { label: "About", href: "#/about", Icon: IconUser },
+  { label: "Home", href: "/", Icon: IconHome },
+  { label: "Resume", href: "/resume", Icon: IconFileText },
+  { label: "About", href: "/about", Icon: IconUser },
 ];
 
 interface NavbarProps {
@@ -101,8 +101,8 @@ export function Navbar({ activeHref }: NavbarProps) {
   const [settingsOpen, setSettingsOpen] = useState(false);
 
   function isActive(href: string): boolean {
-    if (href === "#/") {
-      return activeHref === "" || activeHref === "#/" || activeHref === "#";
+    if (href === "/") {
+      return activeHref === "/" || activeHref === "";
     }
     return activeHref === href;
   }
