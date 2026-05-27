@@ -14,7 +14,7 @@ describe("FeaturedWorkSection", () => {
 
   it("renders the client project title", () => {
     render(<FeaturedWorkSection />);
-    expect(screen.getByText(/Internal Operations Platform/i)).toBeInTheDocument();
+    expect(screen.getByText(/Social Mobile Game/i)).toBeInTheDocument();
   });
 
   it("renders the jakob.now project title", () => {
@@ -24,9 +24,8 @@ describe("FeaturedWorkSection", () => {
 
   it("renders stack chips for each project", () => {
     render(<FeaturedWorkSection />);
-    // React appears in both projects — assert at least one chip is present
-    expect(screen.getAllByText("React").length).toBeGreaterThanOrEqual(1);
-    expect(screen.getByText("PostgreSQL")).toBeInTheDocument();
+    expect(screen.getByText("React Native")).toBeInTheDocument();
+    expect(screen.getByText("Firebase")).toBeInTheDocument();
     expect(screen.getByText("Zustand")).toBeInTheDocument();
   });
 });
