@@ -29,7 +29,7 @@ const PROJECTS: Project[] = [
     title: "jakob.now",
     context:
       "My personal developer portfolio — built as an AI-first project where every feature is spec'd, tested, and shipped through an agentic workflow with minimal manual intervention. Visitors can explore my resume through a filter-driven timeline, narrowing by stack, skills, and date range to find the most relevant experience for any role.",
-    role: "Solo — product, design, and engineering.",
+    role: "Sole developer — product, design, and engineering.",
     stack: [
       { label: "React", variant: "frontend" },
       { label: "TypeScript", variant: "frontend" },
