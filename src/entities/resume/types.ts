@@ -34,6 +34,7 @@ export type ResumeProfile = {
   name: string;
   title: string;
   bio: string;
+  availability?: string;
   contact: {
     email: string;
     linkedin: string;
