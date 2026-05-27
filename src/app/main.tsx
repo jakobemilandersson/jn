@@ -38,7 +38,7 @@ function App() {
 
       <Navbar activeHref={hash} />
 
-      <main className="min-h-screen px-4 relative z-10 pt-0 md:pt-16 pb-20 md:pb-0">
+      <main className="min-h-screen px-4 relative z-10 pt-0 md:pt-16 pb-20 md:pb-24">
         {page}
       </main>
     </React.StrictMode>

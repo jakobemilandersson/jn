@@ -24,9 +24,9 @@ describe("HeroSection", () => {
     expect(screen.getByRole("link", { name: /download cv/i })).toBeInTheDocument();
   });
 
-  it("'Contact me' links to #/about", () => {
+  it("'More about me' links to #/about", () => {
     render(<HeroSection />);
-    const link = screen.getByRole("link", { name: /contact me/i });
+    const link = screen.getByRole("link", { name: /more about me/i });
     expect(link).toHaveAttribute("href", "#/about");
   });
 });

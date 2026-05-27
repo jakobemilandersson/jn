@@ -3,8 +3,9 @@ import type { Resume, YearMonth } from './types';
 export const RESUME: Resume = {
   profile: {
     name: 'Jakob Andersson',
-    title: 'Senior Fullstack Engineer',
-    bio: 'I build reliable, well-crafted software — from mobile apps and backend systems to developer tooling. I care about clean architecture, clear communication, and shipping things that actually work.',
+    title: 'Full-Stack Engineer',
+    bio: "I'm a full-stack engineer based in Uppsala, Sweden. My background is in civil engineering — five years of studies and a master's degree — before I moved into software development. I'm comfortable across the stack, with a preference for backend work in Ruby on Rails, though the last year has been a deliberate push into frontend development with TypeScript and React Native.\n\nI'm genuinely excited about AI-first development — I use AI actively in my workflow, from structuring my own learning curriculum to building projects like this site. I believe working alongside AI is one of the most important skills an engineer can develop right now, and I'm making it a core part of how I build.",
+    availability: 'Currently focused on personal projects and sharpening my JavaScript skills — open to freelance work if the project is interesting. Remote only.',
     contact: {
       email: 'jakobemilandersson@gmail.com',
       linkedin: 'https://www.linkedin.com/in/jakobemilandersson',

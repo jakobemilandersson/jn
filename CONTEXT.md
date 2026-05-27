@@ -2,9 +2,9 @@
 
 Portfolio and filter-driven resume explorer SPA. The default entry point is a
 portfolio homepage (`HomePage`). The resume explorer is accessible at `#/resume`.
-A visitor can browse featured work, read an about section, and filter work
-experience entries by stack type, skills, and date range to surface the most
-relevant parts of a resume for a given role or audience.
+A visitor can browse featured work and filter work experience entries by stack
+type, skills, and date range to surface the most relevant parts of a resume for
+a given role or audience.
 
 > **Scope:** domain language, UI presentation rules, and bounded context only.
 > Architectural constraints, layer rules, import rules, and the Zustand store
@@ -15,7 +15,7 @@ relevant parts of a resume for a given role or audience.
 | Term | Meaning |
 |---|---|
 | `Resume` | The top-level domain object: `{ profile: ResumeProfile, experiences: WorkExperience[] }`. The canonical instance is exported as `RESUME` from `src/entities/resume/data.ts`. |
-| `ResumeProfile` | Identity and contact information for the person behind the resume: `name`, `title`, `bio`, and `contact` (`email`, `linkedin`, `github`). Not filterable. Used by the About page and the hero section on HomePage. |
+| `ResumeProfile` | Identity and contact information for the person behind the resume: `name`, `title`, `bio`, `availability` (optional freelance/job status line), and `contact` (`email`, `linkedin`, `github`). Not filterable. Used by the About page and the hero section on HomePage. |
 | `WorkExperience` | A single career entry (job, education, or project): role, company, `kind`, stack type, skills, date range, optional description. The `kind` field drives timeline dot colour and label. |
 | `ExperienceKind` | One of `'work' \| 'education' \| 'project'` — classifies a `WorkExperience` entry. Defined in `src/entities/resume/types.ts`. |
 | `Skill` | A named technology or capability, tagged with a `stackType` |
@@ -39,17 +39,16 @@ relevant parts of a resume for a given role or audience.
 
 | Route | Page | Purpose |
 |---|---|
-| `#/` | `HomePage` | Portfolio homepage — hero, featured work, about sections |
+| `#/` | `HomePage` | Portfolio homepage — hero and featured work |
 | `#/resume` | `ResumePage` | Filter-driven resume explorer |
-| `#/about` | `AboutPage` | Contact info and bio sourced from `RESUME.profile` |
+| `#/about` | `AboutPage` | Full bio, availability, contact info, and timeline sourced from `RESUME.profile` |
 
 ### HomePage widgets
 
-`HomePage` is composed of three widget slices mounted in order:
+`HomePage` is composed of two widget slices mounted in order:
 
-- **`HeroSection`** (`src/widgets/hero-section/`) — display name, positioning subline, three CTAs: "View featured work" → `#featured-work`, "Download CV" → LinkedIn PDF, "Contact me" → `#/about`.
+- **`HeroSection`** (`src/widgets/hero-section/`) — display name, positioning subline, three CTAs: "View featured work" → `#featured-work`, "Download CV" → LinkedIn PDF, "More about me" → `#/about`. Subtitle sourced from `profile.title`.
 - **`FeaturedWorkSection`** (`src/widgets/featured-work-section/`) — two curated project entries rendered as `<article>` elements with role, outcome, and stack chips.
-- **`AboutSection`** (`src/widgets/about-section/`) — bio paragraph with name, location, experience summary, and availability. Copy sourced from `RESUME.profile`.
 
 ## Bounded context
 

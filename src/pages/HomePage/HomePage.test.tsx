@@ -16,9 +16,4 @@ describe("HomePage", () => {
     render(<HomePage />);
     expect(document.querySelector("section#featured-work")).toBeInTheDocument();
   });
-
-  it("renders the about section", () => {
-    render(<HomePage />);
-    expect(document.querySelector("section#about")).toBeInTheDocument();
-  });
 });
