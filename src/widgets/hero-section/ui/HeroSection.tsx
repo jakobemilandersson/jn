@@ -1,8 +1,12 @@
+import { RESUME } from '@entities/resume';
+
+const { profile } = RESUME;
+
 export function HeroSection() {
   return (
     <div className="max-w-3xl mx-auto px-6 w-full">
       <p className="text-white/40 text-sm font-medium tracking-widest uppercase mb-4">
-        Full-stack developer
+        {profile.title}
       </p>
       <h1
         aria-label="Jakob Andersson"
@@ -34,7 +38,7 @@ export function HeroSection() {
           href="#/about"
           className="px-6 py-3 border border-white/20 text-white text-sm font-semibold rounded-full hover:border-white/50 hover:bg-white/5 transition-colors"
         >
-          Contact me
+          More about me
         </a>
       </div>
     </div>
