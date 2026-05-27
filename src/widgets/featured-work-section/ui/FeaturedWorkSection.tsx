@@ -1,1 +1,91 @@
-aW1wb3J0IHsgU2tpbGxDaGlwIH0gZnJvbSAiQHNoYXJlZC91aSI7CmltcG9ydCB0eXBlIHsgU2tpbGxDaGlwVmFyaWFudCB9IGZyb20gIkBzaGFyZWQvdWkiOwoKdHlwZSBQcm9qZWN0ID0gewogIHRpdGxlOiBzdHJpbmc7CiAgY29udGV4dDogc3RyaW5nOwogIHJvbGU6IHN0cmluZzsKICBzdGFjazogeyBsYWJlbDogc3RyaW5nOyB2YXJpYW50OiBTa2lsbENoaXBWYXJpYW50IH1bXTsKICBvdXRjb21lOiBzdHJpbmc7CiAgbGlua3M6IHsgbGFiZWw6IHN0cmluZzsgdXJsOiBzdHJpbmcgfVtdOwp9OwoKY29uc3QgUFJPSkVDVFM6IFByb2plY3RbXSA9IFsKICB7CiAgICB0aXRsZTogIlNvY2lhbCBNb2JpbGUgR2FtZSIsCiAgICBjb250ZXh0OgogICAgICAiQW4gaU9TIHBhcnR5IGdhbWUgYnVpbHQgYXJvdW5kIGEgZGlnaXRhbCB2ZXJzaW9uIG9mIHRoZSBTd2VkaXNoIFwicGVrbGVrZW5cIiBmb3JtYXQuIFBsYXllcnMgZW50ZXIgdGhlIGdyb3VwXCJzIG5hbWVzLCB0aGVuIHRoZSBhcHAgcHJlc2VudHMgcmFuZG9tIHByb21wdHMgdG8gYSBzZWxlY3RlZCBwbGF5ZXIsIHdobyBhbnN3ZXJzIGJ5IG5hbWluZyBzb21lb25lIGVsc2UgaW4gdGhlIGdyb3VwLiIsCiAgICByb2xlOgogICAgICAiU29sZSBkZXZlbG9wZXIgXHUyMDE0IHRvb2sgb3ZlciBiZWZvcmUgbGF1bmNoLCBoZWxwZWQgc2hpcCB0byB0aGUgQXBwIFN0b3JlLCBhbmQgY29udGludWVkIGFzIHRoZSBzb2xlIGRldmVsb3BlciBmb3Igcm91Z2hseSB0d28geWVhcnMgcG9zdC1sYXVuY2guIiwKICAgIHN0YWNrOiBbCiAgICAgIHsgbGFiZWw6ICJSZWFjdCBOYXRpdmUiLCB2YXJpYW50OiAiZnJvbnRlbmQiIH0sCiAgICAgIHsgbGFiZWw6ICJGaXJlYmFzZSIsIHZhcmlhbnQ6ICJiYWNrZW5kIiB9LAogICAgICB7IGxhYmVsOiAiUmV2ZW51ZUNhdCIsIHZhcmlhbnQ6ICJiYWNrZW5kIiB9LAogICAgXSwKICAgIG91dGNvbWU6ICJTaGlwcGVkIG9uIHRoZSBBcHAgU3RvcmUgYW5kIGFjdGl2ZWx5IG1haW50YWluZWQgZm9yIHR3byB5ZWFycy4iLAogICAgbGlua3M6IFtdLAogIH0sCiAgewogICAgdGl0bGU6ICJqYWtvYi5ub3ciLAogICAgY29udGV4dDoKICAgICAgIk15IHBlcnNvbmFsIGRldmVsb3BlciBwb3J0Zm9saW8gXHUyMDE0IGJ1aWx0IGFzIGFuIEFJLWZpcnN0IHByb2plY3Qgd2hlcmUgZXZlcnkgZmVhdHVyZSBpcyBzcGVjXCdkLCB0ZXN0ZWQsIGFuZCBzaGlwcGVkIHRocm91Z2ggYW4gYWdlbnRpYyB3b3JrZmxvdyB3aXRoIG1pbmltYWwgbWFudWFsIGludGVydmVudGlvbi4gVmlzaXRvcnMgY2FuIGV4cGxvcmUgbXkgcmVzdW1lIHRocm91Z2ggYSBmaWx0ZXItZHJpdmVuIHRpbWVsaW5lLCBuYXJyb3dpbmcgYnkgc3RhY2ssIHNraWxscywgYW5kIGRhdGUgcmFuZ2UgdG8gZmluZCB0aGUgbW9zdCByZWxldmFudCBleHBlcmllbmNlIGZvciBhbnkgcm9sZS4iLAogICAgcm9sZTogIlNvbG8gXHUyMDE0IHByb2R1Y3QsIGRlc2lnbiwgYW5kIGVuZ2luZWVyaW5nLiIsCiAgICBzdGFjazogWwogICAgICB7IGxhYmVsOiAiUmVhY3QiLCB2YXJpYW50OiAiZnJvbnRlbmQiIH0sCiAgICAgIHsgbGFiZWw6ICJUeXBlU2NyaXB0IiwgdmFyaWFudDogImZyb250ZW5kIiB9LAogICAgICB7IGxhYmVsOiAiVml0ZSIsIHZhcmlhbnQ6ICJmcm9udGVuZCIgfSwKICAgICAgeyBsYWJlbDogIlp1c3RhbmQiLCB2YXJpYW50OiAiZnVsbHN0YWNrIiB9LAogICAgICB7IGxhYmVsOiAiVGFpbHdpbmRDU1MiLCB2YXJpYW50OiAiZnJvbnRlbmQiIH0sCiAgICBdLAogICAgb3V0Y29tZTogIkxpdmUgYW5kIGFjdGl2ZWx5IGRldmVsb3BlZC4iLAogICAgbGlua3M6IFsKICAgICAgeyBsYWJlbDogIkdpdEh1YiIsIHVybDogImh0dHBzOi8vZ2l0aHViLmNvbS9qYWtvYmVtaWxhbmRlcnNzb24vam4iIH0sCiAgICAgIHsgbGFiZWw6ICJMaXZlIHNpdGUiLCB1cmw6ICJodHRwczovL2pha29iLm5vdyIgfSwKICAgIF0sCiAgfSwKXTsKCmV4cG9ydCBmdW5jdGlvbiBGZWF0dXJlZFdvcmtTZWN0aW9uKCkgewogIHJldHVybiAoCiAgICA8ZGl2IGNsYXNzTmFtZT0ibWF4LXctM3hsIG14LWF1dG8gcHgtNiB3LWZ1bGwiPgogICAgICA8aDIgY2xhc3NOYW1lPSJ0ZXh0LXdoaXRlLzQwIHRleHQtc20gZm9udC1tZWRpdW0gdHJhY2tpbmctd2lkZXN0IHVwcGVyY2FzZSBtYi02Ij4KICAgICAgICBGZWF0dXJlZCB3b3JrCiAgICAgIDwvaDI+CiAgICAgIDxkaXYgY2xhc3NOYW1lPSJmbGV4IGZsZXgtY29sIGdhcC02Ij4KICAgICAgICB7UFJPSKJFQ1RTLm1hcCgocHJvamVjdCkgPT4gKAogICAgICAgICAgPGFydGljbGUKICAgICAgICAgICAga2V5PXtwcm9qZWN0LnRpdGxlfQogICAgICAgICAgICBjbGFzc05hbWU9InJvdW5kZWQtMnhsIGJvcmRlciBib3JkZXItd2hpdGUvMTAgYmctd2hpdGUvNSBiYWNrZHJvcC1ibHVyLXNtIHA4IGZsZXggZmxleC1jb2wgZ2FwLTQiCiAgICAgICAgICA+CiAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJmbGV4IGl0ZW1zLXN0YXJ0IGp1c3RpZnktYmV0d2VlbiBnYXAtNCBmbGV4LXdyYXAiPgogICAgICAgICAgICAgIDxoMyBjbGFzc05hbWU9InRleHQtd2hpdGUgdGV4dC14bCBmb250LXNlbWlib2xkIj57cHJvamVjdC50aXRsZX08L2gzPgogICAgICAgICAgICAgIHtwcm9qZWN0LmxpbmtzLmxlbmd0aCA+IDAgJiYgKAogICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9ImZsZXggZ2FwLTMgc2hyaW5rLTAiPgogICAgICAgICAgICAgICAgICB7cHJvamVjdC5saW5rcy5tYXAoKGxpbmspID0+ICgKICAgICAgICAgICAgICAgICAgICA8YQogICAgICAgICAgICAgICAgICAgICAga2V5PXtsaW5rLmxhYmVsfQogICAgICAgICAgICAgICAgICAgICAgaHJlZj17bGluay51cmx9CiAgICAgICAgICAgICAgICAgICAgICB0YXJnZXQ9Il9ibGFuayIKICAgICAgICAgICAgICAgICAgICAgIHJlbD0ibm9vcGVuZXIgbm9yZWZlcnJlciIKICAgICAgICAgICAgICAgICAgICAgIGNsYXNzTmFtZT0idGV4dC13aGl0ZS80MCB0ZXh0LXNtIGhvdmVyOnRleHQtd2hpdGUgdHJhbnNpdGlvbi1jb2xvcnMiCiAgICAgICAgICAgICAgICAgICAgPgogICAgICAgICAgICAgICAgICAgICAge2xpbmsubGFiZWx9IOS4gwogICAgICAgICAgICAgICAgICAgIDwvYT4KICAgICAgICAgICAgICAgICAgKSl9CiAgICAgICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgICAgICApfQogICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgICAgPHAgY2xhc3NOYW1lPSJ0ZXh0LXdoaXRlLzYwIHRleHQtc20gbGVhZGluZy1yZWxheGVkIj57cHJvamVjdC5jb250ZXh0fTwvcD4KICAgICAgICAgICAgPHAgY2xhc3NOYW1lPSJ0ZXh0LXdoaXRlLzQwIHRleHQtc20iPntwcm9qZWN0LnJvbGV9PC9wPgogICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0iZmxleCBmbGV4LXdyYXAgZ2FwLTIgbXQtMiI+CiAgICAgICAgICAgICAge3Byb2plY3Quc3RhY2subWFwKCh0ZWNoKSA9PiAoCiAgICAgICAgICAgICAgICA8U2tpbGxDaGlwIGtleT17dGVjaC5sYWJlbH0gbGFiZWw9e3RlY2gubGFiZWx9IHZhcmlhbnQ9e3RlY2gudmFyaWFudH0gLz4KICAgICAgICAgICAgICApKX0KICAgICAgICAgICAgPC9kaXY+CiAgICAgICAgICAgIDxwIGNsYXNzTmFtZT0idGV4dC13aGl0ZS81MCB0ZXh0LXNtIGl0YWxpYyI+e3Byb2plY3Qub3V0Y29tZX08L3A+CiAgICAgICAgICA8L2FydGljbGU+CiAgICAgICAgKSl9CiAgICAgIDwvZGl2PgogICAgPC9kaXY+CiAgKTsKfQo=
+import { SkillChip } from "@shared/ui";
+import type { SkillChipVariant } from "@shared/ui";
+
+type Project = {
+  title: string;
+  context: string;
+  role: string;
+  stack: { label: string; variant: SkillChipVariant }[];
+  outcome: string;
+  links: { label: string; url: string }[];
+};
+
+const PROJECTS: Project[] = [
+  {
+    title: "Social Mobile Game",
+    context:
+      "An iOS party game built around a digital version of the Swedish \"pekleken\" format. Players enter the group's names, then the app presents random prompts to a selected player, who answers by naming someone else in the group.",
+    role:
+      "Sole developer \u2014 took over before launch, helped ship to the App Store, and continued as the sole developer for roughly two years post-launch.",
+    stack: [
+      { label: "React Native", variant: "frontend" },
+      { label: "Firebase", variant: "backend" },
+      { label: "RevenueCat", variant: "backend" },
+    ],
+    outcome: "Shipped on the App Store and actively maintained for two years.",
+    links: [],
+  },
+  {
+    title: "jakob.now",
+    context:
+      "My personal developer portfolio \u2014 built as an AI-first project where every feature is spec'd, tested, and shipped through an agentic workflow with minimal manual intervention. Visitors can explore my resume through a filter-driven timeline, narrowing by stack, skills, and date range to find the most relevant experience for any role.",
+    role: "Solo \u2014 product, design, and engineering.",
+    stack: [
+      { label: "React", variant: "frontend" },
+      { label: "TypeScript", variant: "frontend" },
+      { label: "Vite", variant: "frontend" },
+      { label: "Zustand", variant: "fullstack" },
+      { label: "TailwindCSS", variant: "frontend" },
+    ],
+    outcome: "Live and actively developed.",
+    links: [
+      { label: "GitHub", url: "https://github.com/jakobemilandersson/jn" },
+      { label: "Live site", url: "https://jakob.now" },
+    ],
+  },
+];
+
+export function FeaturedWorkSection() {
+  return (
+    <div className="max-w-3xl mx-auto px-6 w-full">
+      <h2 className="text-white/40 text-sm font-medium tracking-widest uppercase mb-6">
+        Featured work
+      </h2>
+      <div className="flex flex-col gap-6">
+        {PROJECTS.map((project) => (
+          <article
+            key={project.title}
+            className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-8 flex flex-col gap-4"
+          >
+            <div className="flex items-start justify-between gap-4 flex-wrap">
+              <h3 className="text-white text-xl font-semibold">{project.title}</h3>
+              {project.links.length > 0 && (
+                <div className="flex gap-3 shrink-0">
+                  {project.links.map((link) => (
+                    <a
+                      key={link.label}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-white/40 text-sm hover:text-white transition-colors"
+                    >
+                      {link.label} →
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+            <p className="text-white/60 text-sm leading-relaxed">{project.context}</p>
+            <p className="text-white/40 text-sm">{project.role}</p>
+            <div className="flex flex-wrap gap-2 mt-2">
+              {project.stack.map((tech) => (
+                <SkillChip key={tech.label} label={tech.label} variant={tech.variant} />
+              ))}
+            </div>
+            <p className="text-white/50 text-sm italic">{project.outcome}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  );
+}
