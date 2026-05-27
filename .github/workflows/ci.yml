@@ -50,15 +50,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Audit production dependencies (high and critical)
-        run: pnpm audit --audit-level=high --prod
-
-      - name: TypeScript type check
-        run: pnpm tsc --noEmit
-
-      - name: Run ESLint (no warnings allowed)
-        run: pnpm lint --max-warnings=0
-
       - name: Run Vitest with coverage
         run: pnpm coverage
 
@@ -68,3 +59,12 @@ jobs:
         with:
           json-summary-path: coverage/coverage-summary.json
           json-final-path: coverage/coverage-final.json
+
+      - name: Audit production dependencies (high and critical)
+        run: pnpm audit --audit-level=high --prod
+
+      - name: TypeScript type check
+        run: pnpm tsc --noEmit
+
+      - name: Run ESLint (no warnings allowed)
+        run: pnpm lint --max-warnings=0
