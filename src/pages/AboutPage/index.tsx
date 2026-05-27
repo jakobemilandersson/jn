@@ -14,7 +14,7 @@ export default function AboutPage() {
             href={`mailto:${profile.contact.email}`}
             className="text-white/50 hover:text-white transition-colors"
           >
-            {profile.contact.email}
+            Email
           </a>
           <a
             href={profile.contact.linkedin}

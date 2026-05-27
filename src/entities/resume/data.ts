@@ -8,7 +8,7 @@ export const RESUME: Resume = {
     availability: 'Currently focused on personal projects and sharpening my JavaScript skills — open to freelance work if the project is interesting. Remote only.',
     contact: {
       email: 'jakobemilandersson@gmail.com',
-      linkedin: 'https://www.linkedin.com/in/jakobemilandersson',
+      linkedin: 'https://www.linkedin.com/in/jakob-emil-andersson',
       github: 'https://github.com/jakobemilandersson',
     },
   },
