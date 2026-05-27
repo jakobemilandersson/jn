@@ -7,28 +7,29 @@ type Project = {
   role: string;
   stack: { label: string; variant: SkillChipVariant }[];
   outcome: string;
-  link: string | null;
+  links: { label: string; url: string }[];
 };
 
 const PROJECTS: Project[] = [
   {
-    title: "Internal Operations Platform",
+    title: "Social Mobile Game",
     context:
-      "A mid-sized company managed workflows across spreadsheets and email with no centralised tool.",
-    role: "Sole developer — architecture, design, and delivery over 2 years.",
+      "An iOS party game built around a digital version of the Swedish \"pekleken\" format. Players enter the group's names, then the app presents random prompts to a selected player, who answers by naming someone else in the group.",
+    role:
+      "Sole developer — took over before launch, helped ship to the App Store, and continued as the sole developer for roughly two years post-launch.",
     stack: [
-      { label: "React", variant: "frontend" },
-      { label: "TypeScript", variant: "frontend" },
-      { label: "Node.js", variant: "backend" },
-      { label: "PostgreSQL", variant: "backend" },
+      { label: "React Native", variant: "frontend" },
+      { label: "Firebase", variant: "backend" },
+      { label: "RevenueCat", variant: "backend" },
     ],
-    outcome: "Replaced manual processes for a team of 40+, still in active use.",
-    link: null,
+    outcome: "Shipped on the App Store and actively maintained for two years.",
+    links: [],
   },
   {
-    title: "jakob.now — Resume Explorer",
-    context: "Wanted a smarter way to present a resume than a static PDF.",
-    role: "Solo — product, design, and engineering.",
+    title: "jakob.now",
+    context:
+      "My personal developer portfolio — built as an AI-first project where every feature is spec'd, tested, and shipped through an agentic workflow with minimal manual intervention. Visitors can explore my resume through a filter-driven timeline, narrowing by stack, skills, and date range to find the most relevant experience for any role.",
+    role: "Sole developer — product, design, and engineering.",
     stack: [
       { label: "React", variant: "frontend" },
       { label: "TypeScript", variant: "frontend" },
@@ -37,7 +38,9 @@ const PROJECTS: Project[] = [
       { label: "TailwindCSS", variant: "frontend" },
     ],
     outcome: "Live and actively developed.",
-    link: "https://github.com/jakobemilandersson/jn",
+    links: [
+      { label: "GitHub", url: "https://github.com/jakobemilandersson/jn" },
+    ],
   },
 ];
 
@@ -55,15 +58,20 @@ export function FeaturedWorkSection() {
           >
             <div className="flex items-start justify-between gap-4 flex-wrap">
               <h3 className="text-white text-xl font-semibold">{project.title}</h3>
-              {project.link && (
-                <a
-                  href={project.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-white/40 text-sm hover:text-white transition-colors shrink-0"
-                >
-                  View on GitHub →
-                </a>
+              {project.links.length > 0 && (
+                <div className="flex gap-3 shrink-0">
+                  {project.links.map((link) => (
+                    <a
+                      key={link.label}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-white/40 text-sm hover:text-white transition-colors"
+                    >
+                      {link.label} →
+                    </a>
+                  ))}
+                </div>
               )}
             </div>
             <p className="text-white/60 text-sm leading-relaxed">{project.context}</p>
