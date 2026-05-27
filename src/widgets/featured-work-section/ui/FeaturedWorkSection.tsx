@@ -16,7 +16,7 @@ const PROJECTS: Project[] = [
     context:
       "An iOS party game built around a digital version of the Swedish \"pekleken\" format. Players enter the group's names, then the app presents random prompts to a selected player, who answers by naming someone else in the group.",
     role:
-      "Sole developer \u2014 took over before launch, helped ship to the App Store, and continued as the sole developer for roughly two years post-launch.",
+      "Sole developer — took over before launch, helped ship to the App Store, and continued as the sole developer for roughly two years post-launch.",
     stack: [
       { label: "React Native", variant: "frontend" },
       { label: "Firebase", variant: "backend" },
@@ -28,8 +28,8 @@ const PROJECTS: Project[] = [
   {
     title: "jakob.now",
     context:
-      "My personal developer portfolio \u2014 built as an AI-first project where every feature is spec'd, tested, and shipped through an agentic workflow with minimal manual intervention. Visitors can explore my resume through a filter-driven timeline, narrowing by stack, skills, and date range to find the most relevant experience for any role.",
-    role: "Solo \u2014 product, design, and engineering.",
+      "My personal developer portfolio — built as an AI-first project where every feature is spec'd, tested, and shipped through an agentic workflow with minimal manual intervention. Visitors can explore my resume through a filter-driven timeline, narrowing by stack, skills, and date range to find the most relevant experience for any role.",
+    role: "Solo — product, design, and engineering.",
     stack: [
       { label: "React", variant: "frontend" },
       { label: "TypeScript", variant: "frontend" },
@@ -40,7 +40,6 @@ const PROJECTS: Project[] = [
     outcome: "Live and actively developed.",
     links: [
       { label: "GitHub", url: "https://github.com/jakobemilandersson/jn" },
-      { label: "Live site", url: "https://jakob.now" },
     ],
   },
 ];
