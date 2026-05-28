@@ -28,7 +28,32 @@ function formatPeriod(start: string, end?: string): string {
       month: 'short',
     });
   };
-  return end ? `${fmt(start)} \u2013 ${fmt(end)}` : `${fmt(start)} \u2013 present`;
+  return end ? `${fmt(start)} – ${fmt(end)}` : `${fmt(start)} – present`;
+}
+
+function ChevronIcon({ expanded }: { expanded: boolean }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="12"
+      height="12"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className={[
+        'shrink-0 transition-all duration-200',
+        expanded
+          ? 'rotate-180 text-white/60'
+          : 'rotate-0 text-white/30 group-hover:text-white/60',
+      ].join(' ')}
+    >
+      <polyline points="6 9 12 15 18 9" />
+    </svg>
+  );
 }
 
 function PopoverCard({
@@ -92,7 +117,7 @@ function PopoverCard({
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1 text-xs text-white/50 hover:text-white/90 transition-colors"
         >
-          View project \u2192
+          View project →
         </a>
       )}
     </div>
@@ -114,8 +139,6 @@ function TimelineNode({
 }) {
   const styles = KIND_STYLES[event.kind];
 
-  const handleMouseEnter = useCallback(() => onActivate(), [onActivate]);
-  const handleMouseLeave = useCallback(() => onDeactivate(), [onDeactivate]);
   const handleClick = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
@@ -144,15 +167,17 @@ function TimelineNode({
     >
       <button
         type="button"
-        aria-label={`${event.title} \u2014 ${formatPeriod(event.start, event.end)}`}
+        aria-label={`${event.title} — ${formatPeriod(event.start, event.end)}`}
         aria-expanded={isActive}
         onClick={handleClick}
         onKeyDown={handleKeyDown}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
         className={[
           'group w-full text-left flex flex-col gap-0.5 cursor-pointer',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 rounded',
+          'rounded-lg border px-3 py-2 transition-colors duration-150',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50',
+          isActive
+            ? 'border-white/15 bg-white/[0.08]'
+            : 'border-transparent bg-transparent hover:border-white/10 hover:bg-white/5',
           side === 'left' ? 'md:items-end' : 'md:items-start',
         ].join(' ')}
       >
@@ -171,6 +196,7 @@ function TimelineNode({
             aria-hidden="true"
           />
           <span className="text-sm font-semibold text-white/90">{event.title}</span>
+          <ChevronIcon expanded={isActive} />
         </span>
 
         {event.subtitle && (
@@ -194,7 +220,7 @@ function TimelineNode({
       </button>
 
       {isActive && (
-        <div className="pl-5 md:pl-0">
+        <div className="pl-3 md:pl-0">
           <PopoverCard event={event} onClose={onDeactivate} side={side} />
         </div>
       )}
