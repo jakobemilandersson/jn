@@ -12,6 +12,7 @@ export default function AboutPage() {
         <div className="flex flex-wrap gap-x-4 gap-y-1 pt-1 text-sm">
           <a
             href={`mailto:${profile.contact.email}`}
+            aria-label={`Send email to ${profile.contact.email}`}
             className="text-white/50 hover:text-white transition-colors"
           >
             Email

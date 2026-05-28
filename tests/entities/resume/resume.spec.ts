@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { extractSkills, resolveSkill } from "@entities/resume/lib/skillIndex";
 import type { Resume, WorkExperience, YearMonth, StackType, Skill } from "@entities/resume/types";
 
@@ -116,5 +116,22 @@ describe("skillIndex — regression against Resume.experiences", () => {
     const { experiences } = mockResume();
     const result = resolveSkill("not-a-skill", experiences);
     expect(result).toBeNull();
+  });
+});
+
+// -----------------------------------------------------
+// data.ts — regression guard for LinkedIn URL
+// -----------------------------------------------------
+
+describe("RESUME data — contact URL regression", () => {
+  beforeEach(() => {
+    vi.resetModules();
+  });
+
+  it("linkedin URL points to the correct profile slug", async () => {
+    const { RESUME } = await import("@entities/resume/data");
+    expect(RESUME.profile.contact.linkedin).toBe(
+      "https://www.linkedin.com/in/jakob-emil-andersson"
+    );
   });
 });
