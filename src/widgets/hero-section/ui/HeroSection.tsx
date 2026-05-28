@@ -27,9 +27,8 @@ export function HeroSection() {
           View featured work
         </a>
         <a
-          href="https://www.linkedin.com/in/jakobemilandersson/overlay/1635545698955/single-media-viewer/"
-          target="_blank"
-          rel="noopener noreferrer"
+          href="/jakob-andersson-cv.pdf"
+          download="jakob-andersson-cv.pdf"
           className="px-6 py-3 border border-white/20 text-white text-sm font-semibold rounded-full hover:border-white/50 hover:bg-white/5 transition-colors"
         >
           Download CV
