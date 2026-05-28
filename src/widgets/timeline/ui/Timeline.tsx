@@ -28,7 +28,7 @@ function formatPeriod(start: string, end?: string): string {
       month: 'short',
     });
   };
-  return end ? `${fmt(start)} \u2013 ${fmt(end)}` : `${fmt(start)} \u2013 present`;
+  return end ? `${fmt(start)} – ${fmt(end)}` : `${fmt(start)} – present`;
 }
 
 function ChevronIcon({ expanded }: { expanded: boolean }) {
@@ -117,7 +117,7 @@ function PopoverCard({
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1 text-xs text-white/50 hover:text-white/90 transition-colors"
         >
-          View project \u2192
+          View project →
         </a>
       )}
     </div>
@@ -167,7 +167,7 @@ function TimelineNode({
     >
       <button
         type="button"
-        aria-label={`${event.title} \u2014 ${formatPeriod(event.start, event.end)}`}
+        aria-label={`${event.title} — ${formatPeriod(event.start, event.end)}`}
         aria-expanded={isActive}
         onClick={handleClick}
         onKeyDown={handleKeyDown}
@@ -176,7 +176,7 @@ function TimelineNode({
           'rounded-lg border px-3 py-2 transition-colors duration-150',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50',
           isActive
-            ? 'border-white/15 bg-white/8'
+            ? 'border-white/15 bg-white/[0.08]'
             : 'border-transparent bg-transparent hover:border-white/10 hover:bg-white/5',
           side === 'left' ? 'md:items-end' : 'md:items-start',
         ].join(' ')}
@@ -220,7 +220,7 @@ function TimelineNode({
       </button>
 
       {isActive && (
-        <div className="pl-3">
+        <div className="pl-3 md:pl-0">
           <PopoverCard event={event} onClose={onDeactivate} side={side} />
         </div>
       )}
