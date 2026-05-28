@@ -19,9 +19,11 @@ describe("HeroSection", () => {
     expect(link).toHaveAttribute("href", "#featured-work");
   });
 
-  it("renders a 'Download CV' link", () => {
+  it("'Download CV' links to the hosted PDF with download attribute", () => {
     render(<HeroSection />);
-    expect(screen.getByRole("link", { name: /download cv/i })).toBeInTheDocument();
+    const link = screen.getByRole("link", { name: /download cv/i });
+    expect(link).toHaveAttribute("href", "/jakob-andersson-resume.pdf");
+    expect(link).toHaveAttribute("download");
   });
 
   it("'More about me' links to #/about", () => {
