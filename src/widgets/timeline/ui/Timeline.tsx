@@ -45,8 +45,10 @@ function ChevronIcon({ expanded }: { expanded: boolean }) {
       strokeLinejoin="round"
       aria-hidden="true"
       className={[
-        'shrink-0 text-white/30 transition-transform duration-200',
-        expanded ? 'rotate-180' : 'rotate-0',
+        'shrink-0 transition-all duration-200',
+        expanded
+          ? 'rotate-180 text-white/60'
+          : 'rotate-0 text-white/30 group-hover:text-white/60',
       ].join(' ')}
     >
       <polyline points="6 9 12 15 18 9" />
@@ -171,7 +173,11 @@ function TimelineNode({
         onKeyDown={handleKeyDown}
         className={[
           'group w-full text-left flex flex-col gap-0.5 cursor-pointer',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 rounded',
+          'rounded-lg border px-3 py-2 transition-colors duration-150',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50',
+          isActive
+            ? 'border-white/15 bg-white/8'
+            : 'border-transparent bg-transparent hover:border-white/10 hover:bg-white/5',
           side === 'left' ? 'md:items-end' : 'md:items-start',
         ].join(' ')}
       >
@@ -214,7 +220,7 @@ function TimelineNode({
       </button>
 
       {isActive && (
-        <div className="pl-5 md:pl-0">
+        <div className="pl-3">
           <PopoverCard event={event} onClose={onDeactivate} side={side} />
         </div>
       )}
