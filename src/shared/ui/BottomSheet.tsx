@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 type Props = {
   isOpen: boolean;
@@ -85,9 +86,11 @@ export function BottomSheet({ isOpen, onClose, title, children }: Props) {
 
   if (!isMounted) return null;
 
-  return (
+  return createPortal(
     <>
-      {/* Panel — slides in from the right on md+, slides up from bottom on mobile */}
+      {/* Panel — slides in from the right on md+, slides up from bottom on mobile.
+          Rendered via createPortal into document.body so z-50 is evaluated in the
+          root stacking context and always paints above the navbar (z-20). */}
       <div
         ref={panelRef}
         role="dialog"
@@ -139,6 +142,7 @@ export function BottomSheet({ isOpen, onClose, title, children }: Props) {
           {children}
         </div>
       </div>
-    </>
+    </>,
+    document.body
   );
 }
