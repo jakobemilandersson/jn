@@ -27,8 +27,8 @@ export function HeroSection() {
           View featured work
         </a>
         <a
-          href={`${import.meta.env.BASE_URL}jakob-andersson-cv.pdf`}
-          download="jakob-andersson-cv.pdf"
+          href={`${import.meta.env.BASE_URL}jakob-andersson-resume.pdf`}
+          download="jakob-andersson-resume.pdf"
           className="px-6 py-3 border border-white/20 text-white text-sm font-semibold rounded-full hover:border-white/50 hover:bg-white/5 transition-colors"
         >
           Download CV

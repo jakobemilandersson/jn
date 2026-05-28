@@ -22,7 +22,7 @@ describe("HeroSection", () => {
   it("'Download CV' links to the hosted PDF with download attribute", () => {
     render(<HeroSection />);
     const link = screen.getByRole("link", { name: /download cv/i });
-    expect(link).toHaveAttribute("href", "/jakob-andersson-cv.pdf");
+    expect(link).toHaveAttribute("href", "/jakob-andersson-resume.pdf");
     expect(link).toHaveAttribute("download");
   });
 
