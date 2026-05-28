@@ -66,6 +66,20 @@ describe("WorkExperienceCard", () => {
     ).toBeInTheDocument();
   });
 
+  it("renders the dialog into document.body via portal", () => {
+    render(
+      <WorkExperienceCard
+        experience={experience}
+        selectedSkills={[]}
+        selectedStackTypes={[]}
+        isOpen={true}
+      />
+    );
+
+    const dialog = screen.getByRole("dialog");
+    expect(document.body).toContainElement(dialog);
+  });
+
   it("renders a single flat Skills section when no skills are selected", () => {
     render(
       <WorkExperienceCard

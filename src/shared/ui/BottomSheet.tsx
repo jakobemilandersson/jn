@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 type Props = {
   isOpen: boolean;
@@ -85,9 +86,13 @@ export function BottomSheet({ isOpen, onClose, title, children }: Props) {
 
   if (!isMounted) return null;
 
-  return (
+  return createPortal(
     <>
-      {/* Panel — slides in from the right on md+, slides up from bottom on mobile */}
+      {/* Panel — slides in from the right on md+, slides up from bottom on mobile.
+          Rendered via createPortal into document.body so z-50 is evaluated in the
+          root stacking context and always paints above the navbar (z-20).
+          On desktop the top edge is offset to md:top-20 (80px) so the sheet sits
+          just below the navbar with a small gap rather than running behind it. */}
       <div
         ref={panelRef}
         role="dialog"
@@ -98,7 +103,7 @@ export function BottomSheet({ isOpen, onClose, title, children }: Props) {
           bg-gray-900 text-white shadow-xl
           transition-transform duration-300 ease-in-out
           bottom-14 left-0 right-0 max-h-[calc(85dvh-56px)] rounded-t-2xl
-          md:inset-y-0 md:bottom-0 md:right-0 md:left-auto md:w-[480px] md:max-h-none md:rounded-none md:rounded-l-2xl
+          md:top-20 md:bottom-0 md:right-0 md:left-auto md:w-[480px] md:max-h-none md:rounded-2xl
           ${
             isVisible
               ? "translate-y-0 md:translate-x-0"
@@ -139,6 +144,7 @@ export function BottomSheet({ isOpen, onClose, title, children }: Props) {
           {children}
         </div>
       </div>
-    </>
+    </>,
+    document.body
   );
 }
