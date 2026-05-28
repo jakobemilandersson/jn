@@ -31,6 +31,29 @@ function formatPeriod(start: string, end?: string): string {
   return end ? `${fmt(start)} \u2013 ${fmt(end)}` : `${fmt(start)} \u2013 present`;
 }
 
+function ChevronIcon({ expanded }: { expanded: boolean }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="12"
+      height="12"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className={[
+        'shrink-0 text-white/30 transition-transform duration-200',
+        expanded ? 'rotate-180' : 'rotate-0',
+      ].join(' ')}
+    >
+      <polyline points="6 9 12 15 18 9" />
+    </svg>
+  );
+}
+
 function PopoverCard({
   event,
   onClose,
@@ -114,8 +137,6 @@ function TimelineNode({
 }) {
   const styles = KIND_STYLES[event.kind];
 
-  const handleMouseEnter = useCallback(() => onActivate(), [onActivate]);
-  const handleMouseLeave = useCallback(() => onDeactivate(), [onDeactivate]);
   const handleClick = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
@@ -148,8 +169,6 @@ function TimelineNode({
         aria-expanded={isActive}
         onClick={handleClick}
         onKeyDown={handleKeyDown}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
         className={[
           'group w-full text-left flex flex-col gap-0.5 cursor-pointer',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 rounded',
@@ -171,6 +190,7 @@ function TimelineNode({
             aria-hidden="true"
           />
           <span className="text-sm font-semibold text-white/90">{event.title}</span>
+          <ChevronIcon expanded={isActive} />
         </span>
 
         {event.subtitle && (
