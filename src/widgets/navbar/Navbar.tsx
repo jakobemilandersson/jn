@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useScrolled } from "./useScrolled";
 import { SpaceSettingsPanel } from "@app/SpaceSettingsPanel";
+import { APP_VERSION } from "@app/version";
 
 function IconHome({ size = 20 }: { size?: number }) {
   return (
@@ -143,6 +144,14 @@ export function Navbar({ activeHref }: NavbarProps) {
               );
             })}
           </div>
+
+          {/* Version label — between nav links and hamburger */}
+          <span
+            aria-label="Site version"
+            className="text-xs text-white/30 mr-3 tabular-nums"
+          >
+            {APP_VERSION}
+          </span>
 
           {/* Hamburger — right side */}
           <button
