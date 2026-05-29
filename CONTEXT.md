@@ -27,6 +27,7 @@ a given role or audience.
 | Date interval filter | An optional `dateFrom`/`dateTo` range (both `YearMonth \| null`). Overlap logic: a role is included if its tenure overlaps the filter range. Open-ended roles use a `"9999-12"` sentinel for the upper bound. |
 | `WorkExperienceDescription` | An optional object with `title: string`, `summary: string`, and `fulltext: string` attached to a `WorkExperience`. `summary` is used by the timeline widget; `fulltext` is rendered in the `BottomSheet`. |
 | `BottomSheet` | The shared UI component at `src/shared/ui/BottomSheet.tsx`. A slide-up overlay used to show full `WorkExperienceDescription.fulltext` and skill chips. Accepts `isOpen`, `onClose`, `title`, and `children`. Domain-agnostic. Only one sheet can be open at a time — active sheet state is owned by `ResumePage`. |
+| `WipBanner` | The shared UI component at `src/shared/ui/WipBanner.tsx`. A static, domain-agnostic banner rendered at the top of `ResumePage` that communicates to visitors that filtering and work experience content are under active development. Styled as a terminal `console.warn(...)` block. Zero props, no state, must not import from `entities` or `features`. |
 | Active filter chip | A dismissible chip in the filter bar representing one active filter value. Grouped by category (Stack type / Skills) with `aria-labelledby` on each group. |
 | `OptionGroup` | View model type defined in `src/shared/ui/SearchableMultiSelect.tsx` and exported via `src/shared/ui/index.ts`. Used to group skill filter options by `stackType`. |
 | `TimelineViewModel` | Widget-local presentation type produced by `toTimelineViewModels` in `src/widgets/timeline/lib`. Consumed only by `Timeline.tsx`. Not a domain type — not exported from `@entities/resume`. Shape: `{ id, kind: ExperienceKind, title, subtitle?, start, end?, detail, url?, tags?: TimelineTag[] }`. |
@@ -74,6 +75,7 @@ is the single source of truth for all career, education, and project entries.
 - `toTimelineViewModels` is the only place `WorkExperience` → `TimelineViewModel` mapping occurs; it lives in `src/widgets/timeline/lib`.
 - `useSpaceSettingsStore` is the single source of truth for space background configuration. No other file may hardcode comet or star sizing values.
 - `SpaceSettingsPanel` must not import from `entities` or `features` — it is an app-shell concern.
+- `WipBanner` must not import from `entities` or `features` — it is domain-agnostic.
 
 ## UI presentation rules
 
