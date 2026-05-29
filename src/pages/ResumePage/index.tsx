@@ -3,6 +3,7 @@ import { FiltersPanel, useFilteredResume, useFilterStore } from "@features/filte
 import { WorkExperienceSkillBinder } from "@widgets/work-experience";
 import { ActiveFilters } from "@widgets/filters";
 import { RESUME } from "@entities/resume";
+import { WipBanner } from "@shared/ui";
 
 export default function ResumePage() {
   const results = useFilteredResume(RESUME.experiences);
@@ -14,6 +15,8 @@ export default function ResumePage() {
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6 text-white">
       <h1 className="text-2xl font-bold">Jakob — Interactive Resume</h1>
+
+      <WipBanner />
 
       <FiltersPanel />
       <ActiveFilters />
