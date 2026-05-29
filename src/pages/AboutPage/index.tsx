@@ -48,7 +48,7 @@ export default function AboutPage() {
 
       <p
         aria-label="Site version"
-        className="text-xs text-white/20 tabular-nums pt-4 pb-20"
+        className="text-xs text-white/20 tabular-nums pb-16"
       >
         {APP_VERSION}
       </p>
