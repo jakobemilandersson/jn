@@ -1,5 +1,6 @@
 import { RESUME } from '@entities/resume';
 import { Timeline } from '@widgets/timeline';
+import { APP_VERSION } from '@app/version';
 
 const { profile } = RESUME;
 
@@ -44,6 +45,13 @@ export default function AboutPage() {
         <h2 className="text-base font-semibold text-white/50 uppercase tracking-widest text-xs">Timeline</h2>
         <Timeline />
       </section>
+
+      <p
+        aria-label="Site version"
+        className="text-xs text-white/20 tabular-nums pb-16"
+      >
+        {APP_VERSION}
+      </p>
     </div>
   );
 }

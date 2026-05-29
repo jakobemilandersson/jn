@@ -1,9 +1,13 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'node:path'
+import pkg from './package.json'
 
 export default defineConfig({
   plugins: [react()],
+  define: {
+    __APP_VERSION__: JSON.stringify(pkg.version),
+  },
   // Production uses '/' (custom domain jakob.now).
   // PR preview builds set VITE_BASE_PATH=/jn/pull/<pr-number>/ so that
   // all asset URLs resolve correctly under the gh-pages subdirectory.
