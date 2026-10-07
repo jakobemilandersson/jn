@@ -17,15 +17,15 @@ describe("FeaturedWorkSection", () => {
     expect(screen.getByText(/Social Mobile Game/i)).toBeInTheDocument();
   });
 
-  it("renders the jakob.now project title", () => {
+  it("renders the Merge Champion project title", () => {
     render(<FeaturedWorkSection />);
-    expect(screen.getByText(/jakob\.now/i)).toBeInTheDocument();
+    expect(screen.getByText(/Merge Champion/i)).toBeInTheDocument();
   });
 
   it("renders stack chips for each project", () => {
     render(<FeaturedWorkSection />);
     expect(screen.getByText("React Native")).toBeInTheDocument();
     expect(screen.getByText("Firebase")).toBeInTheDocument();
-    expect(screen.getByText("Zustand")).toBeInTheDocument();
+    expect(screen.getByText("Flame")).toBeInTheDocument();
   });
 });
