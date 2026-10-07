@@ -7,9 +7,9 @@ describe("FeaturedWorkSection", () => {
     render(<FeaturedWorkSection />);
   });
 
-  it("renders exactly two project entries", () => {
+  it("renders exactly three project entries", () => {
     render(<FeaturedWorkSection />);
-    expect(screen.getAllByRole("article")).toHaveLength(2);
+    expect(screen.getAllByRole("article")).toHaveLength(3);
   });
 
   it("renders the client project title", () => {
@@ -22,10 +22,17 @@ describe("FeaturedWorkSection", () => {
     expect(screen.getByText(/Merge Champion/i)).toBeInTheDocument();
   });
 
+  it("renders the Storbit project title", () => {
+    render(<FeaturedWorkSection />);
+    expect(screen.getByText(/Storbit/i)).toBeInTheDocument();
+  });
+
   it("renders stack chips for each project", () => {
     render(<FeaturedWorkSection />);
-    expect(screen.getByText("React Native")).toBeInTheDocument();
+    expect(screen.getAllByText("React Native")).toHaveLength(2);
     expect(screen.getByText("Firebase")).toBeInTheDocument();
     expect(screen.getByText("Flame")).toBeInTheDocument();
+    expect(screen.getByText("React")).toBeInTheDocument();
+    expect(screen.getByText("Ruby on Rails")).toBeInTheDocument();
   });
 });
