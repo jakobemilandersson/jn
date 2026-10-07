@@ -204,6 +204,7 @@ Responsible for the full delivery chain: technical decisions, client communicati
       subtitle: 'Side project',
       stackType: 'fullstack',
       links: [
+        { label: 'Web App', url: 'https://storbit.jakob.now/' },
         { label: 'Google Play', url: 'https://play.google.com/store/apps/details?id=com.storbit.app&hl=en' },
       ],
       skills: [
