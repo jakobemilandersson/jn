@@ -12,20 +12,6 @@ type Project = {
 
 const PROJECTS: Project[] = [
   {
-    title: "Social Mobile Game",
-    context:
-      "An iOS party game built around a digital version of the Swedish \"pekleken\" format. Players enter the group's names, then the app presents random prompts to a selected player, who answers by naming someone else in the group.",
-    role:
-      "Sole developer — took over before launch, helped ship to the App Store, and continued as the sole developer for roughly two years post-launch.",
-    stack: [
-      { label: "React Native", variant: "frontend" },
-      { label: "Firebase", variant: "backend" },
-      { label: "RevenueCat", variant: "backend" },
-    ],
-    outcome: "Shipped on the App Store and actively maintained for two years.",
-    links: [],
-  },
-  {
     title: "Merge Champion",
     context:
       "A cross-platform daily merge puzzle game for iOS and Android, built around deterministic daily challenges, generated puzzle sequences, leaderboards, replays, achievements, and production-ready mobile features.",
@@ -44,6 +30,39 @@ const PROJECTS: Project[] = [
       { label: "App Store", url: "https://apps.apple.com/se/app/merge-champion/id6801467932" },
       { label: "Google Play", url: "https://play.google.com/store/apps/details?id=com.mergechampionapp.mergechampion" },
     ],
+  },
+  {
+    title: "Storbit",
+    context:
+      "A cross-platform social question game for web and mobile, with shared game-domain logic, a React web client, Expo mobile app, and Rails API backend.",
+    role:
+      "Sole developer — product, game design, engineering, backend, and release.",
+    stack: [
+      { label: "React", variant: "frontend" },
+      { label: "TypeScript", variant: "fullstack" },
+      { label: "React Native", variant: "frontend" },
+      { label: "Expo", variant: "frontend" },
+      { label: "Ruby on Rails", variant: "backend" },
+      { label: "PostgreSQL", variant: "backend" },
+    ],
+    outcome: "Cross-platform social game shipped on web and mobile.",
+    links: [
+      { label: "Google Play", url: "https://play.google.com/store/apps/details?id=com.storbit.app&hl=en" },
+    ],
+  },
+  {
+    title: "Social Mobile Game",
+    context:
+      "An iOS party game built around a digital version of the Swedish \"pekleken\" format. Players enter the group's names, then the app presents random prompts to a selected player, who answers by naming someone else in the group.",
+    role:
+      "Sole developer — took over before launch, helped ship to the App Store, and continued as the sole developer for roughly two years post-launch.",
+    stack: [
+      { label: "React Native", variant: "frontend" },
+      { label: "Firebase", variant: "backend" },
+      { label: "RevenueCat", variant: "backend" },
+    ],
+    outcome: "Shipped on the App Store and actively maintained for two years.",
+    links: [],
   },
 ];
 
