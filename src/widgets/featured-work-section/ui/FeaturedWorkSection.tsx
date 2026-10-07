@@ -40,9 +40,7 @@ const PROJECTS: Project[] = [
       { label: "Cloudflare Workers", variant: "backend" },
     ],
     outcome: "Cross-platform mobile game actively developed for iOS and Android.",
-    links: [
-      { label: "GitHub", url: "https://github.com/jakobemilandersson/Merge-Master" },
-    ],
+    links: [],
   },
 ];
 
