@@ -69,9 +69,9 @@ export function FeaturedWorkSection() {
                       href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-white/40 text-sm hover:text-white transition-colors"
+                      className="inline-flex items-center rounded-md border border-white/15 bg-white/5 px-3 py-1.5 text-xs text-white/70 hover:bg-white/10 hover:text-white transition-colors"
                     >
-                      {link.label} →
+                      {link.label} ↗
                     </a>
                   ))}
                 </div>
