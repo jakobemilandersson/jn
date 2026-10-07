@@ -177,7 +177,6 @@ Responsible for the full delivery chain: technical decisions, client communicati
       company: 'Side project',
       subtitle: 'Side project',
       stackType: 'fullstack',
-      url: 'https://github.com/jakobemilandersson/Merge-Master',
       skills: [
         { presentation: 'Flutter', stackType: 'frontend' },
         { presentation: 'Dart', stackType: 'fullstack' },
@@ -200,7 +199,6 @@ Responsible for the full delivery chain: technical decisions, client communicati
       company: 'Side project',
       subtitle: 'Side project',
       stackType: 'fullstack',
-      url: 'https://github.com/jakobemilandersson/pekleken',
       skills: [
         { presentation: 'React', stackType: 'frontend' },
         { presentation: 'TypeScript', stackType: 'fullstack' },
