@@ -177,6 +177,10 @@ Responsible for the full delivery chain: technical decisions, client communicati
       company: 'Side project',
       subtitle: 'Side project',
       stackType: 'fullstack',
+      links: [
+        { label: 'App Store', url: 'https://apps.apple.com/se/app/merge-champion/id6801467932' },
+        { label: 'Google Play', url: 'https://play.google.com/store/apps/details?id=com.mergechampionapp.mergechampion' },
+      ],
       skills: [
         { presentation: 'Flutter', stackType: 'frontend' },
         { presentation: 'Dart', stackType: 'fullstack' },
@@ -199,6 +203,9 @@ Responsible for the full delivery chain: technical decisions, client communicati
       company: 'Side project',
       subtitle: 'Side project',
       stackType: 'fullstack',
+      links: [
+        { label: 'Google Play', url: 'https://play.google.com/store/apps/details?id=com.storbit.app&hl=en' },
+      ],
       skills: [
         { presentation: 'React', stackType: 'frontend' },
         { presentation: 'TypeScript', stackType: 'fullstack' },
