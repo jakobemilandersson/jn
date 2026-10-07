@@ -47,6 +47,7 @@ const PROJECTS: Project[] = [
     ],
     outcome: "Cross-platform social game shipped on web and mobile.",
     links: [
+      { label: "Web App", url: "https://storbit.jakob.now/" },
       { label: "Google Play", url: "https://play.google.com/store/apps/details?id=com.storbit.app&hl=en" },
     ],
   },
