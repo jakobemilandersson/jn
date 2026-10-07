@@ -40,7 +40,10 @@ const PROJECTS: Project[] = [
       { label: "Cloudflare Workers", variant: "backend" },
     ],
     outcome: "Cross-platform mobile game actively developed for iOS and Android.",
-    links: [],
+    links: [
+      { label: "App Store", url: "https://apps.apple.com/se/app/merge-champion/id6801467932" },
+      { label: "Google Play", url: "https://play.google.com/store/apps/details?id=com.mergechampionapp.mergechampion" },
+    ],
   },
 ];
 
