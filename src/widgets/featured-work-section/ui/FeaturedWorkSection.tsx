@@ -26,20 +26,22 @@ const PROJECTS: Project[] = [
     links: [],
   },
   {
-    title: "jakob.now",
+    title: "Merge Champion",
     context:
-      "My personal developer portfolio — built as an AI-first project where every feature is spec'd, tested, and shipped through an agentic workflow with minimal manual intervention. Visitors can explore my resume through a filter-driven timeline, narrowing by stack, skills, and date range to find the most relevant experience for any role.",
-    role: "Sole developer — product, design, and engineering.",
+      "A cross-platform daily merge puzzle game for iOS and Android, built around deterministic daily challenges, generated puzzle sequences, leaderboards, replays, achievements, and production-ready mobile features.",
+    role:
+      "Sole developer — product, game design, engineering, backend, and release.",
     stack: [
-      { label: "React", variant: "frontend" },
-      { label: "TypeScript", variant: "frontend" },
-      { label: "Vite", variant: "frontend" },
-      { label: "Zustand", variant: "fullstack" },
-      { label: "TailwindCSS", variant: "frontend" },
+      { label: "Flutter", variant: "frontend" },
+      { label: "Dart", variant: "fullstack" },
+      { label: "Flame", variant: "frontend" },
+      { label: "Riverpod", variant: "frontend" },
+      { label: "Supabase", variant: "backend" },
+      { label: "Cloudflare Workers", variant: "backend" },
     ],
-    outcome: "Live and actively developed.",
+    outcome: "Cross-platform mobile game actively developed for iOS and Android.",
     links: [
-      { label: "GitHub", url: "https://github.com/jakobemilandersson/jn" },
+      { label: "GitHub", url: "https://github.com/jakobemilandersson/Merge-Master" },
     ],
   },
 ];
