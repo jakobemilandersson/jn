@@ -16,6 +16,11 @@ export type YearMonth = string & { readonly __brand: 'YearMonth' };
 
 export type ExperienceKind = 'work' | 'education' | 'project';
 
+export type ExperienceLink = {
+  label: string;
+  url: string;
+};
+
 export type WorkExperience = {
   id: string;
   kind: ExperienceKind;
@@ -27,6 +32,7 @@ export type WorkExperience = {
   start: YearMonth;
   end?: YearMonth;
   url?: string;
+  links?: ExperienceLink[];
   description?: WorkExperienceDescription | null;
 }
 
