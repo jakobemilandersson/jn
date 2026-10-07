@@ -110,15 +110,30 @@ function PopoverCard({
         </ul>
       )}
 
-      {event.url && (
-        <a
-          href={event.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 text-xs text-white/50 hover:text-white/90 transition-colors"
-        >
-          View project →
-        </a>
+      {(event.url || (event.links && event.links.length > 0)) && (
+        <div className="flex flex-wrap gap-3">
+          {event.url && (
+            <a
+              href={event.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-xs text-white/50 hover:text-white/90 transition-colors"
+            >
+              View project →
+            </a>
+          )}
+          {event.links?.map((link) => (
+            <a
+              key={link.label}
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-xs text-white/50 hover:text-white/90 transition-colors"
+            >
+              {link.label} →
+            </a>
+          ))}
+        </div>
       )}
     </div>
   );
