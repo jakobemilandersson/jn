@@ -7,6 +7,11 @@ export type TimelineTag = {
   stackType: SkillChipVariant;
 };
 
+export type TimelineLink = {
+  label: string;
+  url: string;
+};
+
 export type TimelineViewModel = {
   id: string;
   kind: ExperienceKind;
@@ -16,12 +21,13 @@ export type TimelineViewModel = {
   end?: string;
   detail: string;
   url?: string;
+  links?: TimelineLink[];
   tags?: TimelineTag[];
 };
 
 function buildTitle(exp: WorkExperience): string {
   if (exp.kind === 'project') return exp.role;
-  return exp.company ? `${exp.role} \u2014 ${exp.company}` : exp.role;
+  return exp.company ? `${exp.role} — ${exp.company}` : exp.role;
 }
 
 export function toTimelineViewModels(
@@ -36,6 +42,7 @@ export function toTimelineViewModels(
     end: exp.end,
     detail: exp.description?.summary ?? '',
     url: exp.url,
+    links: exp.links,
     tags: exp.skills.map((skill) => ({
       label: skill.presentation,
       stackType: skill.stackType as SkillChipVariant,
