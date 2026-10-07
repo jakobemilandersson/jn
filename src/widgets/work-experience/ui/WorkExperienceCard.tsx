@@ -61,6 +61,7 @@ export function WorkExperienceCard({
     experience.description?.title || experience.description?.fulltext;
 
   const hasSkills = experience.skills.length > 0;
+  const hasLinks = experience.links && experience.links.length > 0;
   const hasSheet = hasDescription || hasSkills;
 
   const sheetTitle = `${experience.role} — ${experience.company}`;
@@ -88,6 +89,22 @@ export function WorkExperienceCard({
             </p>
           )}
         </div>
+
+        {hasLinks && (
+          <div className="flex flex-wrap gap-2">
+            {experience.links?.map((link) => (
+              <a
+                key={link.label}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center rounded-md border border-white/15 bg-white/5 px-3 py-1.5 text-xs text-white/70 hover:bg-white/10 hover:text-white transition-colors"
+              >
+                {link.label} ↗
+              </a>
+            ))}
+          </div>
+        )}
 
         {hasSheet && (
           <button
