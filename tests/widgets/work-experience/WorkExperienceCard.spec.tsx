@@ -1,4 +1,3 @@
-// tests/widgets/work-experience/WorkExperienceCard.spec.tsx
 import { describe, it, expect, vi } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { WorkExperienceCard } from "@widgets/work-experience";
@@ -24,135 +23,52 @@ const experience: WorkExperience = {
 };
 
 describe("WorkExperienceCard", () => {
-  it("opens description sheet when the read-more button is clicked", () => {
+  it("keeps the full description and skills hidden until expanded", () => {
+    render(<WorkExperienceCard experience={experience} selectedSkills={[]} selectedStackTypes={[]} isOpen={false} onOpen={vi.fn()} />);
+    expect(screen.getByText("Built and maintained frontend systems")).toBeInTheDocument();
+    expect(screen.queryByText(/Worked extensively with React/i)).not.toBeInTheDocument();
+    expect(screen.queryByText("Technology & skills")).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Expand details for Frontend Dev/i })).toHaveAttribute("aria-expanded", "false");
+  });
+
+  it("requests opening when the closed card action is clicked", () => {
     const onOpen = vi.fn();
-
-    render(
-      <WorkExperienceCard
-        experience={experience}
-        selectedSkills={[]}
-        selectedStackTypes={[]}
-        isOpen={false}
-        onOpen={onOpen}
-      />
-    );
-
-    const toggle = screen.getByRole("button", {
-      name: /Read more about Frontend Dev/i,
-    });
-
-    // Sheet not yet open — fulltext not in the document
-    expect(
-      screen.queryByText(/Worked extensively with React/i)
-    ).not.toBeInTheDocument();
-
-    fireEvent.click(toggle);
-
+    render(<WorkExperienceCard experience={experience} selectedSkills={[]} selectedStackTypes={[]} isOpen={false} onOpen={onOpen} />);
+    fireEvent.click(screen.getByRole("button", { name: /Expand details for Frontend Dev/i }));
     expect(onOpen).toHaveBeenCalledTimes(1);
   });
 
-  it("renders sheet content when isOpen is true", () => {
-    render(
-      <WorkExperienceCard
-        experience={experience}
-        selectedSkills={[]}
-        selectedStackTypes={[]}
-        isOpen={true}
-      />
-    );
-
-    expect(
-      screen.getByText(/Worked extensively with React/i)
-    ).toBeInTheDocument();
-  });
-
-  it("renders the dialog into document.body via portal", () => {
-    render(
-      <WorkExperienceCard
-        experience={experience}
-        selectedSkills={[]}
-        selectedStackTypes={[]}
-        isOpen={true}
-      />
-    );
-
-    const dialog = screen.getByRole("dialog");
-    expect(document.body).toContainElement(dialog);
-  });
-
-  it("renders a single flat Skills section when no skills are selected", () => {
-    render(
-      <WorkExperienceCard
-        experience={experience}
-        selectedSkills={[]}
-        selectedStackTypes={[]}
-        isOpen={true}
-      />
-    );
-
-    expect(screen.getByText("Skills")).toBeInTheDocument();
-    expect(screen.queryByText("Matched skills")).toBeNull();
-    expect(screen.queryByText("Other skills")).toBeNull();
-
+  it("renders description and all skills while expanded", () => {
+    render(<WorkExperienceCard experience={experience} selectedSkills={[]} selectedStackTypes={[]} isOpen />);
+    expect(screen.getByText(/Worked extensively with React/i)).toBeInTheDocument();
+    expect(screen.getByText("Technology & skills")).toBeInTheDocument();
     expect(screen.getByText("React")).toBeInTheDocument();
     expect(screen.getByText("TypeScript")).toBeInTheDocument();
     expect(screen.getByText("PostgreSQL")).toBeInTheDocument();
   });
 
-  it("renders matched and other skill groups when skills are selected", () => {
-    render(
-      <WorkExperienceCard
-        experience={experience}
-        selectedSkills={["React"]}
-        selectedStackTypes={[]}
-        isOpen={true}
-      />
-    );
-
+  it("renders matched and other skill groups when a skill filter is active", () => {
+    render(<WorkExperienceCard experience={experience} selectedSkills={["React"]} selectedStackTypes={[]} isOpen />);
     expect(screen.getByText("Matched skills")).toBeInTheDocument();
     expect(screen.getByText("Other skills")).toBeInTheDocument();
-
     expect(screen.getByText("React")).toBeInTheDocument();
     expect(screen.getByText("TypeScript")).toBeInTheDocument();
     expect(screen.getByText("PostgreSQL")).toBeInTheDocument();
   });
 
-  it("calls onOpen when the read-more button is clicked", () => {
-    const onOpen = vi.fn();
-
-    render(
-      <WorkExperienceCard
-        experience={experience}
-        selectedSkills={[]}
-        selectedStackTypes={[]}
-        isOpen={false}
-        onOpen={onOpen}
-      />
-    );
-
-    fireEvent.click(
-      screen.getByRole("button", { name: /Read more about Frontend Dev/i })
-    );
-
-    expect(onOpen).toHaveBeenCalledTimes(1);
+  it("requests closing when expanded details are collapsed", () => {
+    const onClose = vi.fn();
+    render(<WorkExperienceCard experience={experience} selectedSkills={[]} selectedStackTypes={[]} isOpen onClose={onClose} />);
+    fireEvent.click(screen.getByRole("button", { name: /Collapse details for Frontend Dev/i }));
+    expect(onClose).toHaveBeenCalledTimes(1);
   });
 
-  it("calls onClose when the sheet close action is triggered", () => {
+  it("allows a skill chip to be used as a filter without toggling the card", () => {
+    const onSkillPressed = vi.fn();
     const onClose = vi.fn();
-
-    render(
-      <WorkExperienceCard
-        experience={experience}
-        selectedSkills={[]}
-        selectedStackTypes={[]}
-        isOpen={true}
-        onClose={onClose}
-      />
-    );
-
-    // BottomSheet renders a close button with aria-label containing "Close"
-    fireEvent.click(screen.getByRole("button", { name: /close/i }));
-
-    expect(onClose).toHaveBeenCalledTimes(1);
+    render(<WorkExperienceCard experience={experience} selectedSkills={[]} selectedStackTypes={[]} isOpen onSkillPressed={onSkillPressed} onClose={onClose} />);
+    fireEvent.click(screen.getByRole("button", { name: "Filter by React" }));
+    expect(onSkillPressed).toHaveBeenCalledWith(experience.skills[0]);
+    expect(onClose).not.toHaveBeenCalled();
   });
 });
