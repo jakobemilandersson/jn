@@ -20,13 +20,10 @@ export default function ResumePage() {
           <div className="relative max-w-3xl">
             <p className="mb-3 text-[11px] font-medium uppercase tracking-[0.2em] text-sky-200/65">Jakob Andersson <span className="mx-1.5 text-white/25">/</span> Resume</p>
             <h1 className="max-w-2xl text-3xl font-semibold leading-tight tracking-tight sm:text-4xl lg:text-5xl">
-              Software developer with an engineer’s mindset.
+              Build simply. Think deeply. Keep learning.
             </h1>
             <p className="mt-4 max-w-2xl text-sm leading-6 text-slate-300 sm:text-base sm:leading-7">
-              Civil engineer by background, with a master’s in software development. I enjoy solving problems in whatever language fits the job, with a soft spot for Ruby on Rails and its <span className="whitespace-nowrap text-sky-200">MINASWAN</span> spirit — “Matz is nice, and so we are nice.”
-            </p>
-            <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-400 sm:text-base">
-              Outside work, I build mobile apps and explore how AI can make development, everyday tools, and the way we work a little better.
+              I enjoy turning ideas into useful products, figuring things out along the way, and finding simpler ways to solve complex problems. I'm naturally curious, comfortable adapting to new challenges, and always looking for ways to improve both what I build and how I build it—including through practical uses of AI.
             </p>
           </div>
         </header>
