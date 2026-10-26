@@ -81,7 +81,7 @@ export function SearchableMultiSelect({
 
   return (
     <div className="relative w-full" ref={containerRef}>
-      <label className="text-sm font-medium" htmlFor={id}>
+      <label className="text-xs font-medium uppercase tracking-wide text-white/55" htmlFor={id}>
         {label}
       </label>
 
@@ -93,17 +93,17 @@ export function SearchableMultiSelect({
         aria-label={`${label}${
           selected.length > 0 ? `, ${selected.length} selected` : ""
         }`}
-        className="mt-1 w-full h-10 flex items-center justify-between gap-2 border border-gray-300 dark:border-gray-600 rounded px-3 text-left bg-white dark:bg-gray-800 text-black dark:text-gray-100 focus:ring focus:outline-none"
+        className="mt-2 flex h-11 w-full items-center justify-between gap-2 rounded-xl border border-white/10 bg-black/20 px-3 text-left text-sm text-white transition hover:border-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300"
         onClick={() => setOpen(o => !o)}
       >
         <span className="truncate">
           {triggerLabel ?? (
-            <span className="text-gray-500 dark:text-gray-400">Select skills…</span>
+            <span className="text-white/35">Select…</span>
           )}
         </span>
         <svg
           aria-hidden="true"
-          className="shrink-0 w-4 h-4 text-gray-400"
+          className="h-4 w-4 shrink-0 text-white/45 transition-transform"
           viewBox="0 0 20 20"
           fill="currentColor"
         >
@@ -116,23 +116,23 @@ export function SearchableMultiSelect({
       </button>
 
       {open && (
-        <div className="absolute z-20 mt-1 w-full border border-gray-200 dark:border-gray-700 rounded bg-white dark:bg-gray-800 shadow-lg p-2">
+        <div className="absolute z-30 mt-2 w-full rounded-xl border border-white/10 bg-[#111722] p-2 shadow-2xl shadow-black/40 backdrop-blur-xl">
           <input
             aria-label={`Search ${label}`}
-            className="w-full border border-gray-300 dark:border-gray-600 rounded px-2 py-1 mb-2 text-sm bg-white dark:bg-gray-700 text-black dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500"
+            className="mb-2 w-full rounded-lg border border-white/10 bg-black/25 px-3 py-2 text-sm text-white placeholder:text-white/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300"
             placeholder="Search…"
             value={query}
             onChange={e => setQuery(e.target.value)}
           />
 
-          <ul role="listbox" aria-multiselectable="true" className="max-h-48 overflow-y-auto">
+          <ul role="listbox" aria-multiselectable="true" className="max-h-56 overflow-y-auto">
             {filteredGroups
               ? filteredGroups.map(group => (
                   <li key={group.label}>
                     <ul role="group" aria-label={group.label}>
                       <li
                         role="presentation"
-                        className="px-2 pt-2 pb-1 text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 select-none"
+                        className="select-none px-2 pb-1 pt-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/35"
                       >
                         {group.label}
                       </li>
@@ -141,14 +141,14 @@ export function SearchableMultiSelect({
                           key={option}
                           role="option"
                           aria-selected={selected.includes(option)}
-                          className="flex items-center gap-2 px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-gray-900 dark:text-gray-100"
+                          className="flex cursor-pointer items-center gap-2 rounded-lg px-2 py-2 text-sm text-white/75 transition hover:bg-white/[0.07] hover:text-white"
                           onClick={() => toggle(option)}
                         >
                           <input
                             type="checkbox"
                             checked={selected.includes(option)}
                             onChange={() => toggle(option)}
-                            className="rounded"
+                            className="h-4 w-4 rounded border-white/20 bg-black/30 text-sky-300 focus:ring-sky-300"
                           />
                           <span>{option}</span>
                         </li>
@@ -176,7 +176,7 @@ export function SearchableMultiSelect({
             }
 
             {filteredFlat.length === 0 && (
-              <li className="px-2 py-1 text-sm text-gray-500 dark:text-gray-400">
+              <li className="px-2 py-3 text-sm text-white/40">
                 No matches.
               </li>
             )}
