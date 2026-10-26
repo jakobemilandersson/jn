@@ -63,14 +63,14 @@ describe("stackTypeFromLabel", () => {
 describe("StackTypeField", () => {
   beforeEach(() => resetStore());
 
-  it("renders the stack type selector", () => {
+  it("renders the stack selector", () => {
     render(<StackTypeField />);
-    expect(screen.getByLabelText(/stack type/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/stack/i)).toBeInTheDocument();
   });
 
   it("handleChange resolves label strings and calls setStackTypes", () => {
     const { getByLabelText } = render(<StackTypeField />);
-    const select = getByLabelText(/stack type/i) as HTMLSelectElement;
+    const select = getByLabelText(/stack/i) as HTMLSelectElement;
 
     // Select 'Frontend' option
     Array.from(select.options).forEach((o) => {
