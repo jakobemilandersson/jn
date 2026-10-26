@@ -28,13 +28,13 @@ describe("WorkExperienceCard", () => {
     expect(screen.getByText("Built and maintained frontend systems")).toBeInTheDocument();
     expect(screen.queryByText(/Worked extensively with React/i)).not.toBeInTheDocument();
     expect(screen.queryByText("Technology & skills")).not.toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /Expand details for Frontend Dev/i })).toHaveAttribute("aria-expanded", "false");
+    expect(screen.getByRole("article", { name: /Toggle details for Frontend Dev/i })).toHaveAttribute("aria-expanded", "false");
   });
 
   it("requests opening when the closed card action is clicked", () => {
     const onOpen = vi.fn();
     render(<WorkExperienceCard experience={experience} selectedSkills={[]} selectedStackTypes={[]} isOpen={false} onOpen={onOpen} />);
-    fireEvent.click(screen.getByRole("button", { name: /Expand details for Frontend Dev/i }));
+    fireEvent.click(screen.getByRole("article", { name: /Toggle details for Frontend Dev/i }));
     expect(onOpen).toHaveBeenCalledTimes(1);
   });
 
@@ -59,7 +59,7 @@ describe("WorkExperienceCard", () => {
   it("requests closing when expanded details are collapsed", () => {
     const onClose = vi.fn();
     render(<WorkExperienceCard experience={experience} selectedSkills={[]} selectedStackTypes={[]} isOpen onClose={onClose} />);
-    fireEvent.click(screen.getByRole("button", { name: /Collapse details for Frontend Dev/i }));
+    fireEvent.click(screen.getByRole("article", { name: /Toggle details for Frontend Dev/i }));
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
