@@ -49,91 +49,62 @@ export function SearchableMultiSelect({
     return grouped
       .map(g => ({
         label: g.label,
-        options: g.options.filter(o =>
-          o.toLowerCase().includes(query.toLowerCase())
-        ),
+        options: g.options.filter(o => o.toLowerCase().includes(query.toLowerCase())),
       }))
       .filter(g => g.options.length > 0);
   }, [grouped, query]);
 
   const toggle = (value: string) => {
-    onChange(
-      selected.includes(value)
-        ? selected.filter(v => v !== value)
-        : [...selected, value]
-    );
+    onChange(selected.includes(value) ? selected.filter(v => v !== value) : [...selected, value]);
   };
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (!containerRef.current?.contains(e.target as Node)) {
-        setOpen(false);
-      }
+      if (!containerRef.current?.contains(e.target as Node)) setOpen(false);
     };
     window.addEventListener("mousedown", handler);
     return () => window.removeEventListener("mousedown", handler);
   }, []);
 
-  const triggerLabel =
-    selected.length === 0
-      ? null
-      : `${label} \u00b7 ${selected.length}`;
+  const triggerLabel = selected.length === 0
+    ? "Any"
+    : `${selected.length} selected`;
 
   return (
-    <div className="relative w-full" ref={containerRef}>
-      <label className="text-sm font-medium" htmlFor={id}>
+    <div className="relative w-full min-w-0" ref={containerRef}>
+      <label className="mb-1.5 block text-[11px] font-medium uppercase tracking-[0.14em] text-white/45" htmlFor={id}>
         {label}
       </label>
-
       <button
         id={id}
         type="button"
         aria-haspopup="listbox"
         aria-expanded={open}
-        aria-label={`${label}${
-          selected.length > 0 ? `, ${selected.length} selected` : ""
-        }`}
-        className="mt-1 w-full h-10 flex items-center justify-between gap-2 border border-gray-300 dark:border-gray-600 rounded px-3 text-left bg-white dark:bg-gray-800 text-black dark:text-gray-100 focus:ring focus:outline-none"
+        aria-label={`${label}${selected.length > 0 ? `, ${selected.length} selected` : ""}`}
+        className="flex h-11 w-full min-w-0 items-center justify-between gap-2 rounded-lg border border-white/10 bg-black/20 px-3 text-left text-sm text-white transition hover:border-white/20 hover:bg-white/[0.035] focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300"
         onClick={() => setOpen(o => !o)}
       >
-        <span className="truncate">
-          {triggerLabel ?? (
-            <span className="text-gray-500 dark:text-gray-400">Select skills…</span>
-          )}
-        </span>
-        <svg
-          aria-hidden="true"
-          className="shrink-0 w-4 h-4 text-gray-400"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path
-            fillRule="evenodd"
-            d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-            clipRule="evenodd"
-          />
+        <span className={`truncate ${selected.length === 0 ? "text-white/40" : "text-white/85"}`}>{triggerLabel}</span>
+        <svg aria-hidden="true" className={`h-4 w-4 shrink-0 text-white/45 transition-transform ${open ? "rotate-180" : ""}`} viewBox="0 0 20 20" fill="currentColor">
+          <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
         </svg>
       </button>
 
       {open && (
-        <div className="absolute z-20 mt-1 w-full border border-gray-200 dark:border-gray-700 rounded bg-white dark:bg-gray-800 shadow-lg p-2">
+        <div className="absolute left-0 right-0 z-30 mt-2 max-h-[min(24rem,70vh)] min-w-0 rounded-xl border border-white/10 bg-[#111722] p-2 shadow-2xl shadow-black/40 backdrop-blur-xl sm:min-w-[15rem]">
           <input
             aria-label={`Search ${label}`}
-            className="w-full border border-gray-300 dark:border-gray-600 rounded px-2 py-1 mb-2 text-sm bg-white dark:bg-gray-700 text-black dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500"
+            className="mb-2 h-10 w-full rounded-lg border border-white/10 bg-black/25 px-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300"
             placeholder="Search…"
             value={query}
             onChange={e => setQuery(e.target.value)}
           />
-
-          <ul role="listbox" aria-multiselectable="true" className="max-h-48 overflow-y-auto">
+          <ul role="listbox" aria-multiselectable="true" className="max-h-[min(18rem,55vh)] overflow-y-auto">
             {filteredGroups
               ? filteredGroups.map(group => (
                   <li key={group.label}>
                     <ul role="group" aria-label={group.label}>
-                      <li
-                        role="presentation"
-                        className="px-2 pt-2 pb-1 text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 select-none"
-                      >
+                      <li role="presentation" className="select-none px-2 pb-1 pt-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/35">
                         {group.label}
                       </li>
                       {group.options.map(option => (
@@ -141,15 +112,10 @@ export function SearchableMultiSelect({
                           key={option}
                           role="option"
                           aria-selected={selected.includes(option)}
-                          className="flex items-center gap-2 px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-gray-900 dark:text-gray-100"
+                          className="flex min-h-10 cursor-pointer items-center gap-2 rounded-lg px-2 py-2 text-sm text-white/75 transition hover:bg-white/[0.07] hover:text-white"
                           onClick={() => toggle(option)}
                         >
-                          <input
-                            type="checkbox"
-                            checked={selected.includes(option)}
-                            onChange={() => toggle(option)}
-                            className="rounded"
-                          />
+                          <input type="checkbox" checked={selected.includes(option)} onClick={(event) => event.stopPropagation()} onChange={() => toggle(option)} className="h-4 w-4 rounded border-white/20 bg-black/30 text-sky-300 focus:ring-sky-300" />
                           <span>{option}</span>
                         </li>
                       ))}
@@ -161,24 +127,15 @@ export function SearchableMultiSelect({
                     key={option}
                     role="option"
                     aria-selected={selected.includes(option)}
-                    className="flex items-center gap-2 px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-gray-900 dark:text-gray-100"
+                    className="flex min-h-10 cursor-pointer items-center gap-2 rounded-lg px-2 py-2 text-sm text-white/75 transition hover:bg-white/[0.07] hover:text-white"
                     onClick={() => toggle(option)}
                   >
-                    <input
-                      type="checkbox"
-                      checked={selected.includes(option)}
-                      onChange={() => toggle(option)}
-                      className="rounded"
-                    />
+                    <input type="checkbox" checked={selected.includes(option)} onClick={(event) => event.stopPropagation()} onChange={() => toggle(option)} className="h-4 w-4 rounded border-white/20 bg-black/30 text-sky-300 focus:ring-sky-300" />
                     <span>{option}</span>
                   </li>
-                ))
-            }
-
+                ))}
             {filteredFlat.length === 0 && (
-              <li className="px-2 py-1 text-sm text-gray-500 dark:text-gray-400">
-                No matches.
-              </li>
+              <li className="px-2 py-3 text-sm text-white/40">No matches.</li>
             )}
           </ul>
         </div>

@@ -15,7 +15,6 @@ export function DateIntervalField() {
   const handleChange = ({ from, to }: MonthRangeValue) => {
     const nextFrom = from ? (from as YearMonth) : null
     const nextTo = to ? (to as YearMonth) : null
-    // clear `to` if it ends up before `from`
     const toIsBeforeFrom = nextFrom && nextTo && nextTo < nextFrom
     setDateFrom(nextFrom)
     setDateTo(toIsBeforeFrom ? null : nextTo)
@@ -24,7 +23,7 @@ export function DateIntervalField() {
   return (
     <MonthRangePicker
       id="date-interval"
-      label="Date interval"
+      label="Period"
       value={{ from: dateFrom, to: dateTo }}
       onChange={handleChange}
       minYear={MIN_YEAR}

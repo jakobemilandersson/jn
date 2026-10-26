@@ -30,7 +30,7 @@ function formatLabel(value: MonthRangeValue): string | null {
   if (!from && !to) return null
   const fmt = (p: { month: string; year: string }) =>
     `${MONTHS[Number(p.month) - 1].slice(0, 3)} ${p.year}`
-  if (from && to) return `${fmt(from)} \u2013 ${fmt(to)}`
+  if (from && to) return `${fmt(from)} – ${fmt(to)}`
   if (from) return `From ${fmt(from)}`
   return `Until ${fmt(to!)}`
 }
@@ -56,7 +56,6 @@ export function MonthRangePicker({ id, label, value, onChange, minYear, maxYear 
     year: parsedTo?.year ?? null,
   })
 
-  // Keep drafts in sync when value is cleared externally (e.g. clear button).
   useEffect(() => {
     const p = parseYearMonth(value.from)
     setFromDraft({ month: p?.month ?? null, year: p?.year ?? null })
@@ -76,8 +75,6 @@ export function MonthRangePicker({ id, label, value, onChange, minYear, maxYear 
 
   const years = yearRange(minYear, maxYear)
 
-  // --- From handlers ---
-
   const handleFromMonth = (m: string) => {
     if (!m) {
       setFromDraft({ month: null, year: null })
@@ -95,23 +92,17 @@ export function MonthRangePicker({ id, label, value, onChange, minYear, maxYear 
       onChange({ ...value, from: null })
       return
     }
-    // Default month to January when none has been selected yet.
     const month = fromDraft.month ?? '01'
     const next: DraftSide = { month, year: y }
     setFromDraft(next)
     const nextFrom = `${y}-${month}`
-    // If the committed To value is now before the new From, reset To.
     const nextValue: MonthRangeValue =
       value.to !== null && value.to < nextFrom
         ? { from: nextFrom, to: null }
         : { ...value, from: nextFrom }
-    if (nextValue.to === null) {
-      setToDraft({ month: null, year: null })
-    }
+    if (nextValue.to === null) setToDraft({ month: null, year: null })
     onChange(nextValue)
   }
-
-  // --- To handlers ---
 
   const handleToMonth = (m: string) => {
     if (!m) {
@@ -130,10 +121,8 @@ export function MonthRangePicker({ id, label, value, onChange, minYear, maxYear 
       onChange({ ...value, to: null })
       return
     }
-    // Default month to December when none has been selected yet.
     const month = toDraft.month ?? '12'
     const nextTo = `${y}-${month}`
-    // If the new To is before the committed From, reset To entirely.
     if (value.from !== null && nextTo < value.from) {
       setToDraft({ month: null, year: null })
       onChange({ ...value, to: null })
@@ -145,11 +134,11 @@ export function MonthRangePicker({ id, label, value, onChange, minYear, maxYear 
   }
 
   const triggerLabel = formatLabel(value)
-  const selectCls = 'w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-sm text-black dark:text-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400'
+  const selectCls = 'w-full min-w-0 rounded-lg border border-white/10 bg-[#111722] px-2 py-2 text-sm text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300'
 
   return (
-    <div className="relative w-full" ref={containerRef}>
-      <label className="text-sm font-medium" htmlFor={id}>
+    <div className="relative w-full min-w-0" ref={containerRef}>
+      <label className="mb-1.5 block text-[11px] font-medium uppercase tracking-[0.14em] text-white/45" htmlFor={id}>
         {label}
       </label>
       <button
@@ -158,44 +147,32 @@ export function MonthRangePicker({ id, label, value, onChange, minYear, maxYear 
         aria-haspopup="true"
         aria-expanded={open}
         onClick={() => setOpen(o => !o)}
-        className="mt-1 w-full h-10 flex items-center justify-between gap-2 border border-gray-300 dark:border-gray-600 rounded px-3 text-left bg-white dark:bg-gray-800 text-black dark:text-gray-100 focus:ring focus:outline-none"
+        className="flex h-11 w-full min-w-0 items-center justify-between gap-2 rounded-lg border border-white/10 bg-black/20 px-3 text-left text-sm text-white transition hover:border-white/20 hover:bg-white/[0.035] focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300"
       >
-        <span className="truncate">
-          {triggerLabel ?? (
-            <span className="text-gray-500 dark:text-gray-400">Any period</span>
-          )}
+        <span className={`truncate ${triggerLabel ? 'text-white/85' : 'text-white/40'}`}>
+          {triggerLabel ?? 'Any'}
         </span>
-        <svg aria-hidden="true" className="shrink-0 w-4 h-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+        <svg aria-hidden="true" className={`h-4 w-4 shrink-0 text-white/45 transition-transform ${open ? 'rotate-180' : ''}`} viewBox="0 0 20 20" fill="currentColor">
           <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
         </svg>
       </button>
 
       {open && (
-        <div className="absolute z-20 mt-1 w-full border border-gray-200 dark:border-gray-700 rounded bg-white dark:bg-gray-800 shadow-lg p-3 flex flex-col gap-4">
+        <div className="absolute left-0 right-0 z-30 mt-2 flex max-h-[min(24rem,70vh)] w-full min-w-0 flex-col gap-3 overflow-y-auto rounded-xl border border-white/10 bg-[#111722] p-2.5 shadow-2xl shadow-black/40 backdrop-blur-xl sm:min-w-[15rem]">
           {([
             { rowLabel: 'From', monthVal: fromDraft.month, yearVal: fromDraft.year, onMonth: handleFromMonth, onYear: handleFromYear },
-            { rowLabel: 'To',   monthVal: toDraft.month,   yearVal: toDraft.year,   onMonth: handleToMonth,   onYear: handleToYear },
+            { rowLabel: 'To', monthVal: toDraft.month, yearVal: toDraft.year, onMonth: handleToMonth, onYear: handleToYear },
           ] as const).map(({ rowLabel, monthVal, yearVal, onMonth, onYear }) => (
-            <div key={rowLabel} className="flex flex-col gap-1.5">
-              <span className="text-xs text-gray-400 dark:text-gray-500">{rowLabel}</span>
-              <div className="flex gap-2">
-                <select
-                  aria-label={`${rowLabel} month`}
-                  value={monthVal ?? ''}
-                  onChange={e => onMonth(e.target.value)}
-                  className={selectCls}
-                >
+            <div key={rowLabel} className="flex min-w-0 flex-col gap-1">
+              <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/35">{rowLabel}</span>
+              <div className="flex min-w-0 gap-2">
+                <select aria-label={`${rowLabel} month`} value={monthVal ?? ''} onChange={e => onMonth(e.target.value)} className={selectCls}>
                   <option value="">Month</option>
                   {MONTHS.map((name, i) => (
                     <option key={name} value={String(i + 1).padStart(2, '0')}>{name}</option>
                   ))}
                 </select>
-                <select
-                  aria-label={`${rowLabel} year`}
-                  value={yearVal ?? ''}
-                  onChange={e => onYear(e.target.value)}
-                  className={selectCls}
-                >
+                <select aria-label={`${rowLabel} year`} value={yearVal ?? ''} onChange={e => onYear(e.target.value)} className={selectCls}>
                   <option value="">Year</option>
                   {years.map(y => (
                     <option key={y} value={String(y)}>{y}</option>

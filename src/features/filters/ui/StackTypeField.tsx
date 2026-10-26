@@ -20,20 +20,17 @@ export const stackTypeFromLabel = (label: string): StackType | undefined =>
 export function StackTypeField() {
   const stackTypes = useFilterStore((s) => s.stackTypes)
   const setStackTypes = useFilterStore((s) => s.setStackTypes)
-
   const selectedLabels = stackTypes.map((v) => STACK_TYPE_LABELS[v])
 
   const handleChange = (labels: string[]) => {
-    const next = labels
-      .map(stackTypeFromLabel)
-      .filter((v): v is StackType => v !== undefined)
+    const next = labels.map(stackTypeFromLabel).filter((v): v is StackType => v !== undefined)
     setStackTypes(next)
   }
 
   return (
     <SearchableMultiSelect
       id="stack-type"
-      label="Stack type"
+      label="Stack"
       options={STACK_TYPE_OPTION_LABELS}
       selected={selectedLabels}
       onChange={handleChange}
