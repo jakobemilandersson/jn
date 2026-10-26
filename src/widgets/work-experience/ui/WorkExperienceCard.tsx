@@ -32,7 +32,21 @@ export function WorkExperienceCard({ experience, selectedSkills, selectedStackTy
   });
 
   return (
-    <article className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm transition-colors duration-200 hover:border-white/20 sm:p-7">
+    <article
+      tabIndex={hasDetails ? 0 : undefined}
+      aria-label={hasDetails ? `Toggle details for ${title}` : undefined}
+      aria-expanded={hasDetails ? isOpen : undefined}
+      onClick={(event) => {
+        if (!hasDetails || (event.target as HTMLElement).closest("a, button, input, select, textarea, [role='button']")) return;
+        handleToggle();
+      }}
+      onKeyDown={(event) => {
+        if (!hasDetails || event.target !== event.currentTarget || (event.key !== "Enter" && event.key !== " ")) return;
+        event.preventDefault();
+        handleToggle();
+      }}
+      className={`group flex flex-col gap-4 rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm transition duration-200 sm:p-7 ${hasDetails ? "cursor-pointer hover:border-sky-200/35 hover:bg-white/[0.07] focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 active:scale-[0.998]" : "hover:border-white/20"}`}
+    >
       <div className="flex flex-col items-start justify-between gap-4 sm:flex-row">
         <div className="min-w-0">
           <p className="mb-2 text-xs font-medium uppercase tracking-[0.2em] text-white/40">{experience.start} — {experience.end ?? "Present"}</p>
@@ -40,10 +54,9 @@ export function WorkExperienceCard({ experience, selectedSkills, selectedStackTy
           {experience.description?.title && <p className="mt-3 max-w-3xl text-sm leading-relaxed text-white/60">{experience.description.title}</p>}
         </div>
         {hasDetails && (
-          <button type="button" aria-label={`${isOpen ? "Collapse" : "Expand"} details for ${title}`} aria-expanded={isOpen} onClick={handleToggle} className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-white/15 bg-white/5 px-3.5 py-2 text-xs font-medium text-white/75 transition hover:border-white/30 hover:bg-white/10 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300">
-            {isOpen ? "Show less" : hasDescription ? "Read more" : "View skills"}
-            <svg aria-hidden="true" className={`h-4 w-4 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" /></svg>
-          </button>
+          <div aria-hidden="true" className={`inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/[0.04] text-white/60 transition duration-200 group-hover:border-sky-200/30 group-hover:bg-sky-200/[0.08] group-hover:text-sky-100 ${isOpen ? "rotate-180 border-sky-200/30 text-sky-100" : ""}`}>
+            <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" /></svg>
+          </div>
         )}
       </div>
       {hasLinks && <div className="flex flex-wrap gap-2">{experience.links?.map((link) => <a key={link.label} href={link.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center rounded-md border border-white/15 bg-white/5 px-3 py-1.5 text-xs text-white/70 transition-colors hover:bg-white/10 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300">{link.label} ↗</a>)}</div>}
