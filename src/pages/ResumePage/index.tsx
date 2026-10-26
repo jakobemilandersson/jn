@@ -25,6 +25,9 @@ export default function ResumePage() {
             <p className="mt-4 max-w-2xl text-sm leading-6 text-slate-300 sm:text-base sm:leading-7">
               I enjoy turning ideas into useful products, figuring things out along the way, and finding simpler ways to solve complex problems. I'm naturally curious, comfortable adapting to new challenges, and always looking for ways to improve both what I build and how I build it—including through practical uses of AI.
             </p>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-400 sm:text-base">
+              Outside work, I build mobile apps and make time for side projects that turn ideas I enjoy into things I can share with others.
+            </p>
           </div>
         </header>
         <section id="experience" className="scroll-mt-8 pt-10 sm:pt-14">
