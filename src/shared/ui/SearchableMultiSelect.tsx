@@ -115,7 +115,7 @@ export function SearchableMultiSelect({
                           className="flex min-h-10 cursor-pointer items-center gap-2 rounded-lg px-2 py-2 text-sm text-white/75 transition hover:bg-white/[0.07] hover:text-white"
                           onClick={() => toggle(option)}
                         >
-                          <input type="checkbox" checked={selected.includes(option)} onChange={() => toggle(option)} className="h-4 w-4 rounded border-white/20 bg-black/30 text-sky-300 focus:ring-sky-300" />
+                          <input type="checkbox" checked={selected.includes(option)} onClick={(event) => event.stopPropagation()} onChange={() => toggle(option)} className="h-4 w-4 rounded border-white/20 bg-black/30 text-sky-300 focus:ring-sky-300" />
                           <span>{option}</span>
                         </li>
                       ))}
@@ -130,7 +130,7 @@ export function SearchableMultiSelect({
                     className="flex min-h-10 cursor-pointer items-center gap-2 rounded-lg px-2 py-2 text-sm text-white/75 transition hover:bg-white/[0.07] hover:text-white"
                     onClick={() => toggle(option)}
                   >
-                    <input type="checkbox" checked={selected.includes(option)} onChange={() => toggle(option)} className="h-4 w-4 rounded border-white/20 bg-black/30 text-sky-300 focus:ring-sky-300" />
+                    <input type="checkbox" checked={selected.includes(option)} onClick={(event) => event.stopPropagation()} onChange={() => toggle(option)} className="h-4 w-4 rounded border-white/20 bg-black/30 text-sky-300 focus:ring-sky-300" />
                     <span>{option}</span>
                   </li>
                 ))}
