@@ -20,11 +20,14 @@ export function DateIntervalField() {
     setDateTo(toIsBeforeFrom ? null : nextTo)
   }
 
-  const hasDateFilter = Boolean(dateFrom || dateTo)
   return (
-    <div>
-      <MonthRangePicker id="date-interval" label="Date interval" value={{ from: dateFrom, to: dateTo }} onChange={handleChange} minYear={MIN_YEAR} maxYear={MAX_YEAR} />
-      <p className="mt-2 text-[11px] leading-relaxed text-white/35">{hasDateFilter ? "Experience timeline narrowed" : "Show experience from any period"}</p>
-    </div>
+    <MonthRangePicker
+      id="date-interval"
+      label="Period"
+      value={{ from: dateFrom, to: dateTo }}
+      onChange={handleChange}
+      minYear={MIN_YEAR}
+      maxYear={MAX_YEAR}
+    />
   )
 }
