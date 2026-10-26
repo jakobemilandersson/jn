@@ -28,9 +28,12 @@ export function StackTypeField() {
   }
 
   return (
-    <div>
-      <SearchableMultiSelect id="stack-type" label="Stack type" options={STACK_TYPE_OPTION_LABELS} selected={selectedLabels} onChange={handleChange} />
-      <p className="mt-2 text-[11px] leading-relaxed text-white/35">{stackTypes.length ? `${stackTypes.length} stack type${stackTypes.length === 1 ? "" : "s"} selected` : "Fullstack, frontend, or backend"}</p>
-    </div>
+    <SearchableMultiSelect
+      id="stack-type"
+      label="Stack"
+      options={STACK_TYPE_OPTION_LABELS}
+      selected={selectedLabels}
+      onChange={handleChange}
+    />
   )
 }
