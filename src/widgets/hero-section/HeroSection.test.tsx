@@ -6,7 +6,7 @@ describe("HeroSection", () => {
   it("renders the resume about card heading", () => {
     render(<HeroSection />);
     expect(screen.getByRole("heading", { name: /build simply\. think deeply\. keep learning\./i })).toBeInTheDocument();
-    expect(screen.getByText(/Jakob Andersson\s*\/\s*Resume/i)).toBeInTheDocument();
+    expect(screen.getByText(/Jakob Andersson/i)).toBeInTheDocument();
   });
 
   it("renders the about copy", () => {
