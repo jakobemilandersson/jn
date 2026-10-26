@@ -145,11 +145,11 @@ export function MonthRangePicker({ id, label, value, onChange, minYear, maxYear 
   }
 
   const triggerLabel = formatLabel(value)
-  const selectCls = 'w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-sm text-black dark:text-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400'
+  const selectCls = 'w-full min-w-0 rounded-lg border border-white/10 bg-[#111722] px-2 py-2 text-sm text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300'
 
   return (
     <div className="relative w-full" ref={containerRef}>
-      <label className="text-sm font-medium" htmlFor={id}>
+      <label className="text-xs font-medium uppercase tracking-wide text-white/55" htmlFor={id}>
         {label}
       </label>
       <button
@@ -158,26 +158,26 @@ export function MonthRangePicker({ id, label, value, onChange, minYear, maxYear 
         aria-haspopup="true"
         aria-expanded={open}
         onClick={() => setOpen(o => !o)}
-        className="mt-1 w-full h-10 flex items-center justify-between gap-2 border border-gray-300 dark:border-gray-600 rounded px-3 text-left bg-white dark:bg-gray-800 text-black dark:text-gray-100 focus:ring focus:outline-none"
+        className="mt-2 flex h-11 w-full items-center justify-between gap-2 rounded-xl border border-white/10 bg-black/20 px-3 text-left text-sm text-white transition hover:border-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300"
       >
         <span className="truncate">
           {triggerLabel ?? (
-            <span className="text-gray-500 dark:text-gray-400">Any period</span>
+            <span className="text-white/35">Any period</span>
           )}
         </span>
-        <svg aria-hidden="true" className="shrink-0 w-4 h-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+        <svg aria-hidden="true" className="h-4 w-4 shrink-0 text-white/45" viewBox="0 0 20 20" fill="currentColor">
           <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
         </svg>
       </button>
 
       {open && (
-        <div className="absolute z-20 mt-1 w-full border border-gray-200 dark:border-gray-700 rounded bg-white dark:bg-gray-800 shadow-lg p-3 flex flex-col gap-4">
+        <div className="absolute z-30 mt-2 flex w-full flex-col gap-4 rounded-xl border border-white/10 bg-[#111722] p-3 shadow-2xl shadow-black/40 backdrop-blur-xl">
           {([
             { rowLabel: 'From', monthVal: fromDraft.month, yearVal: fromDraft.year, onMonth: handleFromMonth, onYear: handleFromYear },
             { rowLabel: 'To',   monthVal: toDraft.month,   yearVal: toDraft.year,   onMonth: handleToMonth,   onYear: handleToYear },
           ] as const).map(({ rowLabel, monthVal, yearVal, onMonth, onYear }) => (
             <div key={rowLabel} className="flex flex-col gap-1.5">
-              <span className="text-xs text-gray-400 dark:text-gray-500">{rowLabel}</span>
+              <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/35">{rowLabel}</span>
               <div className="flex gap-2">
                 <select
                   aria-label={`${rowLabel} month`}
